@@ -448,6 +448,25 @@ h1{
 .mp-actions input[type=file]{display:none}
 .mp-hint{font-size:11px;color:var(--ink-soft);margin-top:12px;line-height:1.5;text-align:center}
 
+.mp-url-form{display:none;flex-direction:column;gap:8px;margin-top:10px}
+.mp-url-form.on{display:flex}
+.mp-url-form input{
+  padding:11px 14px;border-radius:12px;font-size:13px;
+  background:color-mix(in srgb,var(--ink) 5%,transparent);
+  border:1px solid var(--card-brd);color:var(--ink);
+  font-family:inherit;
+}
+.mp-url-form input:focus{outline:2px solid var(--accent);outline-offset:1px}
+.mp-url-actions{display:flex;gap:8px}
+.mp-url-actions button{
+  flex:1;padding:10px;border-radius:12px;font-size:12.5px;font-weight:500;
+  transition:transform .2s var(--ease-bounce),background .2s;
+}
+#mpUrlCancel{background:color-mix(in srgb,var(--ink) 8%,transparent);color:var(--ink)}
+#mpUrlSave{background:var(--ink);color:var(--bg)}
+#mpUrlSave:hover{background:var(--accent)}
+.mp-url-actions button:active{transform:scale(.96)}
+
 /* ===== Responsive ===== */
 @media (max-width:400px){
   h1{font-size:24px}
@@ -517,7 +536,16 @@ h1{
       วาง URL เพลง
     </button>
   </div>
-  <p class="mp-hint">💡 เพิ่มเพลงได้โดยกด "อัปโหลด MP3" แล้วเลือกไฟล์ที่โหลดมา หรือวาง URL ตรงๆ</p>
+  <div class="mp-url-form" id="mpUrlForm">
+    <input type="text" id="mpUrlSrc" placeholder="URL ไฟล์เพลง (mp3/ogg/m4a)" />
+    <input type="text" id="mpUrlTitle" placeholder="ชื่อเพลง" />
+    <input type="text" id="mpUrlArtist" placeholder="ศิลปิน (ไม่บังคับ)" />
+    <div class="mp-url-actions">
+      <button id="mpUrlCancel" type="button">ยกเลิก</button>
+      <button id="mpUrlSave" type="button">เพิ่มเพลง</button>
+    </div>
+  </div>
+  <p class="mp-hint">💡 เพิ่มเพลงได้โดยกด "อัปโหลด MP3" แล้วเลือกไฟล์ที่โหลดมา หรือวาง URL ตรงๆ — เพลงที่มาจาก URL จะถูกจำไว้ในเครื่องนี้ให้อัตโนมัติ</p>
 </div>
 
 <!-- Lightbox -->
@@ -552,7 +580,7 @@ const CONFIG = {
   links: [
     { title: "Portfolio งานวาด", sub: "รวมผลงานที่ผ่านมา", url: "https://example.com/portfolio", icon: "palette", color: "#c77dff" },
     { title: "Commission เปิดรับอยู่", sub: "รายละเอียด + ราคา", url: "https://example.com/commission", icon: "cart", color: "#ff7a59" },
-    { title: "ติดต่องาน", sub: "อีเมล / ไลน์", url: "ัyouvipy@gmail.com", icon: "mail", color: "#6ec9b8" },
+    { title: "ติดต่องาน", sub: "อีเมล / ไลน์", url: "mailto:youvipy@gmail.com", icon: "mail", color: "#6ec9b8" },
   ],
 
   gallery: [
@@ -867,7 +895,22 @@ const trackList = $('#trackList');
 const musicPanel = $('#musicPanel');
 const mpBackdrop = $('#mpBackdrop');
 
-let playlist = [...CONFIG.playlist];
+const PLAYLIST_KEY = 'linkspace-playlist-urls';
+function loadSavedPlaylist() {
+  try {
+    const saved = JSON.parse(localStorage.getItem(PLAYLIST_KEY) || '[]');
+    return Array.isArray(saved) ? saved : [];
+  } catch { return []; }
+}
+function savePlaylist() {
+  // เซฟเฉพาะเพลงที่ผู้ใช้เพิ่มเองผ่าน URL (blob: ของไฟล์อัปโหลดเก็บไว้ข้ามเซสชันไม่ได้)
+  try {
+    const persistable = playlist.filter(t => t.custom && !t.src.startsWith('blob:'));
+    localStorage.setItem(PLAYLIST_KEY, JSON.stringify(persistable));
+  } catch {}
+}
+
+let playlist = [...CONFIG.playlist, ...loadSavedPlaylist()];
 let currentIdx = 0;
 let isPlaying = false;
 
@@ -943,6 +986,7 @@ trackList.addEventListener('click', (e) => {
     const i = +del.dataset.del;
     playlist.splice(i, 1);
     if (currentIdx >= playlist.length) currentIdx = Math.max(0, playlist.length - 1);
+    savePlaylist();
     renderTracks();
     updateMini();
     if (playlist.length === 0) {
@@ -991,14 +1035,30 @@ $('#musicFile').addEventListener('change', (e) => {
   renderTracks();
 });
 
-// URL input
+// URL input (inline form, no browser prompt() dialogs)
+const mpUrlForm = $('#mpUrlForm');
+const mpUrlSrc = $('#mpUrlSrc');
+const mpUrlTitle = $('#mpUrlTitle');
+const mpUrlArtist = $('#mpUrlArtist');
+
 $('#musicUrlBtn').addEventListener('click', () => {
-  const url = prompt('วาง URL ไฟล์เพลง (mp3/ogg/m4a):');
-  if (!url) return;
-  const title = prompt('ชื่อเพลง:', 'เพลงใหม่') || 'เพลงใหม่';
-  const artist = prompt('ศิลปิน:', 'ไม่ทราบ') || 'ไม่ทราบ';
-  playlist.push({ title, artist, src: url });
+  mpUrlForm.classList.add('on');
+  mpUrlSrc.focus();
+});
+$('#mpUrlCancel').addEventListener('click', () => {
+  mpUrlForm.classList.remove('on');
+  mpUrlSrc.value = mpUrlTitle.value = mpUrlArtist.value = '';
+});
+$('#mpUrlSave').addEventListener('click', () => {
+  const url = mpUrlSrc.value.trim();
+  if (!url) { showToast('ใส่ URL เพลงก่อนนะ', 'star'); mpUrlSrc.focus(); return; }
+  const title = mpUrlTitle.value.trim() || 'เพลงใหม่';
+  const artist = mpUrlArtist.value.trim() || 'ไม่ทราบ';
+  playlist.push({ title, artist, src: url, custom: true });
+  savePlaylist();
   showToast('เพิ่มเพลงแล้ว', 'check');
+  mpUrlSrc.value = mpUrlTitle.value = mpUrlArtist.value = '';
+  mpUrlForm.classList.remove('on');
   renderTracks();
   updateMini();
 });
