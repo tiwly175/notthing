@@ -1,0 +1,18 @@
+{
+  "name": "มะปราง ✿ link space",
+  "short_name": "link space",
+  "description": "พื้นที่เล็กๆ รวมไอดีเกมและลิงก์ของมะปราง",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#fef6ee",
+  "theme_color": "#ff7a59",
+  "icons": [
+    {
+      "src": "icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
