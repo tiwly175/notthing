@@ -1,1044 +1,1608 @@
 <!DOCTYPE html>
-<html lang="th" data-theme="light">
+<html lang="th" data-theme="light" data-palette="peach">
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-<title>มะปราง ✿ link space</title>
+<title>link space ✿</title>
 <meta name="theme-color" content="#fef6ee" />
-<meta name="description" content="พื้นที่เล็กๆ ของมะปราง — ฝากไอดีเกมและลิงก์ไว้ให้ตามไปเล่นด้วยกัน" />
-
-<!-- PWA -->
 <link rel="manifest" href="manifest.json" />
 <link rel="icon" href="icon.svg" type="image/svg+xml" />
 <link rel="apple-touch-icon" href="icon.svg" />
 <meta name="apple-mobile-web-app-capable" content="yes" />
-<meta name="apple-mobile-web-app-status-bar-style" content="default" />
-<meta name="apple-mobile-web-app-title" content="link space" />
-
-<!-- Fonts -->
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Mali:wght@400;500;600;700&family=IBM+Plex+Sans+Thai:wght@300;400;500;600&display=swap" rel="stylesheet" />
 
 <style>
 /* ============================================
-   🎨 ตัวแปรสี — แก้ตรงนี้เพื่อเปลี่ยนธีมทั้งเว็บ
+   🎨 PALETTES
    ============================================ */
 :root{
-  --bg:       #fef6ee;
-  --bg-2:     #ffe9d6;
-  --ink:      #2d2422;
-  --ink-soft: #7a6a62;
-  --card:     rgba(255,255,255,.72);
-  --card-brd: rgba(45,36,34,.08);
-  --accent:   #ff7a59;   /* coral หลัก */
-  --accent-2: #ffd166;   /* เหลือง */
-  --accent-3: #6ec9b8;   /* มินต์ */
-  --accent-4: #c77dff;   /* ม่วง */
-  --shadow:   0 10px 30px rgba(45,36,34,.10);
-  --shadow-lg:0 20px 50px rgba(45,36,34,.16);
-  --radius:   22px;
-  --ease-out: cubic-bezier(.22,1,.36,1);
-  --ease-bounce: cubic-bezier(.34,1.56,.64,1);
+  --radius:22px;
+  --ease-out:cubic-bezier(.22,1,.36,1);
+  --ease-bounce:cubic-bezier(.34,1.56,.64,1);
+  --ink:#2d2422; --ink-soft:#7a6a62;
+  --bg:#fef6ee; --bg-2:#ffe9d6;
+  --card:rgba(255,255,255,.72);
+  --card-brd:rgba(45,36,34,.08);
+  --shadow:0 10px 30px rgba(45,36,34,.10);
+  --shadow-lg:0 20px 50px rgba(45,36,34,.18);
 }
 [data-theme="dark"]{
-  --bg:       #17120f;
-  --bg-2:     #241a15;
-  --ink:      #f6ece3;
-  --ink-soft: #b8a79c;
-  --card:     rgba(255,255,255,.055);
-  --card-brd: rgba(255,255,255,.10);
-  --shadow:   0 10px 30px rgba(0,0,0,.4);
+  --ink:#f6ece3; --ink-soft:#b8a79c;
+  --bg:#17120f; --bg-2:#241a15;
+  --card:rgba(255,255,255,.055);
+  --card-brd:rgba(255,255,255,.10);
+  --shadow:0 10px 30px rgba(0,0,0,.4);
   --shadow-lg:0 20px 50px rgba(0,0,0,.55);
 }
+[data-palette="peach"]{--accent:#ff7a59;--accent-2:#ffd166;--accent-3:#6ec9b8;--accent-4:#c77dff;}
+[data-palette="sakura"]{--accent:#ff6f91;--accent-2:#ffc2d1;--accent-3:#c9b6ff;--accent-4:#ffa8c5;}
+[data-palette="matcha"]{--accent:#6bbf59;--accent-2:#f4d35e;--accent-3:#3fa796;--accent-4:#c1e1c1;}
+[data-palette="y2k"]{--accent:#ff2e97;--accent-2:#00e5ff;--accent-3:#b967ff;--accent-4:#f9f871;}
+[data-palette="ocean"]{--accent:#4dabf7;--accent-2:#74c0fc;--accent-3:#63e6be;--accent-4:#9775fa;}
+[data-palette="sunset"]{--accent:#f76707;--accent-2:#ffd43b;--accent-3:#ff6b6b;--accent-4:#c2255c;}
 
-/* ============================================
-   🌿 Base
-   ============================================ */
-*{box-sizing:border-box; margin:0; padding:0; -webkit-tap-highlight-color:transparent;}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
 html,body{height:100%;}
 body{
   font-family:'IBM Plex Sans Thai','Mali',system-ui,sans-serif;
-  color:var(--ink);
-  background:var(--bg);
-  overflow-x:hidden;
-  min-height:100dvh;
-  transition:background .5s var(--ease-out), color .4s var(--ease-out);
-  padding-bottom:env(safe-area-inset-bottom);
-  position:relative;
-  isolation:isolate;
+  color:var(--ink);background:var(--bg);overflow-x:hidden;min-height:100dvh;
+  transition:background .6s var(--ease-out),color .4s var(--ease-out);
+  padding-bottom:env(safe-area-inset-bottom);position:relative;isolation:isolate;
 }
-/* พื้นหลังไล่สีเคลื่อนไหวช้าๆ */
 body::before{
-  content:"";
-  position:fixed; inset:-20%;
+  content:"";position:fixed;inset:-20%;z-index:-2;
   background:
-    radial-gradient(circle at 20% 20%, var(--bg-2), transparent 55%),
-    radial-gradient(circle at 80% 70%, color-mix(in srgb, var(--accent-3) 22%, transparent), transparent 55%),
-    radial-gradient(circle at 50% 100%, color-mix(in srgb, var(--accent) 18%, transparent), transparent 60%);
-  z-index:-2;
+    radial-gradient(circle at 20% 20%,var(--bg-2),transparent 55%),
+    radial-gradient(circle at 80% 70%,color-mix(in srgb,var(--accent-3) 22%,transparent),transparent 55%),
+    radial-gradient(circle at 50% 100%,color-mix(in srgb,var(--accent) 18%,transparent),transparent 60%);
   animation:bgDrift 22s ease-in-out infinite alternate;
-  filter:blur(10px);
+  filter:blur(10px);transition:background 1s var(--ease-out);
 }
-@keyframes bgDrift{
-  0%   {transform:scale(1) translate(0,0);}
-  100% {transform:scale(1.15) translate(-2%,2%);}
-}
-/* noise texture บางๆ ให้ดูไม่แบน */
+@keyframes bgDrift{100%{transform:scale(1.15) translate(-2%,2%);}}
 body::after{
-  content:"";
-  position:fixed; inset:0;
+  content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;opacity:.3;
+  mix-blend-mode:multiply;
   background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='140' height='140'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 .35 0'/></filter><rect width='100%' height='100%' filter='url(%23n)' opacity='.55'/></svg>");
-  opacity:.35; pointer-events:none; z-index:-1; mix-blend-mode:multiply;
 }
-[data-theme="dark"] body::after{mix-blend-mode:screen; opacity:.5;}
-
-a{color:inherit; text-decoration:none;}
-
-/* ============================================
-   🫧 Blobs ลอยอยู่เบื้องหลัง
-   ============================================ */
-.blob{
-  position:fixed; border-radius:50%; filter:blur(40px);
-  opacity:.55; z-index:-1; pointer-events:none;
-  will-change:transform;
+[data-theme="dark"] body::after{mix-blend-mode:screen;opacity:.5;}
+body.has-bg::before{opacity:.15;}
+body.has-bg .bg-image{opacity:1;}
+.bg-image{
+  position:fixed;inset:0;z-index:-3;background-size:cover;background-position:center;
+  opacity:0;transition:opacity 1s var(--ease-out);
 }
+a{color:inherit;text-decoration:none;}
+
+.blob{position:fixed;border-radius:50%;filter:blur(40px);opacity:.55;z-index:-1;pointer-events:none;will-change:transform;transition:background 1s;}
 .blob.b1{width:280px;height:280px;background:var(--accent);top:8%;left:-80px;animation:float1 14s ease-in-out infinite;}
 .blob.b2{width:240px;height:240px;background:var(--accent-3);top:45%;right:-70px;animation:float2 17s ease-in-out infinite;}
 .blob.b3{width:200px;height:200px;background:var(--accent-2);bottom:12%;left:15%;animation:float3 20s ease-in-out infinite;}
 .blob.b4{width:180px;height:180px;background:var(--accent-4);top:20%;right:20%;opacity:.35;animation:float1 15s ease-in-out infinite reverse;}
-@keyframes float1{0%,100%{transform:translate(0,0) scale(1);}50%{transform:translate(30px,-40px) scale(1.15);}}
-@keyframes float2{0%,100%{transform:translate(0,0) scale(1);}50%{transform:translate(-40px,30px) scale(1.1);}}
-@keyframes float3{0%,100%{transform:translate(0,0) scale(1);}50%{transform:translate(40px,-25px) scale(1.2);}}
+@keyframes float1{50%{transform:translate(30px,-40px) scale(1.15);}}
+@keyframes float2{50%{transform:translate(-40px,30px) scale(1.1);}}
+@keyframes float3{50%{transform:translate(40px,-25px) scale(1.2);}}
 
-/* ============================================
-   🖱️ Custom cursor + trail (desktop เท่านั้น)
-   ============================================ */
-.cursor-dot,.cursor-ring{
-  position:fixed; top:0; left:0; pointer-events:none; z-index:9999;
-  border-radius:50%; will-change:transform;
-  transition:opacity .3s;
-}
-.cursor-dot{width:8px;height:8px;background:var(--accent);}
-.cursor-ring{
-  width:34px;height:34px;
-  border:1.5px solid var(--ink);
-  transition:transform .18s var(--ease-out), border-color .3s, background .3s;
-}
-.cursor-ring.hover{
-  transform:scale(1.8);
-  background:color-mix(in srgb, var(--accent) 22%, transparent);
-  border-color:var(--accent);
-}
-.trail-dot{
-  position:fixed; width:6px;height:6px;border-radius:50%;
-  background:var(--accent-3); pointer-events:none; z-index:9998;
-  will-change:transform,opacity;
-}
-@media (hover:none),(pointer:coarse){
-  .cursor-dot,.cursor-ring,.trail-dot{display:none;}
-}
-@media (hover:hover) and (pointer:fine){
-  *{cursor:none !important;}
-}
+.cursor-dot,.cursor-ring{position:fixed;top:0;left:0;pointer-events:none;z-index:9999;border-radius:50%;will-change:transform;}
+.cursor-dot{width:8px;height:8px;background:var(--accent);transition:background .3s;}
+.cursor-ring{width:34px;height:34px;border:1.5px solid var(--ink);transition:transform .18s var(--ease-out),border-color .3s,background .3s;}
+.cursor-ring.hover{transform:scale(1.8);background:color-mix(in srgb,var(--accent) 22%,transparent);border-color:var(--accent);}
+.trail-dot{position:fixed;width:6px;height:6px;border-radius:50%;pointer-events:none;z-index:9998;will-change:transform,opacity;}
+@media (hover:none),(pointer:coarse){.cursor-dot,.cursor-ring,.trail-dot{display:none;}}
+@media (hover:hover) and (pointer:fine){*{cursor:none !important;}}
 
-/* ============================================
-   📱 Wrapper
-   ============================================ */
-.wrap{
-  max-width:520px; margin:0 auto;
-  padding:32px 20px 140px;
-  position:relative;
-}
+.wrap{max-width:520px;margin:0 auto;padding:32px 20px 150px;position:relative;}
+.reveal{opacity:0;transform:translateY(24px);}
+.reveal.in{opacity:1;transform:translateY(0);transition:opacity .8s var(--ease-out),transform .9s var(--ease-bounce);}
+.reveal.d1{transition-delay:.05s}.reveal.d2{transition-delay:.15s}.reveal.d3{transition-delay:.25s}
+.reveal.d4{transition-delay:.35s}.reveal.d5{transition-delay:.45s}
 
-/* ---- Entrance animation ---- */
-.reveal{opacity:0; transform:translateY(24px);}
-.reveal.in{
-  opacity:1; transform:translateY(0);
-  transition:opacity .8s var(--ease-out), transform .9s var(--ease-bounce);
-}
-.reveal.d1{transition-delay:.05s}
-.reveal.d2{transition-delay:.15s}
-.reveal.d3{transition-delay:.25s}
-.reveal.d4{transition-delay:.35s}
-.reveal.d5{transition-delay:.45s}
-
-/* ============================================
-   ✿ Header
-   ============================================ */
-.avatar-wrap{
-  width:120px;height:120px;margin:12px auto 18px;position:relative;
-}
-.avatar-ring{
-  position:absolute; inset:-8px; border-radius:50%;
-  background:conic-gradient(from 0deg, var(--accent), var(--accent-2), var(--accent-3), var(--accent-4), var(--accent));
-  animation:spin 6s linear infinite;
-  filter:blur(2px);
-}
+.avatar-wrap{width:120px;height:120px;margin:12px auto 18px;position:relative;}
+.avatar-ring{position:absolute;inset:-8px;border-radius:50%;
+  background:conic-gradient(from 0deg,var(--accent),var(--accent-2),var(--accent-3),var(--accent-4),var(--accent));
+  animation:spin 6s linear infinite;filter:blur(2px);transition:background 1s;}
 @keyframes spin{to{transform:rotate(360deg);}}
-.avatar{
-  position:relative; width:100%;height:100%; border-radius:50%;
-  object-fit:cover; border:4px solid var(--bg);
-  background:var(--card);
-  display:grid; place-items:center; font-size:52px;
-  animation:breathe 4s ease-in-out infinite;
-  box-shadow:var(--shadow);
-}
-@keyframes breathe{0%,100%{transform:scale(1);}50%{transform:scale(1.04);}}
-
-h1{
-  font-family:'Mali',cursive;
-  font-size:30px; font-weight:700; text-align:center;
-  letter-spacing:.5px;
-  background:linear-gradient(120deg, var(--ink) 30%, var(--accent) 55%, var(--accent-4) 75%, var(--ink));
-  background-size:200% auto;
-  -webkit-background-clip:text; background-clip:text;
-  -webkit-text-fill-color:transparent;
-  animation:shine 6s linear infinite;
-}
+.avatar{position:relative;width:100%;height:100%;border-radius:50%;object-fit:cover;border:4px solid var(--bg);
+  background:var(--card);display:grid;place-items:center;font-size:52px;
+  animation:breathe 4s ease-in-out infinite;box-shadow:var(--shadow);user-select:none;overflow:hidden;}
+.avatar img{width:100%;height:100%;object-fit:cover;border-radius:50%;}
+@keyframes breathe{50%{transform:scale(1.04);}}
+h1{font-family:'Mali',cursive;font-size:30px;font-weight:700;text-align:center;letter-spacing:.5px;
+  background:linear-gradient(120deg,var(--ink) 30%,var(--accent) 55%,var(--accent-4) 75%,var(--ink));
+  background-size:200% auto;-webkit-background-clip:text;background-clip:text;
+  -webkit-text-fill-color:transparent;animation:shine 6s linear infinite;}
 @keyframes shine{to{background-position:200% center;}}
-.tagline{
-  text-align:center; color:var(--ink-soft);
-  font-size:14px; margin-top:6px; line-height:1.6;
-  padding:0 12px;
-}
-.tagline .wavy{
-  display:inline-block;
-  animation:wave 2.4s ease-in-out infinite;
-}
-@keyframes wave{0%,100%{transform:rotate(0);}25%{transform:rotate(-12deg);}75%{transform:rotate(12deg);}}
+.tagline{text-align:center;color:var(--ink-soft);font-size:14px;margin-top:6px;line-height:1.6;padding:0 12px;}
+.tagline .wavy{display:inline-block;animation:wave 2.4s ease-in-out infinite;}
+@keyframes wave{25%{transform:rotate(-12deg);}75%{transform:rotate(12deg);}}
+.status-badge{display:inline-flex;align-items:center;gap:6px;margin:14px auto 0;padding:6px 14px;
+  background:var(--card);border:1px solid var(--card-brd);border-radius:999px;font-size:12px;color:var(--ink-soft);
+  backdrop-filter:blur(10px);box-shadow:var(--shadow);}
+.status-dot{width:8px;height:8px;border-radius:50%;background:#22c55e;animation:pulseDot 1.6s ease-out infinite;}
+@keyframes pulseDot{0%{box-shadow:0 0 0 0 rgba(34,197,94,.7);}70%{box-shadow:0 0 0 10px rgba(34,197,94,0);}100%{box-shadow:0 0 0 0 rgba(34,197,94,0);}}
 
-/* badge status */
-.status-badge{
-  display:inline-flex; align-items:center; gap:6px;
-  margin:14px auto 0; padding:6px 14px;
-  background:var(--card); border:1px solid var(--card-brd);
-  border-radius:999px; font-size:12px; color:var(--ink-soft);
-  backdrop-filter:blur(10px);
-  box-shadow:var(--shadow);
-}
-.status-dot{
-  width:8px;height:8px;border-radius:50%;background:#22c55e;
-  box-shadow:0 0 0 0 rgba(34,197,94,.6);
-  animation:pulseDot 1.6s ease-out infinite;
-}
-@keyframes pulseDot{
-  0%{box-shadow:0 0 0 0 rgba(34,197,94,.7);}
-  70%{box-shadow:0 0 0 10px rgba(34,197,94,0);}
-  100%{box-shadow:0 0 0 0 rgba(34,197,94,0);}
-}
+.section-title{display:flex;align-items:center;gap:10px;margin:34px 4px 14px;
+  font-family:'Mali',cursive;font-weight:600;font-size:16px;}
+.section-title .line{flex:1;height:1.5px;
+  background:repeating-linear-gradient(90deg,var(--ink-soft) 0 6px,transparent 6px 12px);opacity:.4;}
+.section-title .emoji{display:inline-block;animation:pop 2s ease-in-out infinite;}
+@keyframes pop{50%{transform:scale(1.25) rotate(-8deg);}}
 
-/* ============================================
-   🧩 Section title
-   ============================================ */
-.section-title{
-  display:flex; align-items:center; gap:10px;
-  margin:34px 4px 14px;
-  font-family:'Mali',cursive; font-weight:600; font-size:16px;
-  color:var(--ink);
-}
-.section-title .line{
-  flex:1; height:1.5px;
-  background:repeating-linear-gradient(90deg, var(--ink-soft) 0 6px, transparent 6px 12px);
-  opacity:.4;
-}
-.section-title .emoji{
-  display:inline-block;
-  animation:pop 2s ease-in-out infinite;
-}
-@keyframes pop{0%,100%{transform:scale(1) rotate(0);}50%{transform:scale(1.25) rotate(-8deg);}}
-
-/* ============================================
-   🎴 Game ID Cards
-   ============================================ */
-.id-grid{display:flex; flex-direction:column; gap:12px;}
-
-.id-card{
-  position:relative;
-  display:flex; align-items:center; gap:14px;
-  padding:14px 16px;
-  background:var(--card);
-  border:1px solid var(--card-brd);
-  border-radius:var(--radius);
-  backdrop-filter:blur(14px) saturate(1.4);
-  box-shadow:var(--shadow);
-  overflow:hidden;
-  transition:transform .35s var(--ease-bounce), box-shadow .35s, border-color .35s;
-}
-.id-card::before{
-  content:"";
-  position:absolute; inset:0;
-  background:linear-gradient(120deg, transparent 30%, color-mix(in srgb, var(--accent) 25%, transparent) 50%, transparent 70%);
-  transform:translateX(-100%);
-  transition:transform .8s var(--ease-out);
-}
+.id-grid{display:flex;flex-direction:column;gap:12px;}
+.id-card{position:relative;display:flex;align-items:center;gap:14px;padding:14px 16px;
+  background:var(--card);border:1px solid var(--card-brd);border-radius:var(--radius);
+  backdrop-filter:blur(14px) saturate(1.4);box-shadow:var(--shadow);overflow:hidden;
+  transition:transform .35s var(--ease-bounce),box-shadow .35s,border-color .35s;cursor:pointer;}
+.id-card::before{content:"";position:absolute;inset:0;
+  background:linear-gradient(120deg,transparent 30%,color-mix(in srgb,var(--accent) 25%,transparent) 50%,transparent 70%);
+  transform:translateX(-100%);transition:transform .8s var(--ease-out);}
 .id-card:hover::before{transform:translateX(100%);}
-.id-card:hover{
-  transform:translateY(-4px) rotate(-.4deg);
-  box-shadow:var(--shadow-lg);
-  border-color:color-mix(in srgb, var(--accent) 40%, transparent);
-}
-
-.game-icon{
-  width:46px;height:46px;flex-shrink:0;
-  border-radius:14px;
-  display:grid; place-items:center;
-  font-size:24px;
-  background:linear-gradient(135deg, color-mix(in srgb, var(--accent) 30%, transparent), color-mix(in srgb, var(--accent-4) 30%, transparent));
-  box-shadow:inset 0 1px 0 rgba(255,255,255,.4);
-  transition:transform .4s var(--ease-bounce);
-}
+.id-card:hover{transform:translateY(-4px) rotate(-.4deg);box-shadow:var(--shadow-lg);
+  border-color:color-mix(in srgb,var(--accent) 40%,transparent);}
+.game-icon{width:46px;height:46px;flex-shrink:0;border-radius:14px;display:grid;place-items:center;font-size:24px;
+  background:linear-gradient(135deg,color-mix(in srgb,var(--accent) 30%,transparent),color-mix(in srgb,var(--accent-4) 30%,transparent));
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.4);transition:transform .4s var(--ease-bounce);}
 .id-card:hover .game-icon{transform:rotate(-12deg) scale(1.1);}
-
-.id-info{flex:1; min-width:0;}
-.id-name{font-size:12px;color:var(--ink-soft); letter-spacing:.3px;}
-.id-value{
-  font-family:'Mali',cursive; font-weight:600;
-  font-size:16px; margin-top:2px;
-  white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
-  letter-spacing:.3px;
-}
-
-/* ปุ่ม Copy */
-.copy-btn{
-  position:relative;
-  width:42px;height:42px;flex-shrink:0;
-  border-radius:50%;
-  border:none;
-  background:var(--ink); color:var(--bg);
-  display:grid; place-items:center;
-  font-size:16px;
-  transition:transform .25s var(--ease-bounce), background .3s;
-  overflow:hidden;
-}
-.copy-btn:hover{transform:scale(1.12) rotate(8deg); background:var(--accent);}
+.id-info{flex:1;min-width:0;}
+.id-name{font-size:12px;color:var(--ink-soft);letter-spacing:.3px;}
+.id-value{font-family:'Mali',cursive;font-weight:600;font-size:16px;margin-top:2px;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;letter-spacing:.3px;}
+.copy-btn{position:relative;width:42px;height:42px;flex-shrink:0;border-radius:50%;border:none;
+  background:var(--ink);color:var(--bg);display:grid;place-items:center;font-size:16px;
+  transition:transform .25s var(--ease-bounce),background .3s;overflow:hidden;}
+.copy-btn:hover{transform:scale(1.12) rotate(8deg);background:var(--accent);}
 .copy-btn:active{transform:scale(.88);}
 .copy-btn.copied{background:#22c55e;}
-.copy-btn svg{width:18px;height:18px; transition:transform .35s var(--ease-bounce), opacity .25s;}
-.copy-btn .icon-check{position:absolute; opacity:0; transform:scale(.4) rotate(-30deg);}
-.copy-btn.copied .icon-copy{opacity:0; transform:scale(.4) rotate(30deg);}
-.copy-btn.copied .icon-check{opacity:1; transform:scale(1) rotate(0);}
+.copy-btn svg{width:18px;height:18px;transition:transform .35s var(--ease-bounce),opacity .25s;}
+.copy-btn .icon-check{position:absolute;opacity:0;transform:scale(.4) rotate(-30deg);}
+.copy-btn.copied .icon-copy{opacity:0;transform:scale(.4) rotate(30deg);}
+.copy-btn.copied .icon-check{opacity:1;transform:scale(1) rotate(0);}
 
-/* ============================================
-   🔗 Link Cards
-   ============================================ */
-.link-list{display:flex; flex-direction:column; gap:10px;}
-.link-item{
-  position:relative;
-  display:flex; align-items:center; gap:14px;
-  padding:14px 18px;
-  background:var(--card);
-  border:1px solid var(--card-brd);
-  border-radius:18px;
-  backdrop-filter:blur(14px);
-  box-shadow:var(--shadow);
-  overflow:hidden;
-  transition:transform .35s var(--ease-bounce), box-shadow .35s;
-}
-.link-item::after{
-  content:"";
-  position:absolute; left:0; top:0; bottom:0; width:3px;
-  background:var(--accent);
-  transform:scaleY(0); transform-origin:top;
-  transition:transform .4s var(--ease-out);
-}
+.link-list{display:flex;flex-direction:column;gap:10px;}
+.link-item{position:relative;display:flex;align-items:center;gap:14px;padding:14px 18px;
+  background:var(--card);border:1px solid var(--card-brd);border-radius:18px;
+  backdrop-filter:blur(14px);box-shadow:var(--shadow);overflow:hidden;
+  transition:transform .35s var(--ease-bounce),box-shadow .35s;}
+.link-item::after{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--accent);
+  transform:scaleY(0);transform-origin:top;transition:transform .4s var(--ease-out);}
 .link-item:hover::after{transform:scaleY(1);}
-.link-item:hover{transform:translateX(6px); box-shadow:var(--shadow-lg);}
+.link-item:hover{transform:translateX(6px);box-shadow:var(--shadow-lg);}
 .link-item:active{transform:translateX(6px) scale(.98);}
-.link-emoji{
-  font-size:20px; width:32px; text-align:center;
-  transition:transform .4s var(--ease-bounce);
-}
+.link-emoji{font-size:20px;width:32px;text-align:center;transition:transform .4s var(--ease-bounce);}
 .link-item:hover .link-emoji{transform:scale(1.35) rotate(-15deg);}
 .link-text{flex:1;}
-.link-title{font-weight:500; font-size:15px;}
-.link-sub{font-size:12px; color:var(--ink-soft); margin-top:1px;}
-.link-arrow{
-  font-size:16px; color:var(--ink-soft);
-  transition:transform .35s var(--ease-bounce);
-}
-.link-item:hover .link-arrow{transform:translateX(6px); color:var(--accent);}
+.link-title{font-weight:500;font-size:15px;}
+.link-sub{font-size:12px;color:var(--ink-soft);margin-top:1px;}
+.link-arrow{font-size:16px;color:var(--ink-soft);transition:transform .35s var(--ease-bounce);}
+.link-item:hover .link-arrow{transform:translateX(6px);color:var(--accent);}
 
-/* ============================================
-   🌐 Socials
-   ============================================ */
-.socials{
-  display:flex; justify-content:center; gap:14px;
-  margin-top:26px;
-}
-.social{
-  width:46px;height:46px;
-  border-radius:50%;
-  display:grid; place-items:center;
-  background:var(--card);
-  border:1px solid var(--card-brd);
-  font-size:20px;
-  backdrop-filter:blur(10px);
-  transition:transform .35s var(--ease-bounce), background .3s, color .3s;
-  box-shadow:var(--shadow);
-}
-.social:hover{
-  transform:translateY(-6px) rotate(-8deg) scale(1.1);
-  background:var(--ink); color:var(--bg);
-}
-.social:nth-child(2):hover{background:var(--accent-4); color:#fff;}
-.social:nth-child(3):hover{background:var(--accent-3); color:#fff;}
-.social:nth-child(4):hover{background:var(--accent); color:#fff;}
+/* 🖼️ Gallery */
+.gallery-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:8px;}
+.gallery-item{position:relative;aspect-ratio:1;border-radius:14px;overflow:hidden;cursor:pointer;
+  background:var(--card);border:1px solid var(--card-brd);
+  transition:transform .35s var(--ease-bounce),box-shadow .3s;}
+.gallery-item:hover{transform:translateY(-4px) rotate(-1deg) scale(1.03);box-shadow:var(--shadow-lg);}
+.gallery-item img{width:100%;height:100%;object-fit:cover;transition:transform .5s var(--ease-out);}
+.gallery-item:hover img{transform:scale(1.1);}
+.gallery-item .cap{position:absolute;left:0;right:0;bottom:0;padding:6px 8px;font-size:10px;
+  color:#fff;background:linear-gradient(transparent,rgba(0,0,0,.7));
+  transform:translateY(100%);transition:transform .3s var(--ease-out);}
+.gallery-item:hover .cap{transform:translateY(0);}
 
-.footer{
-  text-align:center; color:var(--ink-soft);
-  font-size:11px; margin-top:34px; opacity:.7;
-  font-family:'Mali',cursive;
-}
-.footer .heart{
-  display:inline-block; color:var(--accent);
-  animation:beat 1.2s ease-in-out infinite;
-}
-@keyframes beat{0%,100%{transform:scale(1);}30%{transform:scale(1.3);}60%{transform:scale(.95);}}
+.socials{display:flex;justify-content:center;gap:14px;flex-wrap:wrap;margin-top:26px;}
+.social{width:46px;height:46px;border-radius:50%;display:grid;place-items:center;
+  background:var(--card);border:1px solid var(--card-brd);font-size:20px;backdrop-filter:blur(10px);
+  transition:transform .35s var(--ease-bounce),background .3s,color .3s;box-shadow:var(--shadow);}
+.social:hover{transform:translateY(-6px) rotate(-8deg) scale(1.1);background:var(--ink);color:var(--bg);}
 
-/* ============================================
-   🎵 Music Player (ลอยมุมขวาล่าง)
-   ============================================ */
-.music-player{
-  position:fixed; right:16px; bottom:96px;
-  display:flex; align-items:center; gap:10px;
-  padding:8px 14px 8px 8px;
-  background:var(--card);
-  border:1px solid var(--card-brd);
-  border-radius:999px;
-  backdrop-filter:blur(16px) saturate(1.5);
-  box-shadow:var(--shadow-lg);
-  z-index:500;
-  transition:transform .4s var(--ease-bounce);
-}
+.footer{text-align:center;color:var(--ink-soft);font-size:11px;margin-top:34px;opacity:.7;
+  font-family:'Mali',cursive;cursor:pointer;user-select:none;padding:8px;}
+.footer .heart{display:inline-block;color:var(--accent);animation:beat 1.2s ease-in-out infinite;}
+@keyframes beat{30%{transform:scale(1.3);}60%{transform:scale(.95);}}
+
+.visitor-badge{display:flex;justify-content:center;margin-top:20px;}
+.visitor-inner{display:inline-flex;align-items:center;gap:8px;padding:6px 14px;
+  background:var(--card);border:1px solid var(--card-brd);border-radius:999px;font-size:11px;color:var(--ink-soft);
+  backdrop-filter:blur(10px);font-family:'Mali',cursive;}
+.visitor-inner .num{font-weight:700;color:var(--accent);font-size:14px;font-family:'IBM Plex Sans Thai';}
+
+.action-row{display:flex;justify-content:center;gap:10px;margin-top:18px;flex-wrap:wrap;}
+.action-btn{display:inline-flex;align-items:center;gap:6px;padding:9px 16px;
+  background:var(--card);border:1px solid var(--card-brd);border-radius:999px;
+  font-size:12px;font-family:'Mali',cursive;color:var(--ink-soft);backdrop-filter:blur(10px);
+  box-shadow:var(--shadow);transition:transform .3s var(--ease-bounce),background .3s,color .3s;}
+.action-btn:hover{transform:translateY(-3px) scale(1.04);background:var(--ink);color:var(--bg);}
+.action-btn:active{transform:scale(.94);}
+
+.music-player{position:fixed;right:16px;bottom:96px;display:flex;align-items:center;gap:6px;
+  padding:8px 14px 8px 8px;background:var(--card);border:1px solid var(--card-brd);border-radius:999px;
+  backdrop-filter:blur(16px) saturate(1.5);box-shadow:var(--shadow-lg);z-index:500;
+  transition:transform .4s var(--ease-bounce);}
 .music-player:hover{transform:translateY(-3px) scale(1.02);}
-.mp-btn{
-  width:38px;height:38px;border-radius:50%;border:none;
-  background:linear-gradient(135deg, var(--accent), var(--accent-4));
-  color:#fff; font-size:14px;
-  display:grid; place-items:center;
-  transition:transform .3s var(--ease-bounce);
-  box-shadow:0 4px 12px color-mix(in srgb, var(--accent) 40%, transparent);
-}
-.mp-btn:hover{transform:scale(1.1) rotate(15deg);}
+.mp-btn{width:34px;height:34px;border-radius:50%;border:none;
+  background:linear-gradient(135deg,var(--accent),var(--accent-4));color:#fff;font-size:12px;
+  display:grid;place-items:center;transition:transform .3s var(--ease-bounce);
+  box-shadow:0 4px 12px color-mix(in srgb,var(--accent) 40%,transparent);}
+.mp-btn:hover{transform:scale(1.12);}
 .mp-btn:active{transform:scale(.9);}
-
-.mp-eq{display:flex; align-items:flex-end; gap:2.5px; height:20px;}
-.mp-eq span{
-  width:3px; background:var(--ink); border-radius:2px;
-  height:30%;
-  transition:height .3s;
-}
-.music-player.playing .mp-eq span{
-  animation:eq .8s ease-in-out infinite;
-}
+.mp-eq{display:flex;align-items:flex-end;gap:2.5px;height:20px;margin:0 4px;}
+.mp-eq span{width:3px;background:var(--ink);border-radius:2px;height:30%;transition:height .3s;}
+.music-player.playing .mp-eq span{animation:eq .8s ease-in-out infinite;}
 .music-player.playing .mp-eq span:nth-child(1){animation-delay:0s;}
 .music-player.playing .mp-eq span:nth-child(2){animation-delay:.15s;}
 .music-player.playing .mp-eq span:nth-child(3){animation-delay:.3s;}
 .music-player.playing .mp-eq span:nth-child(4){animation-delay:.45s;}
-@keyframes eq{
-  0%,100%{height:25%;}
-  50%{height:100%;}
-}
-.mp-label{
-  font-size:11px; font-weight:500; color:var(--ink-soft);
-  font-family:'Mali',cursive;
-  max-width:90px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
-}
+@keyframes eq{50%{height:100%;}}
+.mp-label{font-size:11px;font-weight:500;color:var(--ink-soft);font-family:'Mali',cursive;
+  max-width:90px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 
-/* ============================================
-   🔘 Floating Buttons (Theme + Install)
-   ============================================ */
-.float-btn{
-  position:fixed; top:16px;
-  width:42px;height:42px; border-radius:50%;
-  border:1px solid var(--card-brd);
-  background:var(--card);
-  backdrop-filter:blur(14px);
-  display:grid; place-items:center;
-  font-size:16px;
-  z-index:500;
-  box-shadow:var(--shadow);
-  transition:transform .35s var(--ease-bounce), background .3s;
-}
+.float-btn{position:fixed;top:16px;width:42px;height:42px;border-radius:50%;
+  border:1px solid var(--card-brd);background:var(--card);backdrop-filter:blur(14px);
+  display:grid;place-items:center;font-size:16px;z-index:500;box-shadow:var(--shadow);
+  transition:transform .35s var(--ease-bounce),background .3s;}
 .float-btn:hover{transform:rotate(20deg) scale(1.12);}
 .float-btn:active{transform:scale(.9);}
 #themeBtn{right:16px;}
-#installBtn{right:68px; display:none;}
-#installBtn.show{display:grid; animation:slideIn .5s var(--ease-bounce);}
-@keyframes slideIn{from{opacity:0; transform:translateY(-20px) scale(.5);} to{opacity:1; transform:translateY(0) scale(1);}}
+#paletteBtn{right:68px;}
+#installBtn{right:120px;display:none;}
+#installBtn.show{display:grid;animation:slideIn .5s var(--ease-bounce);}
+@keyframes slideIn{from{opacity:0;transform:translateY(-20px) scale(.5);}to{opacity:1;transform:translateY(0) scale(1);}}
 
-/* ============================================
-   🧭 Bottom Nav (แถบลิงก์ด้านล่าง)
-   ============================================ */
-.bottom-nav{
-  position:fixed; left:50%; bottom:16px;
-  transform:translateX(-50%);
-  display:flex; gap:4px;
-  padding:8px;
-  background:color-mix(in srgb, var(--bg) 75%, transparent);
-  border:1px solid var(--card-brd);
-  border-radius:999px;
-  backdrop-filter:blur(18px) saturate(1.6);
-  box-shadow:var(--shadow-lg);
-  z-index:600;
-}
-.nav-item{
-  display:flex; flex-direction:column; align-items:center; gap:2px;
-  padding:8px 14px;
-  border-radius:999px;
-  font-size:10px;
-  color:var(--ink-soft);
-  font-family:'Mali',cursive;
-  transition:background .3s, color .3s, transform .3s var(--ease-bounce);
-  position:relative;
-}
-.nav-item .nav-emoji{font-size:18px; line-height:1;}
-.nav-item:hover{transform:translateY(-3px); color:var(--ink);}
-.nav-item.active{
-  background:var(--ink); color:var(--bg);
-  box-shadow:0 6px 16px color-mix(in srgb, var(--ink) 30%, transparent);
-}
-.nav-item.active .nav-emoji{animation:pop 2s ease-in-out infinite;}
+.palette-picker{position:fixed;top:70px;right:16px;display:none;flex-direction:column;gap:8px;
+  padding:10px;background:var(--card);border:1px solid var(--card-brd);border-radius:18px;
+  backdrop-filter:blur(18px);box-shadow:var(--shadow-lg);z-index:499;
+  animation:paletteIn .35s var(--ease-bounce);}
+.palette-picker.show{display:flex;}
+@keyframes paletteIn{from{opacity:0;transform:translateY(-10px) scale(.8);}to{opacity:1;transform:translateY(0) scale(1);}}
+.palette-dot{width:30px;height:30px;border-radius:50%;border:2px solid transparent;padding:0;
+  transition:transform .3s var(--ease-bounce),border-color .3s;position:relative;}
+.palette-dot:hover{transform:scale(1.15) rotate(15deg);}
+.palette-dot.active{border-color:var(--ink);transform:scale(1.1);}
+.palette-dot[data-p="peach"]{background:linear-gradient(135deg,#ff7a59,#ffd166);}
+.palette-dot[data-p="sakura"]{background:linear-gradient(135deg,#ff6f91,#c9b6ff);}
+.palette-dot[data-p="matcha"]{background:linear-gradient(135deg,#6bbf59,#f4d35e);}
+.palette-dot[data-p="y2k"]{background:linear-gradient(135deg,#ff2e97,#00e5ff);}
+.palette-dot[data-p="ocean"]{background:linear-gradient(135deg,#4dabf7,#63e6be);}
+.palette-dot[data-p="sunset"]{background:linear-gradient(135deg,#f76707,#ffd43b);}
 
-/* ============================================
-   ✨ Click Sparkles
-   ============================================ */
-.spark{
-  position:fixed; width:8px;height:8px;
-  border-radius:50%;
-  pointer-events:none; z-index:9000;
-  will-change:transform,opacity;
-}
+.bottom-nav{position:fixed;left:50%;bottom:16px;transform:translateX(-50%);display:flex;gap:4px;
+  padding:8px;background:color-mix(in srgb,var(--bg) 75%,transparent);border:1px solid var(--card-brd);
+  border-radius:999px;backdrop-filter:blur(18px) saturate(1.6);box-shadow:var(--shadow-lg);z-index:600;}
+.nav-item{display:flex;flex-direction:column;align-items:center;gap:2px;padding:8px 14px;
+  border-radius:999px;font-size:10px;color:var(--ink-soft);font-family:'Mali',cursive;
+  transition:background .3s,color .3s,transform .3s var(--ease-bounce);cursor:pointer;}
+.nav-item .nav-emoji{font-size:18px;line-height:1;}
+.nav-item:hover{transform:translateY(-3px);color:var(--ink);}
+.nav-item.active{background:var(--ink);color:var(--bg);
+  box-shadow:0 6px 16px color-mix(in srgb,var(--ink) 30%,transparent);}
 
-/* ============================================
-   💬 Toast
-   ============================================ */
-.toast-wrap{
-  position:fixed; left:50%; bottom:110px;
-  transform:translateX(-50%);
-  display:flex; flex-direction:column; gap:8px;
-  align-items:center;
-  z-index:8000; pointer-events:none;
-}
-.toast{
-  display:flex; align-items:center; gap:10px;
-  padding:12px 20px;
-  background:var(--ink); color:var(--bg);
-  border-radius:999px;
-  font-size:13px; font-weight:500;
-  box-shadow:var(--shadow-lg);
-  animation:toastIn .5s var(--ease-bounce), toastOut .5s var(--ease-out) 2.2s forwards;
-}
-.toast .t-emoji{font-size:16px;}
-@keyframes toastIn{from{opacity:0; transform:translateY(30px) scale(.7);} to{opacity:1; transform:translateY(0) scale(1);}}
-@keyframes toastOut{to{opacity:0; transform:translateY(-20px) scale(.9);}}
+.spark,.confetti{position:fixed;pointer-events:none;z-index:9000;will-change:transform,opacity;}
+.spark{border-radius:50%;}
+.confetti{width:10px;height:14px;}
 
-/* ============================================
-   🎊 Confetti burst (ตอนโหลดครั้งแรก / กด copy)
-   ============================================ */
-.confetti{
-  position:fixed; width:10px;height:14px;
-  pointer-events:none; z-index:9500;
-  will-change:transform,opacity;
-}
+.toast-wrap{position:fixed;left:50%;bottom:110px;transform:translateX(-50%);
+  display:flex;flex-direction:column;gap:8px;align-items:center;z-index:8000;pointer-events:none;}
+.toast{display:flex;align-items:center;gap:10px;padding:12px 20px;background:var(--ink);color:var(--bg);
+  border-radius:999px;font-size:13px;font-weight:500;box-shadow:var(--shadow-lg);
+  animation:toastIn .5s var(--ease-bounce),toastOut .5s var(--ease-out) 2.2s forwards;}
+@keyframes toastIn{from{opacity:0;transform:translateY(30px) scale(.7);}to{opacity:1;transform:translateY(0) scale(1);}}
+@keyframes toastOut{to{opacity:0;transform:translateY(-20px) scale(.9);}}
 
-/* ============================================
-   📱 Responsive
-   ============================================ */
+.ripple{position:fixed;border-radius:50%;border:2px solid var(--accent);pointer-events:none;z-index:9001;will-change:transform,opacity;}
+
+/* ============ 🔐 Modals ============ */
+.modal-overlay{position:fixed;inset:0;z-index:10000;display:none;
+  align-items:center;justify-content:center;padding:20px;
+  background:rgba(0,0,0,.6);backdrop-filter:blur(8px);
+  animation:fadeIn .3s var(--ease-out);}
+.modal-overlay.show{display:flex;}
+@keyframes fadeIn{from{opacity:0;}to{opacity:1;}}
+.modal-box{background:var(--bg);border:1px solid var(--card-brd);border-radius:24px;
+  padding:26px;max-width:400px;width:100%;box-shadow:var(--shadow-lg);
+  animation:modalIn .4s var(--ease-bounce);position:relative;max-height:85vh;overflow-y:auto;}
+@keyframes modalIn{from{opacity:0;transform:scale(.85) translateY(30px);}to{opacity:1;transform:scale(1) translateY(0);}}
+.modal-box h3{font-family:'Mali',cursive;font-size:20px;margin-bottom:6px;}
+.modal-box p{font-size:13px;color:var(--ink-soft);margin-bottom:16px;}
+.modal-close{position:absolute;top:14px;right:14px;width:34px;height:34px;border-radius:50%;
+  border:1px solid var(--card-brd);background:var(--card);font-size:14px;
+  display:grid;place-items:center;transition:transform .3s var(--ease-bounce),background .3s;cursor:pointer;}
+.modal-close:hover{transform:rotate(90deg);background:var(--accent);color:#fff;}
+
+/* 🔐 Settings */
+.settings-overlay{position:fixed;inset:0;z-index:10000;display:none;
+  background:rgba(0,0,0,.6);backdrop-filter:blur(8px);animation:fadeIn .3s;}
+.settings-overlay.show{display:flex;align-items:flex-end;justify-content:center;}
+@media (min-width:640px){.settings-overlay.show{align-items:center;}}
+.settings-panel{background:var(--bg);width:100%;max-width:560px;max-height:92vh;
+  border-radius:24px 24px 0 0;display:flex;flex-direction:column;overflow:hidden;
+  animation:panelIn .45s var(--ease-bounce);}
+@media (min-width:640px){.settings-panel{border-radius:24px;max-height:88vh;}}
+@keyframes panelIn{from{opacity:0;transform:translateY(60px);}to{opacity:1;transform:translateY(0);}}
+.settings-head{display:flex;align-items:center;justify-content:space-between;
+  padding:18px 20px;border-bottom:1px solid var(--card-brd);flex-shrink:0;}
+.settings-head h2{font-family:'Mali',cursive;font-size:18px;}
+.settings-tabs{display:flex;gap:4px;padding:12px 16px;overflow-x:auto;flex-shrink:0;
+  border-bottom:1px solid var(--card-brd);scrollbar-width:none;}
+.settings-tabs::-webkit-scrollbar{display:none;}
+.settings-tab{padding:8px 14px;border-radius:999px;font-size:12px;border:1px solid transparent;
+  background:transparent;color:var(--ink-soft);font-family:'Mali',cursive;white-space:nowrap;
+  cursor:pointer;transition:all .3s var(--ease-out);display:flex;align-items:center;gap:4px;}
+.settings-tab:hover{background:var(--card);color:var(--ink);}
+.settings-tab.active{background:var(--ink);color:var(--bg);}
+.settings-body{padding:20px;overflow-y:auto;flex:1;}
+.tab-content{display:none;animation:fadeSlide .35s var(--ease-out);}
+.tab-content.active{display:block;}
+@keyframes fadeSlide{from{opacity:0;transform:translateX(12px);}to{opacity:1;transform:translateX(0);}}
+
+.field{margin-bottom:14px;}
+.field label{display:block;font-size:12px;font-weight:500;color:var(--ink-soft);
+  margin-bottom:6px;font-family:'Mali',cursive;}
+.field input,.field textarea,.field select{width:100%;padding:11px 14px;border-radius:12px;
+  border:1px solid var(--card-brd);background:var(--card);color:var(--ink);
+  font-family:inherit;font-size:14px;transition:border-color .3s,box-shadow .3s;}
+.field textarea{resize:vertical;min-height:70px;line-height:1.5;}
+.field input:focus,.field textarea:focus,.field select:focus{outline:none;
+  border-color:var(--accent);box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 20%,transparent);}
+.field-row{display:grid;grid-template-columns:1fr 2fr;gap:8px;}
+
+.item-editor{padding:14px;background:var(--card);border:1px solid var(--card-brd);
+  border-radius:14px;margin-bottom:10px;position:relative;
+  animation:itemIn .3s var(--ease-bounce);}
+@keyframes itemIn{from{opacity:0;transform:scale(.9);}to{opacity:1;transform:scale(1);}}
+.item-editor .delete-btn{position:absolute;top:8px;right:8px;width:26px;height:26px;border-radius:50%;
+  border:none;background:color-mix(in srgb,#ff4757 25%,transparent);color:#ff4757;
+  font-size:14px;display:grid;place-items:center;cursor:pointer;
+  transition:transform .25s var(--ease-bounce),background .3s;}
+.item-editor .delete-btn:hover{transform:scale(1.15) rotate(90deg);background:#ff4757;color:#fff;}
+.item-editor .field:last-child{margin-bottom:0;}
+
+.add-btn{width:100%;padding:12px;border-radius:14px;border:1.5px dashed color-mix(in srgb,var(--accent) 40%,transparent);
+  background:color-mix(in srgb,var(--accent) 8%,transparent);color:var(--accent);
+  font-family:'Mali',cursive;font-size:13px;font-weight:500;cursor:pointer;
+  transition:all .3s var(--ease-out);margin-top:6px;display:flex;align-items:center;justify-content:center;gap:6px;}
+.add-btn:hover{background:color-mix(in srgb,var(--accent) 18%,transparent);transform:translateY(-2px);}
+.add-btn:active{transform:scale(.97);}
+
+.btn-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px;}
+.btn{padding:11px 18px;border-radius:12px;border:none;font-family:'Mali',cursive;font-size:13px;
+  font-weight:500;cursor:pointer;transition:transform .25s var(--ease-bounce),background .3s,color .3s;
+  display:inline-flex;align-items:center;gap:6px;}
+.btn:active{transform:scale(.95);}
+.btn-primary{background:var(--accent);color:#fff;flex:1;}
+.btn-primary:hover{filter:brightness(1.1);transform:translateY(-2px);}
+.btn-secondary{background:var(--card);color:var(--ink);border:1px solid var(--card-brd);}
+.btn-secondary:hover{background:var(--ink);color:var(--bg);}
+.btn-danger{background:color-mix(in srgb,#ff4757 15%,transparent);color:#ff4757;}
+.btn-danger:hover{background:#ff4757;color:#fff;}
+
+.hint{font-size:11px;color:var(--ink-soft);margin-top:4px;line-height:1.5;opacity:.8;}
+
+/* Password input with eye */
+.pass-wrap{position:relative;}
+.pass-wrap input{padding-right:44px;}
+.pass-toggle{position:absolute;right:6px;top:50%;transform:translateY(-50%);
+  width:32px;height:32px;border-radius:8px;border:none;background:transparent;
+  font-size:16px;cursor:pointer;color:var(--ink-soft);}
+
+/* QR modal */
+.qr-img{width:100%;max-width:260px;border-radius:16px;background:#fff;padding:12px;
+  display:block;margin:0 auto 14px;box-shadow:var(--shadow);}
+
+/* Lightbox */
+.lightbox{position:fixed;inset:0;z-index:10001;display:none;
+  align-items:center;justify-content:center;padding:20px;background:rgba(0,0,0,.9);
+  backdrop-filter:blur(10px);animation:fadeIn .3s;cursor:zoom-out;}
+.lightbox.show{display:flex;}
+.lightbox img{max-width:100%;max-height:85vh;border-radius:16px;
+  box-shadow:0 30px 80px rgba(0,0,0,.5);animation:modalIn .4s var(--ease-bounce);}
+.lightbox .lb-cap{position:absolute;bottom:30px;left:50%;transform:translateX(-50%);
+  color:#fff;font-family:'Mali',cursive;font-size:14px;padding:8px 18px;
+  background:rgba(255,255,255,.1);border-radius:999px;backdrop-filter:blur(10px);}
+
 @media (max-width:420px){
   h1{font-size:26px;}
-  .wrap{padding:24px 16px 140px;}
+  .wrap{padding:24px 16px 150px;}
   .avatar-wrap{width:104px;height:104px;}
   .nav-item{padding:8px 11px;}
+  .mp-label{max-width:60px;}
+  .gallery-grid{gap:6px;}
 }
 </style>
 </head>
 <body>
 
-<!-- 🫧 Blobs -->
-<div class="blob b1"></div>
-<div class="blob b2"></div>
-<div class="blob b3"></div>
-<div class="blob b4"></div>
+<div class="bg-image" id="bgImage"></div>
+<div class="blob b1"></div><div class="blob b2"></div>
+<div class="blob b3"></div><div class="blob b4"></div>
 
-<!-- 🖱️ Cursor (desktop) -->
 <div class="cursor-ring"></div>
 <div class="cursor-dot"></div>
 
-<!-- 🔘 ปุ่มมุมขวาบน -->
 <button class="float-btn" id="installBtn" title="ติดตั้งเป็นแอป">📲</button>
-<button class="float-btn" id="themeBtn" title="เปลี่ยนธีม">🌙</button>
+<button class="float-btn" id="paletteBtn" title="เปลี่ยนธีมสี">🎨</button>
+<button class="float-btn" id="themeBtn" title="โหมดกลางวัน/กลางคืน">🌙</button>
 
-<!-- 🎵 Music Player -->
+<div class="palette-picker" id="palettePicker"></div>
+
 <div class="music-player" id="musicPlayer">
+  <button class="mp-btn" id="mpPrev" title="เพลงก่อนหน้า">⏮</button>
   <button class="mp-btn" id="mpBtn" title="เล่น/หยุด">▶</button>
+  <button class="mp-btn" id="mpNext" title="เพลงถัดไป">⏭</button>
   <div class="mp-eq"><span></span><span></span><span></span><span></span></div>
-  <div class="mp-label" id="mpLabel">lofi vibes 🎧</div>
+  <div class="mp-label" id="mpLabel">—</div>
 </div>
-<!-- 🎧 แก้ src เป็นไฟล์เพลงของคุณได้เลย -->
-<audio id="bgm" loop preload="none">
-  <source src="https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3?filename=lofi-study-112191.mp3" type="audio/mpeg" />
-</audio>
+<audio id="bgm" loop preload="none"></audio>
 
-<!-- 📱 Main -->
 <main class="wrap">
-
-  <!-- ===== Header ===== -->
   <header>
     <div class="avatar-wrap reveal d1">
       <div class="avatar-ring"></div>
-      <!-- 🖼️ เปลี่ยนเป็น <img src="รูปของคุณ.jpg" class="avatar" /> ก็ได้ -->
-      <div class="avatar">🍑</div>
+      <div class="avatar" id="avatarEl">🍑</div>
     </div>
-    <h1 class="reveal d2">มะปราง ✿</h1>
-    <p class="tagline reveal d3">
-      นักวาดสายวาไรตี้ <span class="wavy">🎨</span> เล่นเกมบ้าง วาดบ้าง<br />
-      ฝากไอดีไว้ด้วยน้า ถ้าเจอกันในเกมทักได้เลย!
-    </p>
+    <h1 class="reveal d2" id="nameEl">มะปราง ✿</h1>
+    <p class="tagline reveal d3" id="taglineEl"></p>
     <div style="text-align:center;">
-      <div class="status-badge reveal d4">
+      <div class="status-badge reveal d4" id="statusEl">
         <span class="status-dot"></span>
-        <span>ออนไลน์อยู่ • ตอบแชทไว</span>
+        <span id="statusTextEl">ออนไลน์อยู่</span>
       </div>
     </div>
   </header>
 
-  <!-- ===== Game IDs ===== -->
-  <section>
+  <section id="games-section">
     <div class="section-title reveal d3">
       <span class="emoji">🎮</span>
       <span>ไอดีเกม</span>
       <span class="line"></span>
-      <span style="font-size:11px; opacity:.6; font-family:'IBM Plex Sans Thai';">กดคัดลอกได้เลย</span>
+      <span style="font-size:11px;opacity:.6;font-family:'IBM Plex Sans Thai';">กดคัดลอกได้เลย</span>
     </div>
-
-    <div class="id-grid">
-      <!-- ⚙️ การ์ดไอดี — แก้ name / value ได้เลย -->
-      <div class="id-card reveal d3" data-copy="Pang#1234">
-        <div class="game-icon">🎯</div>
-        <div class="id-info">
-          <div class="id-name">VALORANT</div>
-          <div class="id-value">Pang#1234</div>
-        </div>
-        <button class="copy-btn" aria-label="คัดลอกไอดี">
-          <svg class="icon-copy" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg>
-          <svg class="icon-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-        </button>
-      </div>
-
-      <div class="id-card reveal d4" data-copy="ปังปัง✿#9999">
-        <div class="game-icon">⚔️</div>
-        <div class="id-info">
-          <div class="id-name">ROV</div>
-          <div class="id-value">ปังปัง✿#9999</div>
-        </div>
-        <button class="copy-btn" aria-label="คัดลอกไอดี">
-          <svg class="icon-copy" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg>
-          <svg class="icon-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-        </button>
-      </div>
-
-      <div class="id-card reveal d4" data-copy="MangoPang">
-        <div class="game-icon">🍃</div>
-        <div class="id-info">
-          <div class="id-name">GENSHIN IMPACT</div>
-          <div class="id-value">MangoPang</div>
-        </div>
-        <button class="copy-btn" aria-label="คัดลอกไอดี">
-          <svg class="icon-copy" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg>
-          <svg class="icon-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-        </button>
-      </div>
-    </div>
+    <div class="id-grid" id="gamesGrid"></div>
   </section>
 
-  <!-- ===== Links ===== -->
-  <section>
+  <section id="links-section">
     <div class="section-title reveal d5">
-      <span class="emoji">✿</span>
-      <span>ที่อื่นๆ ของเรา</span>
-      <span class="line"></span>
+      <span class="emoji">✿</span><span>ที่อื่นๆ ของเรา</span><span class="line"></span>
     </div>
-
-    <div class="link-list">
-      <a class="link-item reveal d5" href="#" target="_blank" rel="noopener">
-        <span class="link-emoji">🎨</span>
-        <div class="link-text">
-          <div class="link-title">Portfolio งานวาด</div>
-          <div class="link-sub">รวมผลงานที่ผ่านมา</div>
-        </div>
-        <span class="link-arrow">→</span>
-      </a>
-
-      <a class="link-item reveal d5" href="#" target="_blank" rel="noopener">
-        <span class="link-emoji">🛒</span>
-        <div class="link-text">
-          <div class="link-title">Commission เปิดรับอยู่</div>
-          <div class="link-sub">รายละเอียด + ราคา</div>
-        </div>
-        <span class="link-arrow">→</span>
-      </a>
-
-      <a class="link-item reveal d5" href="#" target="_blank" rel="noopener">
-        <span class="link-emoji">📮</span>
-        <div class="link-text">
-          <div class="link-title">ติดต่องาน</div>
-          <div class="link-sub">อีเมล / ไลน์</div>
-        </div>
-        <span class="link-arrow">→</span>
-      </a>
-    </div>
+    <div class="link-list" id="linksList"></div>
   </section>
 
-  <!-- ===== Socials ===== -->
-  <div class="socials reveal d5">
-    <a class="social" href="#" title="Instagram">📷</a>
-    <a class="social" href="#" title="Twitter/X">🐦</a>
-    <a class="social" href="#" title="Discord">💬</a>
-    <a class="social" href="#" title="TikTok">🎵</a>
+  <section id="gallery-section" style="display:none;">
+    <div class="section-title reveal d5">
+      <span class="emoji">🖼️</span><span>แกลเลอรี่</span><span class="line"></span>
+    </div>
+    <div class="gallery-grid" id="galleryGrid"></div>
+  </section>
+
+  <div class="socials reveal d5" id="socialsEl"></div>
+
+  <div class="action-row reveal d5">
+    <button class="action-btn" id="qrBtn">📱 QR Code</button>
+    <button class="action-btn" id="shareBtn">🔗 แชร์ลิงก์</button>
   </div>
 
-  <p class="footer reveal d5">made with <span class="heart">❤</span> by มะปราง</p>
+  <div class="visitor-badge reveal d5">
+    <div class="visitor-inner">
+      <span>👀 มีคนแวะมาแล้ว</span>
+      <span class="num" id="visitorCount">1</span>
+      <span>ครั้ง</span>
+    </div>
+  </div>
+
+  <p class="footer reveal d5" id="footerEl">made with <span class="heart">❤</span> by มะปราง</p>
 </main>
 
-<!-- 🧭 Bottom Nav -->
 <nav class="bottom-nav" id="bottomNav">
   <a class="nav-item active" data-target="top"><span class="nav-emoji">🏠</span><span>home</span></a>
   <a class="nav-item" data-target="games"><span class="nav-emoji">🎮</span><span>เกม</span></a>
   <a class="nav-item" data-target="links"><span class="nav-emoji">🔗</span><span>ลิงก์</span></a>
+  <a class="nav-item" data-target="gallery"><span class="nav-emoji">🖼️</span><span>แกลเลอรี่</span></a>
   <a class="nav-item" data-target="music"><span class="nav-emoji">🎧</span><span>เพลง</span></a>
 </nav>
 
-<!-- 💬 Toast container -->
+<!-- ==================== 🔐 Password Modal ==================== -->
+<div class="modal-overlay" id="passModal">
+  <div class="modal-box">
+    <button class="modal-close" data-close="passModal">✕</button>
+    <h3>🔐 เข้าหน้าตั้งค่า</h3>
+    <p>ใส่รหัสผ่านเพื่อแก้ไขข้อมูลทั้งหมด</p>
+    <div class="field">
+      <div class="pass-wrap">
+        <input type="password" id="passInput" placeholder="รหัสผ่าน..." autocomplete="off" />
+        <button class="pass-toggle" id="passToggle" type="button">👁️</button>
+      </div>
+      <div class="hint">💡 รหัสเริ่มต้น: <code style="background:var(--card);padding:2px 6px;border-radius:4px;">admin123</code> (เปลี่ยนได้ในหน้าตั้งค่า)</div>
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-secondary" data-close="passModal" style="flex:1;">ยกเลิก</button>
+      <button class="btn btn-primary" id="passSubmit" style="flex:1;">🔓 ปลดล็อก</button>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== ⚙️ Settings Panel ==================== -->
+<div class="settings-overlay" id="settingsOverlay">
+  <div class="settings-panel">
+    <div class="settings-head">
+      <h2>⚙️ ตั้งค่า</h2>
+      <button class="modal-close" style="position:static;" id="closeSettings">✕</button>
+    </div>
+    <div class="settings-tabs" id="settingsTabs">
+      <button class="settings-tab active" data-tab="profile">👤 โปรไฟล์</button>
+      <button class="settings-tab" data-tab="games">🎮 เกม</button>
+      <button class="settings-tab" data-tab="links">🔗 ลิงก์</button>
+      <button class="settings-tab" data-tab="socials">📱 โซเชียล</button>
+      <button class="settings-tab" data-tab="playlist">🎵 เพลง</button>
+      <button class="settings-tab" data-tab="gallery">🖼️ แกลเลอรี่</button>
+      <button class="settings-tab" data-tab="appearance">🎨 รูปร่าง</button>
+      <button class="settings-tab" data-tab="data">💾 ข้อมูล</button>
+    </div>
+    <div class="settings-body" id="settingsBody">
+      <!-- โปรไฟล์ -->
+      <div class="tab-content active" data-tab="profile">
+        <div class="field">
+          <label>รูปโปรไฟล์ (URL รูปภาพ หรือ Emoji)</label>
+          <input type="text" data-path="profile.avatar" placeholder="https://... หรือ 🍑" />
+          <div class="hint">ใส่ URL รูปหรือ emoji ก็ได้</div>
+        </div>
+        <div class="field">
+          <label>ชื่อที่แสดง</label>
+          <input type="text" data-path="profile.name" />
+        </div>
+        <div class="field">
+          <label>คำโปรย (ใช้ &lt;br&gt; ขึ้นบรรทัดใหม่ได้)</label>
+          <textarea data-path="profile.tagline"></textarea>
+        </div>
+        <div class="field">
+          <label>สถานะ</label>
+          <input type="text" data-path="profile.status" />
+        </div>
+        <div class="field">
+          <label>ข้อความท้ายเว็บ</label>
+          <input type="text" data-path="profile.footer" />
+        </div>
+      </div>
+
+      <!-- เกม -->
+      <div class="tab-content" data-tab="games">
+        <div id="gamesEditor"></div>
+        <button class="add-btn" data-add="games">＋ เพิ่มไอดีเกม</button>
+      </div>
+
+      <!-- ลิงก์ -->
+      <div class="tab-content" data-tab="links">
+        <div id="linksEditor"></div>
+        <button class="add-btn" data-add="links">＋ เพิ่มลิงก์</button>
+      </div>
+
+      <!-- โซเชียล -->
+      <div class="tab-content" data-tab="socials">
+        <div id="socialsEditor"></div>
+        <button class="add-btn" data-add="socials">＋ เพิ่มโซเชียล</button>
+      </div>
+
+      <!-- เพลง -->
+      <div class="tab-content" data-tab="playlist">
+        <div id="playlistEditor"></div>
+        <button class="add-btn" data-add="playlist">＋ เพิ่มเพลง</button>
+        <div class="hint" style="margin-top:8px;">💡 ใช้ลิงก์ไฟล์ .mp3 ตรงๆ ได้เลย</div>
+      </div>
+
+      <!-- แกลเลอรี่ -->
+      <div class="tab-content" data-tab="gallery">
+        <div id="galleryEditor"></div>
+        <button class="add-btn" data-add="gallery">＋ เพิ่มรูป</button>
+      </div>
+
+      <!-- รูปร่าง -->
+      <div class="tab-content" data-tab="appearance">
+        <div class="field">
+          <label>ภาพพื้นหลัง (URL)</label>
+          <input type="text" data-path="appearance.bgImage" placeholder="https://... (เว้นว่าง = ใช้ค่าเริ่มต้น)" />
+          <div class="hint">ใส่ URL รูปพื้นหลัง ถ้าเว้นว่างจะใช้สี gradient ของธีม</div>
+        </div>
+        <div class="field">
+          <label>ธีมสี</label>
+          <select data-path="appearance.palette">
+            <option value="peach">พีช 🍑</option>
+            <option value="sakura">ซากุระ 🌸</option>
+            <option value="matcha">มัทฉะ 🍵</option>
+            <option value="y2k">Y2K 💾</option>
+            <option value="ocean">โอเชียน 🌊</option>
+            <option value="sunset">ซันเซ็ต 🌅</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>โหมด</label>
+          <select data-path="appearance.theme">
+            <option value="light">กลางวัน ☀️</option>
+            <option value="dark">กลางคืน 🌙</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- ข้อมูล -->
+      <div class="tab-content" data-tab="data">
+        <div class="field">
+          <label>เปลี่ยนรหัสผ่าน</label>
+          <input type="password" id="newPass1" placeholder="รหัสใหม่..." autocomplete="off" />
+        </div>
+        <div class="field">
+          <label>ยืนยันรหัสใหม่</label>
+          <input type="password" id="newPass2" placeholder="พิมพ์อีกครั้ง..." autocomplete="off" />
+        </div>
+        <div class="btn-row">
+          <button class="btn btn-primary" id="changePassBtn">🔑 เปลี่ยนรหัส</button>
+        </div>
+        <hr style="border:none;border-top:1px solid var(--card-brd);margin:20px 0;" />
+        <div class="field">
+          <label>สำรองข้อมูล</label>
+          <div class="hint">ดาวน์โหลดข้อมูลทั้งหมดเป็นไฟล์ JSON เพื่อสำรองไว้</div>
+          <div class="btn-row">
+            <button class="btn btn-secondary" id="exportBtn">📤 Export</button>
+            <button class="btn btn-secondary" id="importBtn">📥 Import</button>
+            <input type="file" id="importFile" accept=".json" style="display:none;" />
+          </div>
+        </div>
+        <hr style="border:none;border-top:1px solid var(--card-brd);margin:20px 0;" />
+        <div class="field">
+          <label>รีเซ็ตเป็นค่าเริ่มต้น</label>
+          <div class="hint">⚠️ ลบข้อมูลทั้งหมดที่แก้ไว้ กลับไปใช้ค่าเริ่มต้น</div>
+          <div class="btn-row">
+            <button class="btn btn-danger" id="resetBtn" style="width:100%;">🗑️ รีเซ็ตทั้งหมด</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== 📱 QR Modal ==================== -->
+<div class="modal-overlay" id="qrModal">
+  <div class="modal-box" style="text-align:center;">
+    <button class="modal-close" data-close="qrModal">✕</button>
+    <h3>📱 แชร์หน้านี้</h3>
+    <p>สแกน QR Code เพื่อเปิด</p>
+    <img class="qr-img" id="qrImg" alt="QR Code" />
+    <p style="font-size:11px;word-break:break-all;opacity:.7;" id="qrUrl"></p>
+    <div class="btn-row" style="margin-top:14px;">
+      <button class="btn btn-primary" id="copyUrlBtn" style="width:100%;">📋 คัดลอกลิงก์</button>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== 🔍 Lightbox ==================== -->
+<div class="lightbox" id="lightbox">
+  <img id="lbImg" alt="" />
+  <div class="lb-cap" id="lbCap"></div>
+</div>
+
 <div class="toast-wrap" id="toastWrap"></div>
 
 <script>
-/* =====================================================
-   ✨ ตัวหลักทั้งหมด — แก้ไขได้ตามใจเลย
-   ===================================================== */
+/* ============================================================
+   ⚙️ DEFAULT CONFIG
+   ============================================================ */
+const DEFAULT_CONFIG = {
+  password: 'admin123',
+  profile: {
+    avatar: '🍑',
+    name: 'มะปราง ✿',
+    tagline: 'นักวาดสายวาไรตี้ <span class="wavy">🎨</span> เล่นเกมบ้าง วาดบ้าง<br>ฝากไอดีไว้ด้วยน้า ถ้าเจอกันในเกมทักได้เลย!',
+    status: 'ออนไลน์อยู่ • ตอบแชทไว',
+    footer: 'made with <span class="heart">❤</span> by มะปราง'
+  },
+  games: [
+    { icon: '🎯', name: 'VALORANT', value: 'Pang#1234' },
+    { icon: '⚔️', name: 'ROV', value: 'ปังปัง✿#9999' },
+    { icon: '🍃', name: 'GENSHIN IMPACT', value: 'MangoPang' }
+  ],
+  links: [
+    { emoji: '🎨', title: 'Portfolio งานวาด', sub: 'รวมผลงานที่ผ่านมา', url: '#' },
+    { emoji: '🛒', title: 'Commission เปิดรับอยู่', sub: 'รายละเอียด + ราคา', url: '#' },
+    { emoji: '📮', title: 'ติดต่องาน', sub: 'อีเมล / ไลน์', url: '#' }
+  ],
+  socials: [
+    { emoji: '📷', title: 'Instagram', url: '#' },
+    { emoji: '🐦', title: 'Twitter', url: '#' },
+    { emoji: '💬', title: 'Discord', url: '#' },
+    { emoji: '🎵', title: 'TikTok', url: '#' }
+  ],
+  playlist: [
+    { name: 'lofi study 🎧', src: 'https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3?filename=lofi-study-112191.mp3' },
+    { name: 'chill beat ☕', src: 'https://cdn.pixabay.com/download/audio/2022/03/15/audio_c8c8a73467.mp3?filename=lofi-chill-medium-version-159456.mp3' },
+    { name: 'soft piano 🌙', src: 'https://cdn.pixabay.com/download/audio/2021/11/25/audio_00fa5593f3.mp3?filename=glad-116336.mp3' }
+  ],
+  gallery: [
+    { src: 'https://picsum.photos/seed/1/400', caption: 'งานวาด #1' },
+    { src: 'https://picsum.photos/seed/2/400', caption: 'งานวาด #2' },
+    { src: 'https://picsum.photos/seed/3/400', caption: 'งานวาด #3' },
+    { src: 'https://picsum.photos/seed/4/400', caption: 'งานวาด #4' },
+    { src: 'https://picsum.photos/seed/5/400', caption: 'งานวาด #5' },
+    { src: 'https://picsum.photos/seed/6/400', caption: 'งานวาด #6' }
+  ],
+  appearance: {
+    theme: 'light',
+    palette: 'peach',
+    bgImage: ''
+  }
+};
+
+/* ============================================================
+   🛠️ Helpers
+   ============================================================ */
 const $ = (s, c=document) => c.querySelector(s);
 const $$ = (s, c=document) => [...c.querySelectorAll(s)];
-
-/* ---------- 1. Entrance reveal ---------- */
-window.addEventListener('load', () => {
-  setTimeout(() => {
-    $$('.reveal').forEach(el => el.classList.add('in'));
-  }, 120);
-});
-
-/* ---------- 2. Theme toggle ---------- */
-const themeBtn = $('#themeBtn');
 const root = document.documentElement;
-const savedTheme = localStorage.getItem('theme');
-if (savedTheme === 'dark') {
-  root.setAttribute('data-theme', 'dark');
-  themeBtn.textContent = '☀️';
-}
-themeBtn.addEventListener('click', () => {
-  const isDark = root.getAttribute('data-theme') === 'dark';
-  const next = isDark ? 'light' : 'dark';
-  root.setAttribute('data-theme', next);
-  themeBtn.textContent = next === 'dark' ? '☀️' : '🌙';
-  localStorage.setItem('theme', next);
-  themeBtn.animate(
-    [{transform:'rotate(0) scale(1)'}, {transform:'rotate(360deg) scale(1.3)'}, {transform:'rotate(360deg) scale(1)'}],
-    {duration:600, easing:'cubic-bezier(.34,1.56,.64,1)'}
-  );
-  spawnSparkles(themeBtn, 10);
-});
+const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-/* ---------- 3. Toast ---------- */
+function escapeHtml(s) {
+  return String(s ?? '').replace(/[&<>"']/g, c => ({
+    '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
+  }[c]));
+}
+function isUrl(s) {
+  return /^(https?:|data:|\/)/.test(String(s || '').trim());
+}
+function getByPath(obj, path) {
+  return path.split('.').reduce((o,k) => o?.[k], obj);
+}
+function setByPath(obj, path, value) {
+  const parts = path.split('.');
+  const last = parts.pop();
+  let cur = obj;
+  for (const p of parts) cur = cur[p];
+  cur[last] = value;
+}
+
+/* ============================================================
+   💾 Config
+   ============================================================ */
+let CONFIG;
+function loadConfig() {
+  try {
+    const saved = localStorage.getItem('linkSpaceConfig');
+    if (saved) {
+      const parsed = JSON.parse(saved);
+      return deepMerge(structuredClone(DEFAULT_CONFIG), parsed);
+    }
+  } catch (e) { console.warn('load config fail', e); }
+  return structuredClone(DEFAULT_CONFIG);
+}
+function deepMerge(target, src) {
+  for (const k in src) {
+    if (src[k] && typeof src[k] === 'object' && !Array.isArray(src[k])) {
+      target[k] = deepMerge(target[k] || {}, src[k]);
+    } else {
+      target[k] = src[k];
+    }
+  }
+  return target;
+}
+function saveConfig() {
+  localStorage.setItem('linkSpaceConfig', JSON.stringify(CONFIG));
+}
+CONFIG = loadConfig();
+
+/* ============================================================
+   🎨 Render everything
+   ============================================================ */
+function renderAll() {
+  renderProfile();
+  renderGames();
+  renderLinks();
+  renderSocials();
+  renderGallery();
+  renderAppearance();
+  renderPlaylist();
+  renderPalettePicker();
+  renderSettingsEditors();
+}
+
+function renderProfile() {
+  const av = $('#avatarEl');
+  if (isUrl(CONFIG.profile.avatar)) {
+    av.innerHTML = `<img src="${escapeHtml(CONFIG.profile.avatar)}" alt="avatar" onerror="this.style.display='none';this.parentElement.textContent='🍑'" />`;
+  } else {
+    av.textContent = CONFIG.profile.avatar || '🍑';
+  }
+  $('#nameEl').textContent = CONFIG.profile.name;
+  $('#taglineEl').innerHTML = CONFIG.profile.tagline;
+  $('#statusTextEl').textContent = CONFIG.profile.status;
+  $('#footerEl').innerHTML = CONFIG.profile.footer;
+}
+
+function renderGames() {
+  const grid = $('#gamesGrid');
+  if (!CONFIG.games.length) {
+    grid.innerHTML = '<p style="text-align:center;color:var(--ink-soft);font-size:13px;padding:20px;">ยังไม่มีไอดีเกม — เพิ่มได้ในหน้าตั้งค่า</p>';
+    return;
+  }
+  grid.innerHTML = CONFIG.games.map((g, i) => `
+    <div class="id-card reveal in" data-copy="${escapeHtml(g.value)}" data-idx="${i}">
+      <div class="game-icon">${escapeHtml(g.icon)}</div>
+      <div class="id-info">
+        <div class="id-name">${escapeHtml(g.name)}</div>
+        <div class="id-value">${escapeHtml(g.value)}</div>
+      </div>
+      <button class="copy-btn" aria-label="คัดลอก">
+        <svg class="icon-copy" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg>
+        <svg class="icon-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+      </button>
+    </div>
+  `).join('');
+  bindCopyButtons();
+}
+
+function renderLinks() {
+  const list = $('#linksList');
+  list.innerHTML = CONFIG.links.map(l => `
+    <a class="link-item reveal in" href="${escapeHtml(l.url || '#')}" target="_blank" rel="noopener">
+      <span class="link-emoji">${escapeHtml(l.emoji)}</span>
+      <div class="link-text">
+        <div class="link-title">${escapeHtml(l.title)}</div>
+        <div class="link-sub">${escapeHtml(l.sub)}</div>
+      </div>
+      <span class="link-arrow">→</span>
+    </a>
+  `).join('');
+}
+
+function renderSocials() {
+  $('#socialsEl').innerHTML = CONFIG.socials.map(s => `
+    <a class="social" href="${escapeHtml(s.url || '#')}" title="${escapeHtml(s.title)}" target="_blank" rel="noopener">${escapeHtml(s.emoji)}</a>
+  `).join('');
+}
+
+function renderGallery() {
+  const sec = $('#gallery-section');
+  if (!CONFIG.gallery.length) { sec.style.display = 'none'; return; }
+  sec.style.display = 'block';
+  $('#galleryGrid').innerHTML = CONFIG.gallery.map((g, i) => `
+    <div class="gallery-item" data-idx="${i}">
+      <img src="${escapeHtml(g.src)}" alt="${escapeHtml(g.caption || '')}" loading="lazy" />
+      <div class="cap">${escapeHtml(g.caption || '')}</div>
+    </div>
+  `).join('');
+  $$('.gallery-item').forEach(item => {
+    item.addEventListener('click', () => {
+      const g = CONFIG.gallery[+item.dataset.idx];
+      $('#lbImg').src = g.src;
+      $('#lbCap').textContent = g.caption || '';
+      $('#lightbox').classList.add('show');
+    });
+  });
+}
+
+function renderAppearance() {
+  root.setAttribute('data-theme', CONFIG.appearance.theme);
+  root.setAttribute('data-palette', CONFIG.appearance.palette);
+  $('#themeBtn').textContent = CONFIG.appearance.theme === 'dark' ? '☀️' : '🌙';
+  const bg = CONFIG.appearance.bgImage;
+  const bgEl = $('#bgImage');
+  if (bg) {
+    bgEl.style.backgroundImage = `url("${bg}")`;
+    document.body.classList.add('has-bg');
+  } else {
+    bgEl.style.backgroundImage = '';
+    document.body.classList.remove('has-bg');
+  }
+}
+
+function renderPalettePicker() {
+  const palettes = [
+    {id:'peach', label:'พีช 🍑'},
+    {id:'sakura', label:'ซากุระ 🌸'},
+    {id:'matcha', label:'มัทฉะ 🍵'},
+    {id:'y2k', label:'Y2K 💾'},
+    {id:'ocean', label:'โอเชียน 🌊'},
+    {id:'sunset', label:'ซันเซ็ต 🌅'}
+  ];
+  const picker = $('#palettePicker');
+  picker.innerHTML = palettes.map(p =>
+    `<button class="palette-dot ${p.id === CONFIG.appearance.palette ? 'active' : ''}" data-p="${p.id}" title="${p.label}"></button>`
+  ).join('');
+  $$('.palette-dot', picker).forEach(dot => {
+    dot.addEventListener('click', () => {
+      CONFIG.appearance.palette = dot.dataset.p;
+      saveConfig();
+      renderAppearance();
+      $$('.palette-dot', picker).forEach(d => d.classList.toggle('active', d.dataset.p === dot.dataset.p));
+      spawnSparkles(dot, 14);
+      burstConfetti(dot, 10);
+      playSound('success');
+    });
+  });
+}
+
+function renderPlaylist() {
+  const p = CONFIG.playlist;
+  if (!p.length) { $('#mpLabel').textContent = 'ไม่มีเพลง'; return; }
+  trackIndex = Math.min(trackIndex, p.length - 1);
+  bgm.src = p[trackIndex].src;
+  $('#mpLabel').textContent = p[trackIndex].name;
+}
+
+/* ============================================================
+   📋 Copy buttons
+   ============================================================ */
+function bindCopyButtons() {
+  $$('.id-card').forEach(card => {
+    const btn = $('.copy-btn', card);
+    card.addEventListener('click', async () => {
+      const value = card.dataset.copy;
+      try {
+        if (navigator.clipboard && window.isSecureContext) {
+          await navigator.clipboard.writeText(value);
+        } else {
+          const ta = document.createElement('textarea');
+          ta.value = value; ta.style.position='fixed'; ta.style.opacity='0';
+          document.body.appendChild(ta); ta.select();
+          document.execCommand('copy'); ta.remove();
+        }
+        btn.classList.add('copied');
+        showToast(`คัดลอก "${value}" แล้ว!`, '📋');
+        spawnSparkles(btn, 16);
+        burstConfetti(btn, 22);
+        playSound('success');
+        setTimeout(() => btn.classList.remove('copied'), 1600);
+      } catch {
+        showToast('คัดลอกไม่สำเร็จ ลองใหม่นะ', '😢');
+        playSound('error');
+      }
+    });
+  });
+}
+
+/* ============================================================
+   🔔 Toast / Sparkles / Confetti / Sound
+   ============================================================ */
 function showToast(text, emoji = '✨') {
   const wrap = $('#toastWrap');
   const t = document.createElement('div');
   t.className = 'toast';
-  t.innerHTML = `<span class="t-emoji">${emoji}</span><span>${text}</span>`;
+  t.innerHTML = `<span class="t-emoji">${emoji}</span><span>${escapeHtml(text)}</span>`;
   wrap.appendChild(t);
   setTimeout(() => t.remove(), 2800);
 }
 
-/* ---------- 4. Copy Game ID (รองรับอักษรพิเศษ) ---------- */
-$$('.id-card').forEach(card => {
-  const btn = $('.copy-btn', card);
-  const value = card.dataset.copy;
-  card.addEventListener('click', async (e) => {
-    // ถ้ากดปุ่ม copy เอง ไม่ต้องทำซ้ำ
-    const text = value;
-    try {
-      if (navigator.clipboard && window.isSecureContext) {
-        await navigator.clipboard.writeText(text);
-      } else {
-        // fallback browser เก่า
-        const ta = document.createElement('textarea');
-        ta.value = text;
-        ta.style.position = 'fixed';
-        ta.style.opacity = '0';
-        document.body.appendChild(ta);
-        ta.select();
-        document.execCommand('copy');
-        ta.remove();
-      }
-      btn.classList.add('copied');
-      showToast(`คัดลอก "${text}" แล้ว!`, '📋');
-      spawnSparkles(btn, 14);
-      burstConfetti(btn);
-      setTimeout(() => btn.classList.remove('copied'), 1600);
-    } catch (err) {
-      showToast('คัดลอกไม่สำเร็จ ลองใหม่อีกทีนะ', '😢');
-    }
-  });
-});
-
-/* ---------- 5. Cursor + Trail (desktop) ---------- */
-const isFine = window.matchMedia('(hover:hover) and (pointer:fine)').matches;
-if (isFine) {
-  const dot = $('.cursor-dot');
-  const ring = $('.cursor-ring');
-  let mx = window.innerWidth/2, my = window.innerHeight/2;
-  let rx = mx, ry = my;
-
-  window.addEventListener('mousemove', e => {
-    mx = e.clientX; my = e.clientY;
-    dot.style.transform = `translate(${mx - 4}px, ${my - 4}px)`;
-    createTrail(mx, my);
-  });
-
-  (function tick() {
-    rx += (mx - rx) * 0.18;
-    ry += (my - ry) * 0.18;
-    ring.style.transform = `translate(${rx - 17}px, ${ry - 17}px)`;
-    requestAnimationFrame(tick);
-  })();
-
-  // ขยาย ring ตอน hover ของ interactive
-  document.addEventListener('mouseover', e => {
-    if (e.target.closest('a,button,.id-card,.social,.nav-item,.link-item')) {
-      ring.classList.add('hover');
-    }
-  });
-  document.addEventListener('mouseout', e => {
-    if (e.target.closest('a,button,.id-card,.social,.nav-item,.link-item')) {
-      ring.classList.remove('hover');
-    }
-  });
-
-  // Trail dots
-  let trailT = 0;
-  function createTrail(x, y) {
-    const now = performance.now();
-    if (now - trailT < 40) return; // throttle
-    trailT = now;
-    const d = document.createElement('div');
-    d.className = 'trail-dot';
-    d.style.left = (x - 3) + 'px';
-    d.style.top  = (y - 3) + 'px';
-    d.style.background = pickColor();
-    document.body.appendChild(d);
-    const anim = d.animate(
-      [
-        {transform:'translate(0,0) scale(1)', opacity:.9},
-        {transform:`translate(${(Math.random()-.5)*30}px, ${(Math.random()-.5)*30}px) scale(0)`, opacity:0}
-      ],
-      {duration: 700 + Math.random()*300, easing:'cubic-bezier(.22,1,.36,1)'}
-    );
-    anim.onfinish = () => d.remove();
-  }
-  function pickColor() {
-    const colors = ['#ff7a59','#ffd166','#6ec9b8','#c77dff'];
-    return colors[Math.floor(Math.random()*colors.length)];
-  }
-}
-
-/* ---------- 6. Click Sparkles ---------- */
-document.addEventListener('click', (e) => {
-  // ไม่ spawn ถ้าคลิกใน input
-  if (e.target.closest('input,textarea')) return;
-  spawnSparkles({getBoundingClientRect: () => ({left: e.clientX - 4, top: e.clientY - 4, width: 8, height: 8})}, 8);
-});
-
 function spawnSparkles(el, count = 8) {
-  const rect = el.getBoundingClientRect();
-  const cx = rect.left + rect.width/2;
-  const cy = rect.top + rect.height/2;
-  const colors = ['#ff7a59','#ffd166','#6ec9b8','#c77dff','#2d2422'];
+  if (prefersReduced) return;
+  const r = el.getBoundingClientRect();
+  const cx = r.left + r.width/2, cy = r.top + r.height/2;
+  const cs = getComputedStyle(root);
+  const colors = ['--accent','--accent-2','--accent-3','--accent-4','--ink'].map(v => cs.getPropertyValue(v).trim());
   for (let i = 0; i < count; i++) {
     const s = document.createElement('div');
     s.className = 'spark';
-    s.style.left = cx + 'px';
-    s.style.top = cy + 'px';
+    s.style.left = cx+'px'; s.style.top = cy+'px';
     s.style.background = colors[i % colors.length];
-    s.style.width = s.style.height = (5 + Math.random()*5) + 'px';
+    s.style.width = s.style.height = (5 + Math.random()*5)+'px';
     document.body.appendChild(s);
-    const angle = (Math.PI * 2 * i) / count + Math.random()*0.5;
+    const ang = (Math.PI*2*i)/count + Math.random()*.5;
     const dist = 40 + Math.random()*50;
-    const dx = Math.cos(angle) * dist;
-    const dy = Math.sin(angle) * dist;
     const anim = s.animate(
-      [
-        {transform:'translate(-50%,-50%) scale(1)', opacity:1},
-        {transform:`translate(calc(-50% + ${dx}px), calc(-50% + ${dy}px)) scale(0)`, opacity:0}
-      ],
+      [{transform:'translate(-50%,-50%) scale(1)', opacity:1},
+       {transform:`translate(calc(-50% + ${Math.cos(ang)*dist}px), calc(-50% + ${Math.sin(ang)*dist}px)) scale(0)`, opacity:0}],
       {duration: 700 + Math.random()*400, easing:'cubic-bezier(.22,1,.36,1)'}
     );
     anim.onfinish = () => s.remove();
   }
 }
-
-/* ---------- 7. Confetti burst (ตอนคัดลอก) ---------- */
-function burstConfetti(el) {
-  const rect = el.getBoundingClientRect();
-  const cx = rect.left + rect.width/2;
-  const cy = rect.top + rect.height/2;
-  const colors = ['#ff7a59','#ffd166','#6ec9b8','#c77dff','#ff477e'];
-  for (let i = 0; i < 18; i++) {
+function burstConfetti(el, count = 18) {
+  if (prefersReduced) return;
+  const r = el.getBoundingClientRect();
+  const cx = r.left + r.width/2, cy = r.top + r.height/2;
+  const colors = ['#ff7a59','#ffd166','#6ec9b8','#c77dff','#ff477e','#00e5ff'];
+  for (let i = 0; i < count; i++) {
     const c = document.createElement('div');
     c.className = 'confetti';
-    c.style.left = cx + 'px';
-    c.style.top = cy + 'px';
+    c.style.left = cx+'px'; c.style.top = cy+'px';
     c.style.background = colors[i % colors.length];
     c.style.borderRadius = Math.random() > .5 ? '50%' : '2px';
     document.body.appendChild(c);
-    const angle = Math.random() * Math.PI * 2;
+    const ang = Math.random()*Math.PI*2;
     const dist = 60 + Math.random()*80;
-    const dx = Math.cos(angle) * dist;
-    const dy = Math.sin(angle) * dist - 40;
-    const rot = (Math.random()-.5) * 720;
+    const dx = Math.cos(ang)*dist, dy = Math.sin(ang)*dist - 40;
+    const rot = (Math.random()-.5)*720;
     const anim = c.animate(
-      [
-        {transform:'translate(-50%,-50%) rotate(0) scale(1)', opacity:1},
-        {transform:`translate(calc(-50% + ${dx}px), calc(-50% + ${dy + 100}px)) rotate(${rot}deg) scale(.4)`, opacity:0}
-      ],
+      [{transform:'translate(-50%,-50%) rotate(0) scale(1)', opacity:1},
+       {transform:`translate(calc(-50% + ${dx}px), calc(-50% + ${dy+100}px)) rotate(${rot}deg) scale(.4)`, opacity:0}],
       {duration: 900 + Math.random()*500, easing:'cubic-bezier(.22,1,.36,1)'}
     );
     anim.onfinish = () => c.remove();
   }
 }
+let audioCtx = null;
+function initAudio() {
+  if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  return audioCtx;
+}
+function playSound(type = 'tap') {
+  if (prefersReduced) return;
+  try {
+    const ctx = initAudio();
+    const o = ctx.createOscillator(), g = ctx.createGain();
+    o.connect(g); g.connect(ctx.destination);
+    if (type === 'tap') {
+      o.type='sine'; o.frequency.setValueAtTime(880, ctx.currentTime);
+      o.frequency.exponentialRampToValueAtTime(1320, ctx.currentTime+.08);
+      g.gain.setValueAtTime(.06, ctx.currentTime);
+      g.gain.exponentialRampToValueAtTime(.001, ctx.currentTime+.12);
+      o.start(); o.stop(ctx.currentTime+.12);
+    } else if (type === 'success') {
+      o.type='triangle';
+      o.frequency.setValueAtTime(523, ctx.currentTime);
+      o.frequency.setValueAtTime(659, ctx.currentTime+.08);
+      o.frequency.setValueAtTime(784, ctx.currentTime+.16);
+      g.gain.setValueAtTime(.08, ctx.currentTime);
+      g.gain.exponentialRampToValueAtTime(.001, ctx.currentTime+.3);
+      o.start(); o.stop(ctx.currentTime+.3);
+    } else if (type === 'error') {
+      o.type='sawtooth'; o.frequency.setValueAtTime(220, ctx.currentTime);
+      o.frequency.exponentialRampToValueAtTime(110, ctx.currentTime+.2);
+      g.gain.setValueAtTime(.06, ctx.currentTime);
+      g.gain.exponentialRampToValueAtTime(.001, ctx.currentTime+.25);
+      o.start(); o.stop(ctx.currentTime+.25);
+    }
+  } catch {}
+}
 
-/* ---------- 8. Music Player ---------- */
+/* ============================================================
+   🖱️ Cursor + Trail
+   ============================================================ */
+if (window.matchMedia('(hover:hover) and (pointer:fine)').matches) {
+  const dot = $('.cursor-dot'), ring = $('.cursor-ring');
+  let mx = innerWidth/2, my = innerHeight/2, rx = mx, ry = my;
+  window.addEventListener('mousemove', e => {
+    mx = e.clientX; my = e.clientY;
+    dot.style.transform = `translate(${mx-4}px, ${my-4}px)`;
+    createTrail(mx, my);
+  });
+  (function tick(){
+    rx += (mx-rx)*.18; ry += (my-ry)*.18;
+    ring.style.transform = `translate(${rx-17}px, ${ry-17}px)`;
+    requestAnimationFrame(tick);
+  })();
+  document.addEventListener('mouseover', e => {
+    if (e.target.closest('a,button,.id-card,.social,.nav-item,.link-item,.palette-dot,.action-btn,.gallery-item')) ring.classList.add('hover');
+  });
+  document.addEventListener('mouseout', e => {
+    if (e.target.closest('a,button,.id-card,.social,.nav-item,.link-item,.palette-dot,.action-btn,.gallery-item')) ring.classList.remove('hover');
+  });
+  let lastT = 0;
+  function createTrail(x, y) {
+    const now = performance.now();
+    if (now - lastT < 45) return;
+    lastT = now;
+    const d = document.createElement('div');
+    d.className = 'trail-dot';
+    d.style.left = (x-3)+'px'; d.style.top = (y-3)+'px';
+    const cs = getComputedStyle(root);
+    const colors = ['--accent','--accent-2','--accent-3','--accent-4'].map(v => cs.getPropertyValue(v).trim());
+    d.style.background = colors[Math.floor(Math.random()*colors.length)];
+    document.body.appendChild(d);
+    const anim = d.animate(
+      [{transform:'translate(0,0) scale(1)', opacity:.9},
+       {transform:`translate(${(Math.random()-.5)*30}px, ${(Math.random()-.5)*30}px) scale(0)`, opacity:0}],
+      {duration: 700 + Math.random()*300, easing:'cubic-bezier(.22,1,.36,1)'}
+    );
+    anim.onfinish = () => d.remove();
+  }
+}
+
+/* ============================================================
+   ✨ Click effects
+   ============================================================ */
+document.addEventListener('click', (e) => {
+  if (e.target.closest('input,textarea,select')) return;
+  const x = e.clientX, y = e.clientY;
+  const r = document.createElement('div');
+  r.className = 'ripple';
+  r.style.left = (x-10)+'px'; r.style.top = (y-10)+'px';
+  r.style.width = r.style.height = '20px';
+  document.body.appendChild(r);
+  r.animate([{transform:'scale(1)', opacity:.9}, {transform:'scale(8)', opacity:0}],
+    {duration:650, easing:'cubic-bezier(.22,1,.36,1)'}).onfinish = () => r.remove();
+  spawnSparkles({getBoundingClientRect: () => ({left:x-4, top:y-4, width:8, height:8})}, 8);
+  playSound('tap');
+});
+
+/* ============================================================
+   🎵 Music Player
+   ============================================================ */
 const bgm = $('#bgm');
-const mpBtn = $('#mpBtn');
-const musicPlayer = $('#musicPlayer');
-const mpLabel = $('#mpLabel');
-let playing = false;
+const mpBtn = $('#mpBtn'), mpPrev = $('#mpPrev'), mpNext = $('#mpNext');
+const musicPlayer = $('#musicPlayer'), mpLabel = $('#mpLabel');
+let trackIndex = 0, playing = false;
 
 mpBtn.addEventListener('click', async () => {
+  if (!CONFIG.playlist.length) { showToast('ยังไม่มีเพลงในเพลย์ลิสต์', '🎵'); return; }
   try {
     if (!playing) {
-      bgm.volume = 0.35;
+      bgm.volume = .35;
       await bgm.play();
       playing = true;
       mpBtn.textContent = '❚❚';
       musicPlayer.classList.add('playing');
-      mpLabel.textContent = 'now playing ✿';
       showToast('เปิดเพลงแล้ว ฟังเพลินๆ นะ', '🎧');
     } else {
       bgm.pause();
       playing = false;
       mpBtn.textContent = '▶';
       musicPlayer.classList.remove('playing');
-      mpLabel.textContent = 'lofi vibes 🎧';
     }
-  } catch (err) {
-    showToast('เล่นเพลงไม่ได้ ลองแตะอีกทีนะ', '🎵');
-  }
+  } catch { showToast('เล่นเพลงไม่ได้ ลองแตะอีกทีนะ', '🎵'); }
 });
+mpNext.addEventListener('click', async () => {
+  if (!CONFIG.playlist.length) return;
+  trackIndex = (trackIndex + 1) % CONFIG.playlist.length;
+  renderPlaylist();
+  spawnSparkles(mpNext, 6);
+  if (playing) try { await bgm.play(); } catch {}
+  showToast(`เพลงถัดไป: ${CONFIG.playlist[trackIndex].name}`, '⏭');
+});
+mpPrev.addEventListener('click', async () => {
+  if (!CONFIG.playlist.length) return;
+  trackIndex = (trackIndex - 1 + CONFIG.playlist.length) % CONFIG.playlist.length;
+  renderPlaylist();
+  spawnSparkles(mpPrev, 6);
+  if (playing) try { await bgm.play(); } catch {}
+  showToast(`เพลงก่อนหน้า: ${CONFIG.playlist[trackIndex].name}`, '⏮');
+});
+bgm.addEventListener('ended', () => { if (playing) mpNext.click(); });
 
-/* ---------- 9. Bottom nav (scroll to section + active) ---------- */
+/* ============================================================
+   🧭 Bottom nav
+   ============================================================ */
 const navItems = $$('.nav-item');
 navItems.forEach(item => {
   item.addEventListener('click', (e) => {
     e.preventDefault();
-    const target = item.dataset.target;
-    if (target === 'top') {
-      window.scrollTo({top:0, behavior:'smooth'});
-    } else if (target === 'music') {
-      // สั่นนิดหน่อย + ไฮไลต์ music player
+    const t = item.dataset.target;
+    if (t === 'top') scrollTo({top:0, behavior:'smooth'});
+    else if (t === 'music') {
       musicPlayer.animate(
-        [{transform:'scale(1)'},{transform:'scale(1.15) rotate(5deg)'},{transform:'scale(1)'}],
+        [{transform:'scale(1)'},{transform:'scale(1.18) rotate(6deg)'},{transform:'scale(1)'}],
         {duration:600, easing:'cubic-bezier(.34,1.56,.64,1)'}
       );
-      spawnSparkles(musicPlayer, 10);
+      spawnSparkles(musicPlayer, 12);
       return;
-    } else if (target === 'games' || target === 'links') {
-      const el = target === 'games'
-        ? $$('.section-title')[0]
-        : $$('.section-title')[1];
+    } else {
+      const el = $(`#${t}-section`);
       el?.scrollIntoView({behavior:'smooth', block:'start'});
     }
     navItems.forEach(n => n.classList.remove('active'));
     item.classList.add('active');
   });
 });
-
-// อัปเดต active ตอน scroll
-const sections = [
-  {el: document.body, target: 'top'},
-  {el: $$('.section-title')[0], target: 'games'},
-  {el: $$('.section-title')[1], target: 'links'}
-];
-window.addEventListener('scroll', () => {
-  const y = window.scrollY + 120;
-  let current = 'top';
-  sections.forEach(s => {
-    if (s.el && s.el.offsetTop <= y) current = s.target;
+addEventListener('scroll', () => {
+  const y = scrollY + 120;
+  let cur = 'top';
+  ['games','links','gallery'].forEach(id => {
+    const el = $(`#${id}-section`);
+    if (el && el.style.display !== 'none' && el.offsetTop <= y) cur = id;
   });
-  if (current === 'top' && window.scrollY < 100) current = 'top';
-  navItems.forEach(n => n.classList.toggle('active', n.dataset.target === current));
+  if (scrollY < 100) cur = 'top';
+  navItems.forEach(n => n.classList.toggle('active', n.dataset.target === cur));
 }, {passive:true});
 
-/* ---------- 10. PWA Install ---------- */
+/* ============================================================
+   🔐 Hidden settings access (tap footer 5 times)
+   ============================================================ */
+let footerTaps = 0, footerTapTimer = null;
+$('#footerEl').addEventListener('click', () => {
+  footerTaps++;
+  clearTimeout(footerTapTimer);
+  footerTapTimer = setTimeout(() => { footerTaps = 0; }, 1500);
+  if (footerTaps >= 5) {
+    footerTaps = 0;
+    openPasswordModal();
+  }
+});
+
+function openPasswordModal() {
+  $('#passInput').value = '';
+  $('#passModal').classList.add('show');
+  setTimeout(() => $('#passInput').focus(), 300);
+}
+$('#passToggle').addEventListener('click', () => {
+  const inp = $('#passInput');
+  inp.type = inp.type === 'password' ? 'text' : 'password';
+  $('#passToggle').textContent = inp.type === 'password' ? '👁️' : '🙈';
+});
+$('#passInput').addEventListener('keydown', e => {
+  if (e.key === 'Enter') $('#passSubmit').click();
+});
+$('#passSubmit').addEventListener('click', () => {
+  const v = $('#passInput').value;
+  if (v === CONFIG.password) {
+    $('#passModal').classList.remove('show');
+    openSettings();
+    playSound('success');
+  } else {
+    showToast('รหัสไม่ถูกต้อง ลองใหม่นะ', '❌');
+    playSound('error');
+    $('#passInput').value = '';
+    $('#passInput').focus();
+  }
+});
+
+/* ============================================================
+   ⚙️ Settings Panel
+   ============================================================ */
+function openSettings() {
+  $('#settingsOverlay').classList.add('show');
+  renderSettingsEditors();
+  fillSettingsFields();
+}
+$('#closeSettings').addEventListener('click', () => {
+  $('#settingsOverlay').classList.remove('show');
+});
+
+// Tabs
+$$('.settings-tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    $$('.settings-tab').forEach(t => t.classList.remove('active'));
+    tab.classList.add('active');
+    $$('.tab-content').forEach(c => c.classList.toggle('active', c.dataset.tab === tab.dataset.tab));
+    spawnSparkles(tab, 6);
+  });
+});
+
+// Fill simple fields (single-value inputs)
+function fillSettingsFields() {
+  $$('[data-path]', $('#settingsBody')).forEach(el => {
+    const val = getByPath(CONFIG, el.dataset.path);
+    if (val !== undefined) el.value = val;
+  });
+}
+
+// Bind simple fields (auto-save on input)
+$$('[data-path]', $('#settingsBody')).forEach(el => {
+  el.addEventListener('input', () => {
+    setByPath(CONFIG, el.dataset.path, el.value);
+    saveConfig();
+    renderAll();
+  });
+});
+
+/* -------- List Editors -------- */
+function renderSettingsEditors() {
+  renderListEditor('games', CONFIG.games, [
+    {key:'icon', label:'อิโมจิ', placeholder:'🎮'},
+    {key:'name', label:'ชื่อเกม', placeholder:'VALORANT'},
+    {key:'value', label:'ไอดี', placeholder:'Player#1234'}
+  ]);
+  renderListEditor('links', CONFIG.links, [
+    {key:'emoji', label:'อิโมจิ', placeholder:'🔗'},
+    {key:'title', label:'หัวข้อ', placeholder:'Portfolio'},
+    {key:'sub', label:'คำอธิบายสั้น', placeholder:'รวมผลงาน'},
+    {key:'url', label:'ลิงก์', placeholder:'https://...'}
+  ]);
+  renderListEditor('socials', CONFIG.socials, [
+    {key:'emoji', label:'อิโมจิ', placeholder:'📷'},
+    {key:'title', label:'ชื่อ', placeholder:'Instagram'},
+    {key:'url', label:'ลิงก์', placeholder:'https://...'}
+  ]);
+  renderListEditor('playlist', CONFIG.playlist, [
+    {key:'name', label:'ชื่อเพลง', placeholder:'lofi 🎧'},
+    {key:'src', label:'URL ไฟล์เพลง (.mp3)', placeholder:'https://...'}
+  ]);
+  renderListEditor('gallery', CONFIG.gallery, [
+    {key:'src', label:'URL รูป', placeholder:'https://...'},
+    {key:'caption', label:'คำบรรยาย', placeholder:'ชื่อผลงาน'}
+  ]);
+}
+
+function renderListEditor(type, arr, fields) {
+  const editor = $(`#${type}Editor`);
+  if (!editor) return;
+  if (!arr.length) {
+    editor.innerHTML = `<div style="text-align:center;padding:20px;color:var(--ink-soft);font-size:13px;">ยังไม่มีรายการ กดปุ่มด้านล่างเพื่อเพิ่ม</div>`;
+    return;
+  }
+  editor.innerHTML = arr.map((item, i) => `
+    <div class="item-editor" data-type="${type}" data-idx="${i}">
+      <button class="delete-btn" data-del="${type}" data-idx="${i}" title="ลบ">✕</button>
+      ${fields.map(f => `
+        <div class="field">
+          <label>${escapeHtml(f.label)}</label>
+          <input type="text" data-type="${type}" data-idx="${i}" data-key="${f.key}"
+                 value="${escapeHtml(item[f.key] || '')}" placeholder="${escapeHtml(f.placeholder || '')}" />
+        </div>
+      `).join('')}
+    </div>
+  `).join('');
+
+  $$(`#${type}Editor input`).forEach(inp => {
+    inp.addEventListener('input', () => {
+      const i = +inp.dataset.idx;
+      CONFIG[type][i][inp.dataset.key] = inp.value;
+      saveConfig();
+      renderAll();
+    });
+  });
+  $$(`#${type}Editor .delete-btn`).forEach(btn => {
+    btn.addEventListener('click', () => {
+      const i = +btn.dataset.idx;
+      CONFIG[type].splice(i, 1);
+      saveConfig();
+      renderAll();
+      renderSettingsEditors();
+      showToast('ลบเรียบร้อย', '🗑️');
+      playSound('error');
+    });
+  });
+}
+
+// Add buttons
+$$('[data-add]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const type = btn.dataset.add;
+    const templates = {
+      games:    { icon: '🎮', name: 'เกมใหม่', value: 'Player#0000' },
+      links:    { emoji: '🔗', title: 'ลิงก์ใหม่', sub: 'คำอธิบาย', url: '#' },
+      socials:  { emoji: '📱', title: 'โซเชียลใหม่', url: '#' },
+      playlist: { name: 'เพลงใหม่ 🎵', src: '' },
+      gallery:  { src: 'https://picsum.photos/seed/' + Date.now() + '/400', caption: 'รูปใหม่' }
+    };
+    CONFIG[type].push({ ...templates[type] });
+    saveConfig();
+    renderAll();
+    renderSettingsEditors();
+    spawnSparkles(btn, 12);
+    playSound('success');
+    // scroll to bottom of editor
+    const ed = $(`#${type}Editor`);
+    ed?.lastElementChild?.scrollIntoView({behavior:'smooth', block:'center'});
+  });
+});
+
+/* -------- Change Password -------- */
+$('#changePassBtn').addEventListener('click', () => {
+  const p1 = $('#newPass1').value;
+  const p2 = $('#newPass2').value;
+  if (!p1 || p1.length < 4) { showToast('รหัสต้องยาวอย่างน้อย 4 ตัว', '⚠️'); return; }
+  if (p1 !== p2) { showToast('รหัสไม่ตรงกัน ลองใหม่นะ', '❌'); return; }
+  CONFIG.password = p1;
+  saveConfig();
+  $('#newPass1').value = ''; $('#newPass2').value = '';
+  showToast('เปลี่ยนรหัสเรียบร้อย!', '🔑');
+  burstConfetti($('#changePassBtn'), 20);
+  playSound('success');
+});
+
+/* -------- Export / Import -------- */
+$('#exportBtn').addEventListener('click', () => {
+  const data = JSON.stringify(CONFIG, null, 2);
+  const blob = new Blob([data], {type:'application/json'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `linkspace-backup-${new Date().toISOString().slice(0,10)}.json`;
+  a.click();
+  URL.revokeObjectURL(url);
+  showToast('ดาวน์โหลดไฟล์สำรองแล้ว', '📤');
+  playSound('success');
+});
+$('#importBtn').addEventListener('click', () => $('#importFile').click());
+$('#importFile').addEventListener('change', (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = () => {
+    try {
+      const data = JSON.parse(reader.result);
+      CONFIG = deepMerge(structuredClone(DEFAULT_CONFIG), data);
+      saveConfig();
+      renderAll();
+      renderSettingsEditors();
+      fillSettingsFields();
+      showToast('นำเข้าข้อมูลสำเร็จ!', '📥');
+      burstConfetti($('#importBtn'), 20);
+      playSound('success');
+    } catch {
+      showToast('ไฟล์ไม่ถูกต้อง', '❌');
+      playSound('error');
+    }
+  };
+  reader.readAsText(file);
+  e.target.value = '';
+});
+
+/* -------- Reset -------- */
+$('#resetBtn').addEventListener('click', () => {
+  if (!confirm('แน่ใจนะ? ข้อมูลทั้งหมดจะหายไปและกลับเป็นค่าเริ่มต้น')) return;
+  localStorage.removeItem('linkSpaceConfig');
+  CONFIG = structuredClone(DEFAULT_CONFIG);
+  saveConfig();
+  renderAll();
+  renderSettingsEditors();
+  fillSettingsFields();
+  showToast('รีเซ็ตเรียบร้อย', '🔄');
+  playSound('error');
+});
+
+/* ============================================================
+   🔐 Theme & Palette buttons (จากด้านนอก)
+   ============================================================ */
+$('#themeBtn').addEventListener('click', () => {
+  CONFIG.appearance.theme = CONFIG.appearance.theme === 'dark' ? 'light' : 'dark';
+  saveConfig();
+  renderAppearance();
+  spawnSparkles($('#themeBtn'), 12);
+  playSound('tap');
+});
+$('#paletteBtn').addEventListener('click', (e) => {
+  e.stopPropagation();
+  $('#palettePicker').classList.toggle('show');
+  spawnSparkles($('#paletteBtn'), 8);
+});
+document.addEventListener('click', (e) => {
+  if (!e.target.closest('#palettePicker') && e.target !== $('#paletteBtn')) {
+    $('#palettePicker').classList.remove('show');
+  }
+});
+
+/* ============================================================
+   📱 QR Code / Share
+   ============================================================ */
+$('#qrBtn').addEventListener('click', () => {
+  const url = location.href;
+  $('#qrImg').src = `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodeURIComponent(url)}&bgcolor=ffffff&color=2d2422&margin=10`;
+  $('#qrUrl').textContent = url;
+  $('#qrModal').classList.add('show');
+  playSound('success');
+  burstConfetti($('#qrBtn'), 14);
+});
+$('#copyUrlBtn').addEventListener('click', async () => {
+  try {
+    await navigator.clipboard.writeText(location.href);
+    showToast('คัดลอกลิงก์แล้ว!', '📋');
+  } catch {
+    showToast('คัดลอกไม่สำเร็จ', '😢');
+  }
+});
+$('#shareBtn').addEventListener('click', async () => {
+  if (navigator.share) {
+    try {
+      await navigator.share({ title: document.title, url: location.href });
+    } catch {}
+  } else {
+    try {
+      await navigator.clipboard.writeText(location.href);
+      showToast('คัดลอกลิงก์แล้ว!', '📋');
+    } catch { showToast('แชร์ไม่ได้ ลองคัดลอกจาก URL', '💡'); }
+  }
+});
+
+/* ============================================================
+   🔍 Lightbox close
+   ============================================================ */
+$('#lightbox').addEventListener('click', () => $('#lightbox').classList.remove('show'));
+
+/* ============================================================
+   ❌ Close modals
+   ============================================================ */
+$$('[data-close]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    $(`#${btn.dataset.close}`).classList.remove('show');
+  });
+});
+$$('.modal-overlay').forEach(ov => {
+  ov.addEventListener('click', (e) => {
+    if (e.target === ov) ov.classList.remove('show');
+  });
+});
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') {
+    $$('.modal-overlay.show').forEach(m => m.classList.remove('show'));
+    $('#settingsOverlay').classList.remove('show');
+    $('#lightbox').classList.remove('show');
+  }
+});
+
+/* ============================================================
+   📲 PWA Install
+   ============================================================ */
 let deferredPrompt = null;
 const installBtn = $('#installBtn');
-
-window.addEventListener('beforeinstallprompt', (e) => {
+addEventListener('beforeinstallprompt', e => {
   e.preventDefault();
   deferredPrompt = e;
   installBtn.classList.add('show');
 });
-
 installBtn.addEventListener('click', async () => {
   if (!deferredPrompt) {
-    showToast('เปิดจาก Chrome แล้วกด ⋮ → ติดตั้งแอป', '💡');
+    showToast('เปิด Chrome กด ⋮ → ติดตั้งแอป', '💡');
     return;
   }
   deferredPrompt.prompt();
-  const {outcome} = await deferredPrompt.userChoice;
+  const { outcome } = await deferredPrompt.userChoice;
   if (outcome === 'accepted') {
-    showToast('ติดตั้งสำเร็จแล้ว! เปิดจากหน้าจอโฮมได้เลย', '🎉');
-    spawnSparkles(installBtn, 20);
-    burstConfetti(installBtn);
+    showToast('ติดตั้งสำเร็จ! เปิดจากหน้าจอโฮมได้เลย', '🎉');
+    burstConfetti(installBtn, 26);
   }
   deferredPrompt = null;
   installBtn.classList.remove('show');
 });
+addEventListener('appinstalled', () => showToast('ติดตั้งเรียบร้อย ขอบคุณงับ', '✨'));
 
-window.addEventListener('appinstalled', () => {
-  showToast('ติดตั้งเรียบร้อย ขอบคุณที่ใช้งับ', '✨');
-});
-
-/* ---------- 11. Service Worker ---------- */
 if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('sw.js').catch(() => {});
-  });
+  addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(()=>{}));
 }
 
-/* ---------- 12. Easter egg: กดค้างที่ avatar ---------- */
+/* ============================================================
+   📊 Visitor counter
+   ============================================================ */
+(function () {
+  const key = 'visits';
+  let n = parseInt(localStorage.getItem(key) || '0', 10) + 1;
+  localStorage.setItem(key, String(n));
+  const el = $('#visitorCount');
+  let cur = 0;
+  const step = Math.max(1, Math.ceil(n / 30));
+  const timer = setInterval(() => {
+    cur += step;
+    if (cur >= n) { cur = n; clearInterval(timer); }
+    el.textContent = cur;
+  }, 30);
+})();
+
+/* ============================================================
+   🥚 Easter eggs
+   ============================================================ */
+// กดค้าง avatar
 let holdTimer = null;
-$('.avatar').addEventListener('pointerdown', () => {
+const avatar = $('#avatarEl');
+avatar.addEventListener('pointerdown', () => {
   holdTimer = setTimeout(() => {
-    burstConfetti($('.avatar'));
+    burstConfetti(avatar, 40);
     showToast('เจอ easter egg แล้ว! 🥚', '🎉');
-    document.body.animate(
-      [{filter:'hue-rotate(0)'},{filter:'hue-rotate(360deg)'}],
-      {duration:1500, easing:'ease-in-out'}
-    );
+    document.body.animate([{filter:'hue-rotate(0)'},{filter:'hue-rotate(360deg)'}],
+      {duration:1500, easing:'ease-in-out'});
+    playSound('success');
   }, 900);
 });
 ['pointerup','pointerleave','pointercancel'].forEach(ev =>
-  $('.avatar').addEventListener(ev, () => clearTimeout(holdTimer))
+  avatar.addEventListener(ev, () => clearTimeout(holdTimer))
 );
+
+// Konami
+const konami = ['ArrowUp','ArrowUp','ArrowDown','ArrowDown','ArrowLeft','ArrowRight','ArrowLeft','ArrowRight','b','a'];
+let konamiIdx = 0;
+addEventListener('keydown', e => {
+  if (e.key === konami[konamiIdx] || e.key.toLowerCase() === konami[konamiIdx]) {
+    konamiIdx++;
+    if (konamiIdx === konami.length) { konamiIdx = 0; triggerKonami(); }
+  } else konamiIdx = 0;
+});
+function triggerKonami() {
+  showToast('KONAMI UNLOCKED! 🎉✨', '🌈');
+  playSound('success');
+  document.body.animate(
+    [{filter:'hue-rotate(0) saturate(1)'},{filter:'hue-rotate(720deg) saturate(2)'},{filter:'hue-rotate(0) saturate(1)'}],
+    {duration:2500, easing:'ease-in-out'}
+  );
+  [10,30,50,70,90].forEach(pct => {
+    burstConfetti({ getBoundingClientRect: () => ({left: innerWidth*pct/100, top: innerHeight/2, width:0, height:0})}, 20);
+  });
+  const palettes = ['peach','sakura','matcha','y2k','ocean','sunset'];
+  const p = palettes[Math.floor(Math.random()*palettes.length)];
+  CONFIG.appearance.palette = p;
+  saveConfig();
+  renderAppearance();
+  renderPalettePicker();
+}
+
+/* ============================================================
+   🚀 Start
+   ============================================================ */
+window.addEventListener('load', () => {
+  renderAll();
+  setTimeout(() => $$('.reveal').forEach(el => el.classList.add('in')), 120);
+});
 </script>
 </body>
 </html>
