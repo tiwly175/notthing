@@ -1,4 +1,4 @@
-2<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="th" data-theme="light">
 <head>
 <meta charset="UTF-8" />
@@ -61,6 +61,16 @@ body::after{
 }
 [data-theme="dark"] body::after{mix-blend-mode:screen;opacity:.35}
 
+/* วิดีโอพื้นหลัง (อยู่หลังสุด, มี overlay บางๆ ให้อ่านตัวหนังสือออก) */
+#bgVideo{
+  position:fixed; inset:0; width:100%; height:100%;
+  object-fit:cover; z-index:-2; pointer-events:none;
+  opacity:0; transition:opacity .8s var(--ease-out);
+}
+html.has-video #bgVideo{opacity:1}
+html.has-video body::before{background:color-mix(in srgb, var(--bg) 58%, transparent)}
+html.has-video body::after{opacity:.12}
+
 a{color:inherit;text-decoration:none}
 button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit}
 
@@ -91,23 +101,6 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;color:inhe
 }
 
 /* ===== Header ===== */
-header{position:relative}
-header.has-media{
-  border-radius:26px;overflow:hidden;
-  padding:22px 16px 18px;
-  margin:0 -2px 4px;
-}
-.header-media{
-  position:absolute;inset:0;z-index:-2;
-  width:100%;height:100%;object-fit:cover;
-}
-.header-veil{
-  position:absolute;inset:0;z-index:-1;
-  background:linear-gradient(180deg, rgba(0,0,0,.32) 0%, rgba(0,0,0,.12) 45%, var(--bg) 100%);
-}
-header.has-media h1{color:#fff;text-shadow:0 2px 8px rgba(0,0,0,.3)}
-header.has-media .tagline{color:rgba(255,255,255,.88)}
-header.has-media .status-badge{background:rgba(0,0,0,.35);border-color:rgba(255,255,255,.25);color:#fff}
 .avatar-wrap{width:112px;height:112px;margin:4px auto 16px;position:relative}
 .avatar-ring{
   position:absolute;inset:-6px;border-radius:50%;
@@ -189,7 +182,6 @@ h1{
   box-shadow:inset 0 -2px 0 rgba(0,0,0,.12);
 }
 .game-icon svg{width:22px;height:22px}
-.game-icon img{width:100%;height:100%;object-fit:cover;border-radius:12px}
 
 .id-info{flex:1;min-width:0}
 .id-name{font-size:11px;color:var(--ink-soft);letter-spacing:.5px;text-transform:uppercase}
@@ -466,25 +458,6 @@ h1{
 .mp-actions input[type=file]{display:none}
 .mp-hint{font-size:11px;color:var(--ink-soft);margin-top:12px;line-height:1.5;text-align:center}
 
-.mp-url-form{display:none;flex-direction:column;gap:8px;margin-top:10px}
-.mp-url-form.on{display:flex}
-.mp-url-form input{
-  padding:11px 14px;border-radius:12px;font-size:13px;
-  background:color-mix(in srgb,var(--ink) 5%,transparent);
-  border:1px solid var(--card-brd);color:var(--ink);
-  font-family:inherit;
-}
-.mp-url-form input:focus{outline:2px solid var(--accent);outline-offset:1px}
-.mp-url-actions{display:flex;gap:8px}
-.mp-url-actions button{
-  flex:1;padding:10px;border-radius:12px;font-size:12.5px;font-weight:500;
-  transition:transform .2s var(--ease-bounce),background .2s;
-}
-#mpUrlCancel{background:color-mix(in srgb,var(--ink) 8%,transparent);color:var(--ink)}
-#mpUrlSave{background:var(--ink);color:var(--bg)}
-#mpUrlSave:hover{background:var(--accent)}
-.mp-url-actions button:active{transform:scale(.96)}
-
 /* ===== Responsive ===== */
 @media (max-width:400px){
   h1{font-size:24px}
@@ -531,7 +504,7 @@ h1{
 <nav class="bottom-nav" id="bottomNav">
   <a class="nav-item active" data-target="top"><span class="ni-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 10 9-7 9 7v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M9 21V12h6v9"/></svg></span><span>home</span></a>
   <a class="nav-item" data-target="games"><span class="ni-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="6" y1="12" x2="10" y2="12"/><line x1="8" y1="10" x2="8" y2="14"/><line x1="15" y1="13" x2="15.01" y2="13"/><line x1="18" y1="11" x2="18.01" y2="11"/><rect x="2" y="6" width="20" height="12" rx="3"/></svg></span><span>เกม</span></a>
-  <a class="nav-item" data-target="gallery"><span class="ni-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="9" cy="9" r="2"/><path d="m21 15-5-5L5 21"/></svg></span><span>เกมที่เล่น</span></a>
+  <a class="nav-item" data-target="gallery"><span class="ni-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="9" cy="9" r="2"/><path d="m21 15-5-5L5 21"/></svg></span><span>แกลเลอรี่</span></a>
   <a class="nav-item" data-target="music"><span class="ni-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg></span><span>เพลง</span></a>
 </nav>
 
@@ -554,16 +527,7 @@ h1{
       วาง URL เพลง
     </button>
   </div>
-  <div class="mp-url-form" id="mpUrlForm">
-    <input type="text" id="mpUrlSrc" placeholder="URL ไฟล์เพลง (mp3/ogg/m4a)" />
-    <input type="text" id="mpUrlTitle" placeholder="ชื่อเพลง" />
-    <input type="text" id="mpUrlArtist" placeholder="ศิลปิน (ไม่บังคับ)" />
-    <div class="mp-url-actions">
-      <button id="mpUrlCancel" type="button">ยกเลิก</button>
-      <button id="mpUrlSave" type="button">เพิ่มเพลง</button>
-    </div>
-  </div>
-  <p class="mp-hint">💡 เพิ่มเพลงได้โดยกด "อัปโหลด MP3" แล้วเลือกไฟล์ที่โหลดมา หรือวาง URL ตรงๆ — เพลงที่มาจาก URL จะถูกจำไว้ในเครื่องนี้ให้อัตโนมัติ</p>
+  <p class="mp-hint">💡 เพิ่มเพลง Champagne Supernova — Oasis ได้โดยกด "อัปโหลด MP3" แล้วเลือกไฟล์ที่โหลดมา หรือวาง URL ตรงๆ</p>
 </div>
 
 <!-- Lightbox -->
@@ -575,7 +539,8 @@ h1{
 <!-- Toast -->
 <div class="toast-wrap" id="toastWrap"></div>
 
-<audio id="bgm" loop preload="metadata"></audio>
+<video id="bgVideo" muted loop playsinline autoplay preload="auto" aria-hidden="true" disablepictureinpicture></video>
+<audio id="bgm" preload="metadata"></audio>
 
 <script>
 /* =====================================================================
@@ -583,50 +548,46 @@ h1{
    ===================================================================== */
 const CONFIG = {
   name: "Tiwly ✿",
-  tagline: "โบราณกล่าวไว้ว่าหากกลางคืนได้กลิ่นธูป แสดงว่ามีคนจุด",
+  tagline: "อยากทำไรก็ทำ",
   status: "ออนไลน์ • (มั้ง)",
-  avatar: "⚖", // ใส่ URL รูปก็ได้ เช่น "https://.../me.jpg"
+  avatar: "🍑", // ใส่ URL รูปก็ได้ เช่น "https://.../me.jpg"
   accent: "#ff7a59", // สีหลัก
-
-  // 🖼️ พื้นหลังส่วนหัว (โปรไฟล์) ใส่รูปหรือวิดีโอก็ได้ ไม่ใส่ก็ปล่อยว่างไว้แบบนี้
-  //    type: "image" หรือ "video", src: "./ไฟล์ที่วางไว้โฟลเดอร์เดียวกับ index.html"
-  headerMedia: { type: "video", src: "./Gta6.mp4" },
+  bgVideo: "./bg-video.mp4", // วิดีโอพื้นหลัง (ต้องเป็น H.264/mp4) — ใส่ "" ถ้าไม่ใช้
 
   games: [
-    // ใส่ logo: "./ไฟล์โลโก้.png" เพื่อใช้โลโก้เกมจริงแทนไอคอนที่วาดเอง (ถ้าไม่ใส่ logo จะใช้ icon เดิม)
-    { name: "VALORANT",        id: "ไม่ค่อยได้เล่นแล้ว",       icon: "target", color: "#ff4655" },
-    { name: "ROV",             id: "บลูเล็ต♛",    icon: "sword",  color: "#3b82f6" },
-    { name: "GENSHIN IMPACT",  id: "ไม่ค่อยได้เล่นแล้ว",        icon: "leaf",   color: "#10b981" },
-    { name: "MINECRAFT",       id: "Skibididob8069",     icon: "cube",   color: "#84cc16" },
+    { name: "VALORANT",        id: "Pang#1234",       icon: "target", color: "#ff4655" },
+    { name: "ROV",             id: "ปังปัง✿#9999",    icon: "sword",  color: "#3b82f6" },
+    { name: "GENSHIN IMPACT",  id: "MangoPang",        icon: "leaf",   color: "#10b981" },
+    { name: "MINECRAFT",       id: "MangoCraftTH",     icon: "cube",   color: "#84cc16" },
   ],
 
   links: [
-   // { title: "Portfolio งานวาด", sub: "รวมผลงานที่ผ่านมา", url: "https://example.com/portfolio", icon: "palette", color: "#c77dff" },
-    //{ title: "Commission เปิดรับอยู่", sub: "รายละเอียด + ราคา", url: "https://example.com/commission", icon: "cart", color: "#ff7a59" },
-    { title: "ติดต่อ", sub: "อีเมล", url: "mailto:youvipy@gmail.com", icon: "mail", color: "#6ec9b8" },
-    { title: "ติดต่อ", sub: "ไลน์", url: "https://line.me/ti/p/E4algXlTex", icon: "line", color: "#6ec9b8" }
+    { title: "Portfolio งานวาด", sub: "รวมผลงานที่ผ่านมา", url: "https://example.com/portfolio", icon: "palette", color: "#c77dff" },
+    { title: "Commission เปิดรับอยู่", sub: "รายละเอียด + ราคา", url: "https://example.com/commission", icon: "cart", color: "#ff7a59" },
+    { title: "ติดต่องาน", sub: "อีเมล / ไลน์", url: "ัyouvipy@gmail.com", icon: "mail", color: "#6ec9b8" },
   ],
 
-gallery: [
-    { src: "./gta-sa.jpg", caption: "GTA San Andreas" },
-    { src: "./rov.jpg", caption: "RoV" },
-    { src: "./minecraft.jpg", caption: "Minecraft" },
-    { src: "./rdr.jpg", caption: "Red Dead Redemption" },
-    { src: "./onepiece.jpg", caption: "One Piece" },
+  gallery: [
+    { src: "https://picsum.photos/seed/art1/600", caption: "งานวาด #01" },
+    { src: "https://picsum.photos/seed/art2/600", caption: "งานวาด #02" },
+    { src: "https://picsum.photos/seed/art3/600", caption: "งานวาด #03" },
+    { src: "https://picsum.photos/seed/art4/600", caption: "สเก็ตช์" },
+    { src: "https://picsum.photos/seed/art5/600", caption: "Fanart" },
+    { src: "https://picsum.photos/seed/art6/600", caption: "งาน Commission" },
   ],
-  
 
   socials: [
     { icon: "instagram", url: "https://instagram.com/", label: "Instagram" },
     { icon: "twitter",   url: "https://x.com/",         label: "Twitter/X" },
-    { icon: "discord",   url: "https://discord.com/",   label: "Discord" },
+    { icon: "discord",   url: "#",                       label: "Discord" },
     { icon: "tiktok",    url: "https://tiktok.com/",    label: "TikTok" },
   ],
 
   // 🎵 เพลย์ลิสต์เริ่มต้น — ใส่ URL เพลงที่คุณมีสิทธิ์ใช้ได้
-  //    เอาไฟล์ champagne-supernova.mp3 ไปวางไว้โฟลเดอร์เดียวกับ index.html แล้วอัปโหลดขึ้นพร้อมกัน
+  //    แนะนำ: ดาวน์โหลดไฟล์ MP3 ไว้ในเครื่อง แล้วกดปุ่ม "อัปโหลด MP3" ในเว็บ
   playlist: [
-    { title: "Champagne Supernova", artist: "Oasis", src: "./Oasis - Champagne Supernova.mp3" },
+    { title: "Champagne Supernova", artist: "Oasis", src: "./Oasis_-_Champagne_Supernova.mp3" },
+    { title: "Lofi Demo", artist: "royalty free", src: "https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3?filename=lofi-study-112191.mp3" },
   ],
 };
 
@@ -679,7 +640,7 @@ function render() {
   // Games
   const gamesHTML = CONFIG.games.map(g => `
     <div class="id-card" data-copy="${escapeAttr(g.id)}">
-      <div class="game-icon" style="background:${g.logo ? '#fff' : g.color}">${g.logo ? `<img src="${g.logo}" alt="${g.name}" />` : (ICONS[g.icon] || ICONS.star)}</div>
+      <div class="game-icon" style="background:${g.color}">${ICONS[g.icon] || ICONS.star}</div>
       <div class="id-info">
         <div class="id-name">${g.name}</div>
         <div class="id-value">${g.id}</div>
@@ -718,17 +679,8 @@ function render() {
     </a>
   `).join('');
 
-  // Header background media (รูป/วิดีโอ) — ไม่บังคับ
-  const hm = CONFIG.headerMedia;
-  const headerMediaHTML = hm && hm.src
-    ? (hm.type === 'video'
-        ? `<video class="header-media" autoplay muted loop playsinline src="${hm.src}"></video>`
-        : `<img class="header-media" src="${hm.src}" alt="" />`) + `<div class="header-veil"></div>`
-    : '';
-
   app.innerHTML = `
-    <header class="${hm && hm.src ? 'has-media' : ''}">
-      ${headerMediaHTML}
+    <header>
       <div class="avatar-wrap">
         <div class="avatar-ring"></div>
         ${avatarHTML}
@@ -753,14 +705,14 @@ function render() {
 
     <div class="section-title">
       ${ICONS.link}
-      <span>อื่นๆ </span>
+      <span>ที่อื่นๆ ของเรา</span>
       <span class="line"></span>
     </div>
     <div class="link-list">${linksHTML}</div>
 
     <div class="section-title" id="secGallery">
       ${ICONS.image}
-      <span>example </span>
+      <span>แกลเลอรี่</span>
       <span class="line"></span>
     </div>
     <div class="gallery">${galleryHTML}</div>
@@ -927,22 +879,7 @@ const trackList = $('#trackList');
 const musicPanel = $('#musicPanel');
 const mpBackdrop = $('#mpBackdrop');
 
-const PLAYLIST_KEY = 'linkspace-playlist-urls';
-function loadSavedPlaylist() {
-  try {
-    const saved = JSON.parse(localStorage.getItem(PLAYLIST_KEY) || '[]');
-    return Array.isArray(saved) ? saved : [];
-  } catch { return []; }
-}
-function savePlaylist() {
-  // เซฟเฉพาะเพลงที่ผู้ใช้เพิ่มเองผ่าน URL (blob: ของไฟล์อัปโหลดเก็บไว้ข้ามเซสชันไม่ได้)
-  try {
-    const persistable = playlist.filter(t => t.custom && !t.src.startsWith('blob:'));
-    localStorage.setItem(PLAYLIST_KEY, JSON.stringify(persistable));
-  } catch {}
-}
-
-let playlist = [...CONFIG.playlist, ...loadSavedPlaylist()];
+let playlist = [...CONFIG.playlist];
 let currentIdx = 0;
 let isPlaying = false;
 
@@ -982,7 +919,7 @@ function loadTrack(i, autoPlay = false) {
   audio.load();
   updateMini();
   renderTracks();
-  if (autoPlay) audio.play().catch(()=>{});
+  if (autoPlay) audio.play().catch(() => showToast('เล่นไม่ได้ ลองกดปุ่มเล่นอีกที', 'star'));
 }
 
 mpPlayPause.addEventListener('click', () => {
@@ -1009,6 +946,13 @@ audio.addEventListener('ended', () => {
   // next
   loadTrack(currentIdx + 1, true);
 });
+audio.addEventListener('error', () => {
+  if (!audio.getAttribute('src')) return;
+  isPlaying = false;
+  updateMini();
+  renderTracks();
+  showToast('เล่นเพลงนี้ไม่ได้ (ไฟล์/ลิงก์เสีย)', 'star');
+});
 
 // Track list click
 trackList.addEventListener('click', (e) => {
@@ -1018,7 +962,6 @@ trackList.addEventListener('click', (e) => {
     const i = +del.dataset.del;
     playlist.splice(i, 1);
     if (currentIdx >= playlist.length) currentIdx = Math.max(0, playlist.length - 1);
-    savePlaylist();
     renderTracks();
     updateMini();
     if (playlist.length === 0) {
@@ -1058,47 +1001,49 @@ $('#musicFile').addEventListener('change', (e) => {
   });
   if (files.length) {
     showToast(`เพิ่ม ${files.length} เพลงแล้ว`, 'check');
-    if (playlist.length === files.length && !isPlaying) {
-      // first time adding
-      setTimeout(() => loadTrack(playlist.length - files.length, true), 100);
-    }
+    // เล่นเพลงแรกที่เพิ่งเลือกทันที (อยู่ใน user gesture เลย เบราว์เซอร์ไม่บล็อก)
+    loadTrack(playlist.length - files.length, true);
   }
   e.target.value = '';
   renderTracks();
 });
 
-// URL input (inline form, no browser prompt() dialogs)
-const mpUrlForm = $('#mpUrlForm');
-const mpUrlSrc = $('#mpUrlSrc');
-const mpUrlTitle = $('#mpUrlTitle');
-const mpUrlArtist = $('#mpUrlArtist');
-
+// URL input
 $('#musicUrlBtn').addEventListener('click', () => {
-  mpUrlForm.classList.add('on');
-  mpUrlSrc.focus();
-});
-$('#mpUrlCancel').addEventListener('click', () => {
-  mpUrlForm.classList.remove('on');
-  mpUrlSrc.value = mpUrlTitle.value = mpUrlArtist.value = '';
-});
-$('#mpUrlSave').addEventListener('click', () => {
-  const url = mpUrlSrc.value.trim();
-  if (!url) { showToast('ใส่ URL เพลงก่อนนะ', 'star'); mpUrlSrc.focus(); return; }
-  const title = mpUrlTitle.value.trim() || 'เพลงใหม่';
-  const artist = mpUrlArtist.value.trim() || 'ไม่ทราบ';
-  playlist.push({ title, artist, src: url, custom: true });
-  savePlaylist();
+  const url = prompt('วาง URL ไฟล์เพลง (mp3/ogg/m4a):');
+  if (!url) return;
+  const title = prompt('ชื่อเพลง:', 'เพลงใหม่') || 'เพลงใหม่';
+  const artist = prompt('ศิลปิน:', 'ไม่ทราบ') || 'ไม่ทราบ';
+  playlist.push({ title, artist, src: url });
   showToast('เพิ่มเพลงแล้ว', 'check');
-  mpUrlSrc.value = mpUrlTitle.value = mpUrlArtist.value = '';
-  mpUrlForm.classList.remove('on');
-  renderTracks();
-  updateMini();
+  loadTrack(playlist.length - 1, true);
 });
 
 // Show mini-player if there's at least 1 track on load
 if (playlist.length > 0) {
   loadTrack(0);
 }
+
+/* =====================================================================
+   🎬 Background video
+   ===================================================================== */
+(function initBgVideo() {
+  const v = $('#bgVideo');
+  const de = document.documentElement;
+  if (!CONFIG.bgVideo || prefersReducedMotion) { v.remove(); return; }
+  v.muted = true;
+  v.defaultMuted = true;
+  v.setAttribute('playsinline', '');
+  v.addEventListener('playing', () => de.classList.add('has-video'));
+  v.addEventListener('error', () => { de.classList.remove('has-video'); console.warn('bgVideo error', v.error); });
+  v.src = CONFIG.bgVideo;
+  const tryPlay = () => v.play().catch(() => {});
+  tryPlay();
+  // ถ้าเบราว์เซอร์ (เช่น โหมดประหยัดแบตฯ) บล็อก autoplay ให้เล่นตอนแตะครั้งแรก
+  ['pointerdown', 'touchstart', 'keydown'].forEach(ev =>
+    window.addEventListener(ev, () => { if (v.paused) tryPlay(); }, { once: true, passive: true }));
+  document.addEventListener('visibilitychange', () => { if (!document.hidden && v.paused) tryPlay(); });
+})();
 
 /* =====================================================================
    🖼️ Lightbox
