@@ -91,6 +91,23 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;color:inhe
 }
 
 /* ===== Header ===== */
+header{position:relative}
+header.has-media{
+  border-radius:26px;overflow:hidden;
+  padding:22px 16px 18px;
+  margin:0 -2px 4px;
+}
+.header-media{
+  position:absolute;inset:0;z-index:-2;
+  width:100%;height:100%;object-fit:cover;
+}
+.header-veil{
+  position:absolute;inset:0;z-index:-1;
+  background:linear-gradient(180deg, rgba(0,0,0,.32) 0%, rgba(0,0,0,.12) 45%, var(--bg) 100%);
+}
+header.has-media h1{color:#fff;text-shadow:0 2px 8px rgba(0,0,0,.3)}
+header.has-media .tagline{color:rgba(255,255,255,.88)}
+header.has-media .status-badge{background:rgba(0,0,0,.35);border-color:rgba(255,255,255,.25);color:#fff}
 .avatar-wrap{width:112px;height:112px;margin:4px auto 16px;position:relative}
 .avatar-ring{
   position:absolute;inset:-6px;border-radius:50%;
@@ -172,6 +189,7 @@ h1{
   box-shadow:inset 0 -2px 0 rgba(0,0,0,.12);
 }
 .game-icon svg{width:22px;height:22px}
+.game-icon img{width:100%;height:100%;object-fit:cover;border-radius:12px}
 
 .id-info{flex:1;min-width:0}
 .id-name{font-size:11px;color:var(--ink-soft);letter-spacing:.5px;text-transform:uppercase}
@@ -570,7 +588,12 @@ const CONFIG = {
   avatar: "⚖", // ใส่ URL รูปก็ได้ เช่น "https://.../me.jpg"
   accent: "#ff7a59", // สีหลัก
 
+  // 🖼️ พื้นหลังส่วนหัว (โปรไฟล์) ใส่รูปหรือวิดีโอก็ได้ ไม่ใส่ก็ปล่อยว่างไว้แบบนี้
+  //    type: "image" หรือ "video", src: "./ไฟล์ที่วางไว้โฟลเดอร์เดียวกับ index.html"
+  headerMedia: { type: "image", src: "" },
+
   games: [
+    // ใส่ logo: "./ไฟล์โลโก้.png" เพื่อใช้โลโก้เกมจริงแทนไอคอนที่วาดเอง (ถ้าไม่ใส่ logo จะใช้ icon เดิม)
     { name: "VALORANT",        id: "ไม่เล่น",       icon: "target", color: "#ff4655" },
     { name: "ROV",             id: "บลูเล็ต♛",    icon: "sword",  color: "#3b82f6" },
     { name: "GENSHIN IMPACT",  id: "ไม่เล่น",        icon: "leaf",   color: "#10b981" },
@@ -601,10 +624,9 @@ gallery: [
   ],
 
   // 🎵 เพลย์ลิสต์เริ่มต้น — ใส่ URL เพลงที่คุณมีสิทธิ์ใช้ได้
-  //    แนะนำ: ดาวน์โหลดไฟล์ MP3 ไว้ในเครื่อง แล้วกดปุ่ม "อัปโหลด MP3" ในเว็บ
+  //    เอาไฟล์ champagne-supernova.mp3 ไปวางไว้โฟลเดอร์เดียวกับ index.html แล้วอัปโหลดขึ้นพร้อมกัน
   playlist: [
-    // { title: "Champagne Supernova", artist: "Oasis", src: "./champagne-supernova.mp3" },
-    { title: "Lofi Demo", artist: "royalty free", src: "https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3?filename=lofi-study-112191.mp3" },
+    { title: "Champagne Supernova", artist: "Oasis", src: "./champagne-supernova.mp3" },
   ],
 };
 
@@ -657,7 +679,7 @@ function render() {
   // Games
   const gamesHTML = CONFIG.games.map(g => `
     <div class="id-card" data-copy="${escapeAttr(g.id)}">
-      <div class="game-icon" style="background:${g.color}">${ICONS[g.icon] || ICONS.star}</div>
+      <div class="game-icon" style="background:${g.logo ? '#fff' : g.color}">${g.logo ? `<img src="${g.logo}" alt="${g.name}" />` : (ICONS[g.icon] || ICONS.star)}</div>
       <div class="id-info">
         <div class="id-name">${g.name}</div>
         <div class="id-value">${g.id}</div>
@@ -696,8 +718,17 @@ function render() {
     </a>
   `).join('');
 
+  // Header background media (รูป/วิดีโอ) — ไม่บังคับ
+  const hm = CONFIG.headerMedia;
+  const headerMediaHTML = hm && hm.src
+    ? (hm.type === 'video'
+        ? `<video class="header-media" autoplay muted loop playsinline src="${hm.src}"></video>`
+        : `<img class="header-media" src="${hm.src}" alt="" />`) + `<div class="header-veil"></div>`
+    : '';
+
   app.innerHTML = `
-    <header>
+    <header class="${hm && hm.src ? 'has-media' : ''}">
+      ${headerMediaHTML}
       <div class="avatar-wrap">
         <div class="avatar-ring"></div>
         ${avatarHTML}
