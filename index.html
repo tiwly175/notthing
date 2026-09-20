@@ -590,7 +590,7 @@ const CONFIG = {
 
   // 🖼️ พื้นหลังส่วนหัว (โปรไฟล์) ใส่รูปหรือวิดีโอก็ได้ ไม่ใส่ก็ปล่อยว่างไว้แบบนี้
   //    type: "image" หรือ "video", src: "./ไฟล์ที่วางไว้โฟลเดอร์เดียวกับ index.html"
-  headerMedia: { type: "image", src: "" },
+  headerMedia: { type: "video", src: "Gta6.mp4" },
 
   games: [
     // ใส่ logo: "./ไฟล์โลโก้.png" เพื่อใช้โลโก้เกมจริงแทนไอคอนที่วาดเอง (ถ้าไม่ใส่ logo จะใช้ icon เดิม)
@@ -753,14 +753,14 @@ function render() {
 
     <div class="section-title">
       ${ICONS.link}
-      <span>ที่อื่นๆ ของเรา</span>
+      <span>อื่นๆ </span>
       <span class="line"></span>
     </div>
     <div class="link-list">${linksHTML}</div>
 
     <div class="section-title" id="secGallery">
       ${ICONS.image}
-      <span>เกมที่เล่น</span>
+      <span>example </span>
       <span class="line"></span>
     </div>
     <div class="gallery">${galleryHTML}</div>
