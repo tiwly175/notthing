@@ -370,7 +370,7 @@ h1{
   position:fixed;left:50%;bottom:calc(180px + var(--safe-b));
   transform:translateX(-50%);
   display:flex;flex-direction:column;gap:8px;align-items:center;
-  z-index:8000;pointer-events:none;
+  z-index:9000;pointer-events:none;
 }
 .toast{
   display:flex;align-items:center;gap:8px;
@@ -537,6 +537,15 @@ button.pill:active{transform:scale(.88)}
 .op-adjbtns{display:flex;gap:8px;margin-top:8px}
 .op-adjbtns button{flex:1;padding:9px;border-radius:12px;background:var(--card);border:1px solid var(--card-brd);font-size:13px}
 .op-adjbtns button[data-act="adj-save"]{background:var(--ink);color:var(--bg);border-color:transparent}
+.op-card button{transition:transform .18s var(--ease-bounce),filter .15s,opacity .2s,background .2s,border-color .2s;-webkit-tap-highlight-color:transparent}
+.op-card button:active:not(:disabled){transform:scale(.94);filter:brightness(.9)}
+.op-card button:disabled{opacity:.7;cursor:default}
+.op-card button.done{background:#22c55e !important;color:#fff !important;border-color:transparent !important}
+.op-msg{position:sticky;top:0;z-index:3;display:none;margin:0 0 8px;padding:9px 12px;border-radius:12px;font-size:12.5px;line-height:1.5;color:var(--ink)}
+.op-msg.show{display:block;animation:opMsgIn .3s var(--ease-bounce)}
+.op-msg.ok{background:color-mix(in srgb,#22c55e 24%,var(--card-solid));border:1px solid color-mix(in srgb,#22c55e 55%,transparent)}
+.op-msg.err{background:color-mix(in srgb,#ef4444 24%,var(--card-solid));border:1px solid color-mix(in srgb,#ef4444 55%,transparent)}
+@keyframes opMsgIn{from{opacity:0;transform:translateY(-8px)}}
 .op-foot{display:flex;gap:8px;padding-top:12px;border-top:1px solid var(--card-brd)}
 .op-foot button{flex:1;padding:9px;border-radius:12px;background:var(--card);border:1px solid var(--card-brd);font-size:13px}
 
@@ -1417,32 +1426,62 @@ function initLive() {
       return false;
     }
   }
+  let lastErr = '';
+  const errText = () => (lastErr === '401' || lastErr === '403')
+    ? 'บันทึกไม่ได้: ไม่มีสิทธิ์เขียน — ยังไม่ได้เพิ่ม/กด Publish Rules ของ Firebase หรือให้กดค้างที่ป้ายเพื่อล็อกอินใหม่'
+    : lastErr === 'token' ? 'ล็อกอินหมดอายุ — กดค้างที่ป้ายสถานะเพื่อล็อกอินใหม่'
+    : 'บันทึกไม่สำเร็จ (' + (lastErr || 'ไม่ทราบสาเหตุ') + ') เช็กอินเทอร์เน็ตแล้วลองใหม่';
+  function panelMsg(text, type) {
+    const m = $('#opMsg');
+    if (!m) return;
+    m.textContent = text;
+    m.className = 'op-msg show ' + type;
+    clearTimeout(panelMsg.t);
+    panelMsg.t = setTimeout(() => m.classList.remove('show'), type === 'err' ? 9000 : 2600);
+  }
+  // ให้ปุ่มมีสถานะ: กำลังทำ… -> ✓ สำเร็จ (สีเขียว) -> กลับปกติ
+  async function busy(btn, label, task, doneLabel) {
+    const orig = btn.textContent;
+    btn.disabled = true;
+    btn.textContent = label;
+    let ok = false;
+    try { ok = await task(); } catch (_) {}
+    if (!btn.isConnected) return ok;
+    if (ok && doneLabel) {
+      btn.textContent = doneLabel;
+      btn.classList.add('done');
+      setTimeout(() => { if (btn.isConnected) { btn.textContent = orig; btn.classList.remove('done'); btn.disabled = false; } }, 1100);
+    } else { btn.textContent = orig; btn.disabled = false; }
+    return ok;
+  }
   async function publish(v) {
     try { localStorage.setItem('status', JSON.stringify(v)); } catch (_) {}
     if (!hasFB) return true;
+    lastErr = '';
     try {
       const t = await getToken();
-      if (!t) throw new Error('token');
+      if (!t) { lastErr = 'token'; return false; }
       const r = await db('status', { method: 'PUT', body: v, token: t });
-      if (!r.ok) throw new Error('write');
+      if (!r.ok) { lastErr = String(r.status); return false; }
       return true;
     } catch (_) {
-      showToast('บันทึกสถานะไม่สำเร็จ ลองกดค้างที่ป้ายเพื่อล็อกอินใหม่', 'star');
+      lastErr = 'network';
       return false;
     }
   }
 
   async function putOffset(vals) {
+    lastErr = '';
     try {
       const t = await getToken();
-      if (!t) throw new Error('token');
+      if (!t) { lastErr = 'token'; return false; }
       const r = await db('stats/offset', { method: 'PUT', body: vals, token: t });
-      if (!r.ok) throw new Error('write');
+      if (!r.ok) { lastErr = String(r.status); return false; }
       S.off = { ...vals };
       drawStats();
       return true;
     } catch (_) {
-      showToast('บันทึกตัวเลขไม่สำเร็จ (เช็ก Rules/ล็อกอินใหม่)', 'star');
+      lastErr = 'network';
       return false;
     }
   }
@@ -1509,6 +1548,7 @@ function initLive() {
     el.className = 'op-backdrop';
     el.innerHTML = `
       <div class="op-card" role="dialog" aria-label="แผงเจ้าของ">
+        <div class="op-msg" id="opMsg" role="status"></div>
         <div class="op-head"><span>แผงเจ้าของ</span><button data-act="close" aria-label="ปิด">✕</button></div>
         <div class="op-sec">
           <div class="op-label">สถานะ</div>
@@ -1531,22 +1571,26 @@ function initLive() {
         if (isDefault) input.value = find(sel).text;
         return;
       }
-      const act = e.target.closest('[data-act]')?.dataset.act;
+      const btn = e.target.closest('[data-act]');
+      const act = btn?.dataset.act;
       if (act === 'close') closePanel();
-      else if (act === 'refresh') loadStats();
+      else if (act === 'refresh') await busy(btn, 'กำลังโหลด…', async () => { await loadStats(); return true; });
       else if (act === 'adj-save' || act === 'adj-reset') {
         const vals = { views: 0, likes: 0, online: 0 };
         if (act === 'adj-save') {
           $$('[data-off]', el).forEach(i => { vals[i.dataset.off] = Math.max(-1e9, Math.min(1e9, Math.round(+i.value || 0))); });
         }
-        if (await putOffset(vals)) { showToast(act === 'adj-save' ? 'บันทึกตัวเลขแล้ว' : 'กลับเป็นค่าจริงแล้ว', 'check'); loadStats(); }
+        const ok = await busy(btn, 'กำลังบันทึก…', () => putOffset(vals), act === 'adj-save' ? '✓ บันทึกแล้ว' : '✓ เรียบร้อย');
+        if (ok) { panelMsg(act === 'adj-save' ? 'บันทึกตัวเลขแล้ว หน้าเว็บแสดงตามที่ตั้งไว้' : 'กลับเป็นค่าจริงแล้ว', 'ok'); loadStats(); }
+        else panelMsg(errText(), 'err');
       }
       else if (act === 'save') {
         const val = { key: sel, text: input.value.trim().slice(0, 40) || find(sel).text };
         const prev = { ...cur };
         apply(val);
-        if (await publish(val)) showToast('บันทึกสถานะแล้ว', 'check');
-        else apply(prev);
+        const ok = await busy(btn, 'กำลังบันทึก…', () => publish(val), '✓ บันทึกแล้ว');
+        if (ok) panelMsg('บันทึกสถานะแล้ว ทุกคนเห็นทันที', 'ok');
+        else { apply(prev); panelMsg(errText(), 'err'); }
       } else if (act === 'logout') {
         if (!confirm('ออกจากโหมดเจ้าของ?')) return;
         owner = false;
