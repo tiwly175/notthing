@@ -4,9 +4,6 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 <title>link space ✿</title>
-
- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
- 
 <meta name="theme-color" content="#fef6ee" />
 <link rel="manifest" href="manifest.json" />
 <link rel="icon" href="icon.svg" type="image/svg+xml" />
@@ -527,6 +524,14 @@ button.pill:active{transform:scale(.88)}
 .op-row .bw{flex:1;height:6px;border-radius:3px;background:var(--card)}
 .op-row .bar{display:block;height:100%;border-radius:3px;background:var(--accent)}
 .op-row .n{min-width:28px;text-align:right;font-variant-numeric:tabular-nums;color:var(--ink-soft)}
+.op-adj{display:flex;align-items:center;gap:8px;margin:7px 0;font-size:13px}
+.op-adj .t{flex:1}
+.op-adj .t small{display:block;font-size:11px;color:var(--ink-soft)}
+.op-adj input{width:92px;padding:7px 9px;border-radius:10px;border:1px solid var(--card-brd);background:var(--card);color:var(--ink);font:inherit;text-align:right}
+.op-adj .sh{min-width:78px;text-align:right;color:var(--ink-soft);font-variant-numeric:tabular-nums}
+.op-adjbtns{display:flex;gap:8px;margin-top:8px}
+.op-adjbtns button{flex:1;padding:9px;border-radius:12px;background:var(--card);border:1px solid var(--card-brd);font-size:13px}
+.op-adjbtns button[data-act="adj-save"]{background:var(--ink);color:var(--bg);border-color:transparent}
 .op-foot{display:flex;gap:8px;padding-top:12px;border-top:1px solid var(--card-brd)}
 .op-foot button{flex:1;padding:9px;border-radius:12px;background:var(--card);border:1px solid var(--card-brd);font-size:13px}
 
@@ -612,18 +617,18 @@ button.pill:active{transform:scale(.88)}
    ⚙️ CONFIG — แก้ตรงนี้ที่เดียวจบ
    ===================================================================== */
 const CONFIG = {
-  name: "✿ @TIW.exe ✿",
-  tagline:" เราไม่สามารถเปลี่ยนคนรอบตัวได้<br>แต่เราสามารถเปลี่ยนคนรอบตัวได้",
-  status: "ออนไลน์",
+  name: "Tiwly ✿",
+  tagline: "อยากทำไรก็ทำ",
+  status: "ออนไลน์ • (มั้ง)",
   // สถานะที่กดสลับได้ (กดที่ป้ายสถานะ ตอนอยู่ในโหมดเจ้าของ — กดค้างที่ป้ายเพื่อเข้า/ออกโหมดนี้)
   statusPresets: [
-    { key: "online",  text: "ออนไลน์", color: "#22c55e" },
+    { key: "online",  text: "ออนไลน์ • (มั้ง)", color: "#22c55e" },
     { key: "busy",    text: "ไม่ว่าง",           color: "#ef4444" },
     { key: "offline", text: "ออฟไลน์",           color: "#9ca3af" },
   ],
   // แสดงสถานะให้ทุกคนเห็นแบบเรียลไทม์ต้องใส่ค่า Firebase (ดูวิธีตั้งค่าที่คุยกันในแชท) ถ้าเว้นว่าง = เห็นเฉพาะเครื่องนี้
   firebase: { dbUrl: "https://notthing-112-default-rtdb.asia-southeast1.firebasedatabase.app", apiKey: "AIzaSyDDTaS9WoBPAVG4_Hjw9c4N9PNUkw6L49M" },
-  avatar: "✿", // ใส่ URL รูปก็ได้ เช่น "https://.../me.jpg"
+  avatar: "⚖", // ใส่ URL รูปก็ได้ เช่น "https://.../me.jpg"
   accent: "#ff7a59", // สีหลัก
   bgVideo: "./bg-video.mp4", // วิดีโอพื้นหลัง (ต้องเป็น H.264/mp4) — ใส่ "" ถ้าไม่ใช้
 
@@ -638,12 +643,9 @@ const CONFIG = {
   links: [
    // { title: "Portfolio งานวาด", sub: "รวมผลงานที่ผ่านมา", url: "https://example.com/portfolio", icon: "palette", color: "#c77dff" },
     //{ title: "Commission เปิดรับอยู่", sub: "รายละเอียด + ราคา", url: "https://example.com/commission", icon: "cart", color: "#ff7a59" },
-  { title: "Contact", sub: "Gmail", url: "mailto:youvipy@gmail.com", icon: "fa-solid fa-envelope", color: "#EA4335" },
-  { title: "Contact", sub: "LINE", url: "https://line.me/ti/p/E4algXlTex", icon: "fa-brands fa-line", color: "#00B900" },
-  { title: "Contact", sub: "Instagram", url: "https://www.instagram.com/patchara.phon_?utm_source=ig_web_button_share_sheet&stkn=ZDNlZDc0MzIxNw==", icon: "fa-brands fa-instagram", color: "#E4405F" },
-  { title: "Contact", sub: "Facebook", url: "https://www.facebook.com/share/19RSxzEhti/", icon: "fa-brands fa-facebook", color: "#1877F2" },
-  { title: "Contact", sub: "GitHub", url: "https://github.com/tiwly175", icon: "fa-brands fa-github", color: "#24292e" },  
-],
+    { title: "ติดต่อ", sub: "อีเมล", url: "mailto:youvipy@gmail.com", icon: "mail", color: "#6ec9b8" },
+    { title: "ติดต่อ", sub: "ไลน์", url: "https://line.me/ti/p/E4algXlTex", icon: "line", color: "#6ec9b8" }
+  ],
 
   gallery: [
     { src: "./gta-sa.jpg", caption: "GTA San Andreas" },
@@ -732,9 +734,7 @@ function render() {
   // Links
   const linksHTML = CONFIG.links.map(l => `
     <a class="link-item" href="${l.url}" ${l.url.startsWith('http') ? 'target="_blank" rel="noopener"' : ''}>
-    
-      <div class="link-icon" style="background:${l.color}">${ICONS[l.icon] || `<i class="${l.icon}"></i>`}</div>
-      
+      <div class="link-icon" style="background:${l.color}">${ICONS[l.icon] || ICONS.link}</div>
       <div class="link-text">
         <div class="link-title">${l.title}</div>
         <div class="link-sub">${l.sub}</div>
@@ -769,14 +769,6 @@ function render() {
       <div style="text-align:center">
         <div class="status-badge">
           <span class="status-dot"></span>
-
-<i class="fa-solid fa-envelope" style="color: #ea4335; margin-left: 4px; margin-right: 2px;"></i>
-<i class="fa-brands fa-line" style="color: #06c755; margin-left: 4px; margin-right: 2px;"></i>
-<i class="fa-brands fa-instagram" style="color: #e4405f; margin-left: 4px; margin-right: 2px;"></i>
-<i class="fa-brands fa-facebook" style="color: #1877f2; margin-left: 4px; margin-right: 2px;"></i>
-<i class="fa-brands fa-github" style="color: #ffffff; margin-left: 4px; margin-right: 2px;"></i>
-
-          
           <span>${CONFIG.status}</span>
         </div>
         <div class="stats-row" id="statsRow"></div>
@@ -1262,15 +1254,18 @@ function initLive() {
     eye: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>',
     heart: '<svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l1 1.1L12 21l7.8-7.5 1-1.1a5.5 5.5 0 0 0 0-7.8z"/></svg>'
   };
-  const S = { views: undefined, likes: undefined, online: undefined };
+  const S = { views: undefined, likes: undefined, online: undefined, off: { views: 0, likes: 0, online: 0 } };
+  let real = { views: 0, likes: 0, online: undefined }; // ค่าจริงล่าสุดที่แผงเจ้าของอ่านได้
+  // ค่าที่แสดง = ค่าจริง + ตัวปรับ (ค่าจริงไม่ถูกแตะ ตัวปรับเก็บแยกที่ stats/offset)
+  const shown = k => (S[k] === undefined ? undefined : Math.max(k === 'online' ? 1 : 0, S[k] + (S.off[k] || 0)));
   let liked = localStorage.getItem('liked') === '1';
   const fmt = n => Number(n).toLocaleString('en-US');
   function drawStats() {
     if (!row) return;
     row.innerHTML = [
-      S.online !== undefined ? `<span class="pill"><i class="live"></i>${S.online} ออนไลน์</span>` : '',
-      S.views !== undefined ? `<span class="pill">${IC.eye}${fmt(S.views)}</span>` : '',
-      S.likes !== undefined ? `<button class="pill heart${liked ? ' on' : ''}" id="likeBtn" aria-label="ถูกใจ">${IC.heart}<span>${fmt(S.likes)}</span></button>` : ''
+      S.online !== undefined ? `<span class="pill"><i class="live"></i>${shown('online')} ออนไลน์</span>` : '',
+      S.views !== undefined ? `<span class="pill">${IC.eye}${fmt(shown('views'))}</span>` : '',
+      S.likes !== undefined ? `<button class="pill heart${liked ? ' on' : ''}" id="likeBtn" aria-label="ถูกใจ">${IC.heart}<span>${fmt(shown('likes'))}</span></button>` : ''
     ].join('');
   }
   async function like() {
@@ -1294,10 +1289,15 @@ function initLive() {
   })();
   async function refresh() {
     if (!hasFB) return;
-    const [v, l, pr] = await Promise.all([
+    const [v, l, pr, of] = await Promise.all([
       num('stats/views'), num('stats/likes'),
-      db('presence').then(r => (r.ok ? r.json() : undefined)).catch(() => undefined)
+      db('presence').then(r => (r.ok ? r.json() : undefined)).catch(() => undefined),
+      db('stats/offset').then(r => (r.ok ? r.json() : undefined)).catch(() => undefined)
     ]);
+    if (of !== undefined) {
+      const o = of && typeof of === 'object' ? of : {};
+      S.off = { views: +o.views || 0, likes: +o.likes || 0, online: +o.online || 0 };
+    }
     if (v !== undefined) S.views = v;
     if (l !== undefined) S.likes = l;
     if (pr !== undefined) {
@@ -1415,6 +1415,21 @@ function initLive() {
     }
   }
 
+  async function putOffset(vals) {
+    try {
+      const t = await getToken();
+      if (!t) throw new Error('token');
+      const r = await db('stats/offset', { method: 'PUT', body: vals, token: t });
+      if (!r.ok) throw new Error('write');
+      S.off = { ...vals };
+      drawStats();
+      return true;
+    } catch (_) {
+      showToast('บันทึกตัวเลขไม่สำเร็จ (เช็ก Rules/ล็อกอินใหม่)', 'star');
+      return false;
+    }
+  }
+
   /* ---------- แผงเจ้าของ ---------- */
   const dispKey = k => k.replace(/^copy_/, 'คัดลอก ').replace(/^link_/, 'ลิงก์ ')
     .replace(/^img_/, 'รูป ').replace(/^social_/, 'โซเชียล ').replace(/_/g, ' ');
@@ -1441,12 +1456,23 @@ function initLive() {
         const v = (st.daily && st.daily[d]) || 0;
         return `<div class="op-row"><span class="lb">${d.slice(5)}</span><span class="bw"><span class="bar" style="width:${v ? Math.max(4, Math.round(v / dmax * 100)) : 0}%"></span></span><span class="n">${v}</span></div>`;
       }).join('');
+      const o = st.offset && typeof st.offset === 'object' ? st.offset : {};
+      S.off = { views: +o.views || 0, likes: +o.likes || 0, online: +o.online || 0 };
+      real = { views: st.views || 0, likes: st.likes || 0, online: S.online };
+      drawStats();
+      const adjHTML = [['views', 'เข้าชม'], ['likes', 'หัวใจ'], ['online', 'ออนไลน์']].map(([k, n]) => `
+        <div class="op-adj"><span class="t">${n}<small>จริง ${real[k] === undefined ? '-' : fmt(real[k])}</small></span>
+          <input type="number" step="1" data-off="${k}" value="${S.off[k]}">
+          <span class="sh" data-sh="${k}">แสดง ${real[k] === undefined ? '-' : fmt(Math.max(k === 'online' ? 1 : 0, real[k] + S.off[k]))}</span></div>`).join('');
       box.innerHTML = `
         <div class="op-nums">
-          <div class="op-num"><b>${fmt(st.views || 0)}</b><span>เข้าชมรวม</span></div>
-          <div class="op-num"><b>${fmt(st.likes || 0)}</b><span>หัวใจ</span></div>
-          <div class="op-num"><b>${S.online ?? '-'}</b><span>ออนไลน์</span></div>
+          <div class="op-num"><b>${fmt(real.views)}</b><span>เข้าชม (จริง)</span></div>
+          <div class="op-num"><b>${fmt(real.likes)}</b><span>หัวใจ (จริง)</span></div>
+          <div class="op-num"><b>${real.online ?? '-'}</b><span>ออนไลน์ (จริง)</span></div>
         </div>
+        <div class="op-h">ปรับตัวเลขที่แสดงหน้าเว็บ (ค่าจริงไม่ถูกแตะ)</div>
+        ${adjHTML}
+        <div class="op-adjbtns"><button data-act="adj-reset">กลับเป็นค่าจริง</button><button data-act="adj-save">บันทึกตัวเลข</button></div>
         <div class="op-h">7 วันล่าสุด</div>${dailyHTML}
         <div class="op-h">สิ่งที่ถูกกด</div>${rowsHTML(st.clicks, dispKey, 12)}
         <div class="op-h">อุปกรณ์</div>${rowsHTML(st.device)}
@@ -1491,6 +1517,13 @@ function initLive() {
       const act = e.target.closest('[data-act]')?.dataset.act;
       if (act === 'close') closePanel();
       else if (act === 'refresh') loadStats();
+      else if (act === 'adj-save' || act === 'adj-reset') {
+        const vals = { views: 0, likes: 0, online: 0 };
+        if (act === 'adj-save') {
+          $$('[data-off]', el).forEach(i => { vals[i.dataset.off] = Math.max(-1e9, Math.min(1e9, Math.round(+i.value || 0))); });
+        }
+        if (await putOffset(vals)) { showToast(act === 'adj-save' ? 'บันทึกตัวเลขแล้ว' : 'กลับเป็นค่าจริงแล้ว', 'check'); loadStats(); }
+      }
       else if (act === 'save') {
         const val = { key: sel, text: input.value.trim().slice(0, 40) || find(sel).text };
         const prev = { ...cur };
@@ -1506,6 +1539,13 @@ function initLive() {
         closePanel();
         showToast('ออกจากโหมดเจ้าของแล้ว', 'check');
       }
+    });
+    el.addEventListener('input', e => {
+      const i = e.target.closest('[data-off]');
+      if (!i) return;
+      const k = i.dataset.off;
+      const sh = $(`[data-sh="${k}"]`, el);
+      if (sh && real[k] !== undefined) sh.textContent = 'แสดง ' + fmt(Math.max(k === 'online' ? 1 : 0, real[k] + (Math.round(+i.value) || 0)));
     });
     loadStats();
   }
