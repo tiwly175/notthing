@@ -480,6 +480,53 @@ h1{
   .gallery{grid-template-columns:repeat(3,1fr);gap:6px}
 }
 
+/* ===== Stats row + Owner panel ===== */
+.stats-row{display:flex;justify-content:center;flex-wrap:wrap;gap:8px;margin-top:10px}
+.stats-row:empty{display:none}
+.pill{
+  display:inline-flex;align-items:center;gap:6px;padding:4px 11px;
+  background:var(--card);border:1px solid var(--card-brd);border-radius:999px;
+  font-size:12px;color:var(--ink-soft);font-family:inherit;line-height:1.4;
+}
+.pill svg{width:13px;height:13px}
+.pill .live{width:6px;height:6px;border-radius:50%;background:#22c55e;display:inline-block}
+button.pill{cursor:pointer;transition:transform .25s var(--ease-bounce),color .2s,border-color .2s}
+button.pill:active{transform:scale(.88)}
+.pill.heart svg{fill:none}
+.pill.heart.on{color:#ef4444;border-color:color-mix(in srgb,#ef4444 40%,transparent)}
+.pill.heart.on svg{fill:#ef4444}
+
+.op-backdrop{position:fixed;inset:0;z-index:8500;background:rgba(0,0,0,.45);display:flex;align-items:flex-end;justify-content:center}
+.op-card{
+  width:100%;max-width:460px;max-height:90dvh;overflow:auto;
+  background:var(--card-solid);color:var(--ink);
+  border-radius:22px 22px 0 0;padding:16px 18px calc(18px + var(--safe-b));
+  box-shadow:var(--shadow-lg);
+}
+@media(min-width:600px){.op-backdrop{align-items:center}.op-card{border-radius:22px}}
+.op-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;font-family:'Mali',cursive;font-size:16px;font-weight:600}
+.op-head button{width:32px;height:32px;border-radius:50%;background:var(--card);border:1px solid var(--card-brd)}
+.op-sec{padding:12px 0;border-top:1px solid var(--card-brd)}
+.op-label{font-size:11px;color:var(--ink-soft);margin-bottom:8px;letter-spacing:.4px}
+.op-chips{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px}
+.op-chip{display:inline-flex;align-items:center;gap:7px;padding:7px 12px;border-radius:999px;border:1.5px solid var(--card-brd);font-size:13px}
+.op-chip i{width:9px;height:9px;border-radius:50%;background:var(--c)}
+.op-chip.on{border-color:var(--c);background:color-mix(in srgb,var(--c) 14%,transparent)}
+.op-input{width:100%;padding:10px 12px;border-radius:12px;border:1px solid var(--card-brd);background:var(--card);color:var(--ink);font:inherit;font-size:14px;margin-bottom:10px}
+.op-save{width:100%;padding:11px;border-radius:12px;background:var(--ink);color:var(--bg);font-weight:500}
+.op-nums{display:flex;gap:8px;margin-bottom:6px}
+.op-num{flex:1;background:var(--card);border:1px solid var(--card-brd);border-radius:14px;padding:10px 6px;text-align:center}
+.op-num b{display:block;font-family:'Mali',cursive;font-size:20px}
+.op-num span{font-size:11px;color:var(--ink-soft)}
+.op-h{font-size:12px;font-weight:600;margin:12px 0 4px}
+.op-row{display:flex;align-items:center;gap:8px;font-size:12.5px;margin:4px 0}
+.op-row .lb{flex:0 0 118px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.op-row .bw{flex:1;height:6px;border-radius:3px;background:var(--card)}
+.op-row .bar{display:block;height:100%;border-radius:3px;background:var(--accent)}
+.op-row .n{min-width:28px;text-align:right;font-variant-numeric:tabular-nums;color:var(--ink-soft)}
+.op-foot{display:flex;gap:8px;padding-top:12px;border-top:1px solid var(--card-brd)}
+.op-foot button{flex:1;padding:9px;border-radius:12px;background:var(--card);border:1px solid var(--card-brd);font-size:13px}
+
 /* Reduce motion */
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{animation-duration:.01ms !important;animation-iteration-count:1 !important;transition-duration:.01ms !important}
@@ -716,6 +763,7 @@ function render() {
           <span class="status-dot"></span>
           <span>${CONFIG.status}</span>
         </div>
+        <div class="stats-row" id="statsRow"></div>
       </div>
     </header>
 
@@ -1130,33 +1178,58 @@ if ('serviceWorker' in navigator) {
 render();
 
 /* =====================================================================
-   🟢 Status (เรียลไทม์ผ่าน Firebase Realtime Database — REST + SSE ไม่ต้องใช้ SDK)
+   🟢 Live: สถานะ + ออนไลน์/ยอดชม/หัวใจ + นับการกด + แผงเจ้าของ
+   (Firebase Realtime Database ผ่าน REST + SSE ไม่ใช้ SDK, เก็บแบบไม่ระบุตัวตน ไม่เก็บ IP)
    ===================================================================== */
-function initStatus() {
+function initLive() {
   const badge = $('.status-badge');
   if (!badge) return;
   const dot = $('.status-dot', badge);
   const label = dot.nextElementSibling;
+  const row = $('#statsRow');
   const presets = CONFIG.statusPresets;
   const FB = CONFIG.firebase || {};
   const hasFB = !!(FB.dbUrl && FB.apiKey);
-  const dbBase = (FB.dbUrl || '').replace(/\/$/, '');
+  const base = (FB.dbUrl || '').replace(/\/$/, '');
+  const esc = v => escapeAttr(v);
   const find = k => presets.find(p => p.key === k) || presets[0];
-  let current = presets[0].key;
+  const INC = { '.sv': { increment: 1 } };
+  const safeKey = v => String(v).replace(/[.$#\[\]\/\s]+/g, '_').slice(0, 36) || '_';
+  const db = (path, o = {}) => fetch(
+    base + '/' + path + '.json' + (o.token ? '?auth=' + o.token : ''),
+    { method: o.method || 'GET', body: o.body === undefined ? undefined : JSON.stringify(o.body), keepalive: !!o.keepalive, cache: 'no-store' }
+  );
+  const bump = path => { if (hasFB) db(path, { method: 'PUT', body: INC }).catch(() => {}); };
+  const num = async path => {
+    try { const r = await db(path); if (!r.ok) return undefined; const v = await r.json(); return typeof v === 'number' ? v : 0; }
+    catch (_) { return undefined; }
+  };
+
   let owner = hasFB ? !!localStorage.getItem('fbRefresh') : localStorage.getItem('statusOwnerLocal') === '1';
 
-  function apply(key) {
-    const p = find(key);
-    current = p.key;
+  /* ---------- สถานะ (สี + ข้อความ) ---------- */
+  let cur = { key: presets[0].key, text: presets[0].text };
+  function apply(v) {
+    if (typeof v === 'string') v = { key: v };
+    if (!v || typeof v !== 'object') return;
+    const p = find(v.key);
+    const t = typeof v.text === 'string' ? v.text.trim().slice(0, 40) : '';
+    cur = { key: p.key, text: t || p.text };
     badge.style.setProperty('--st', p.color);
-    label.textContent = p.text;
+    label.textContent = cur.text;
   }
-  apply(localStorage.getItem('status') || presets[0].key);
+  const remember = v => {
+    if (v === null || v === undefined) return;
+    apply(v);
+    try { localStorage.setItem('status', JSON.stringify(v)); } catch (_) {}
+  };
+  try {
+    const raw = localStorage.getItem('status');
+    if (raw) { try { apply(JSON.parse(raw)); } catch (_) { apply(raw); } }
+  } catch (_) {}
 
-  /* ---- ฝั่งคนดู: ฟังการเปลี่ยนแปลงแบบเรียลไทม์ ---- */
   if (hasFB) {
-    const url = dbBase + '/status.json';
-    const remember = v => { if (typeof v === 'string') { apply(v); localStorage.setItem('status', v); } };
+    const url = base + '/status.json';
     const pull = () => fetch(url, { cache: 'no-store' }).then(r => r.json()).then(remember).catch(() => {});
     pull();
     try {
@@ -1165,11 +1238,118 @@ function initStatus() {
         try { const d = JSON.parse(e.data); if (d && d.path === '/') remember(d.data); } catch (_) {}
       });
     } catch (_) {}
-    setInterval(pull, 60000); // กันหลุดเผื่อ stream ขาด
+    setInterval(pull, 60000);
   }
 
-  /* ---- ฝั่งเจ้าของ ---- */
+  /* ---------- ตัวเลข: ออนไลน์ / ยอดชม / หัวใจ ---------- */
+  const IC = {
+    eye: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>',
+    heart: '<svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l1 1.1L12 21l7.8-7.5 1-1.1a5.5 5.5 0 0 0 0-7.8z"/></svg>'
+  };
+  const S = { views: undefined, likes: undefined, online: undefined };
+  let liked = localStorage.getItem('liked') === '1';
+  const fmt = n => Number(n).toLocaleString('en-US');
+  function drawStats() {
+    if (!row) return;
+    row.innerHTML = [
+      S.online !== undefined ? `<span class="pill"><i class="live"></i>${S.online} ออนไลน์</span>` : '',
+      S.views !== undefined ? `<span class="pill">${IC.eye}${fmt(S.views)}</span>` : '',
+      S.likes !== undefined ? `<button class="pill heart${liked ? ' on' : ''}" id="likeBtn" aria-label="ถูกใจ">${IC.heart}<span>${fmt(S.likes)}</span></button>` : ''
+    ].join('');
+  }
+  async function like() {
+    if (liked || !hasFB || S.likes === undefined) return;
+    liked = true;
+    localStorage.setItem('liked', '1');
+    S.likes += 1;
+    drawStats();
+    sparkles($('#likeBtn'), 8);
+    let ok = false;
+    try { ok = (await db('stats/likes', { method: 'PUT', body: INC })).ok; } catch (_) {}
+    if (!ok) { liked = false; localStorage.removeItem('liked'); S.likes -= 1; drawStats(); }
+  }
+  row && row.addEventListener('click', e => { if (e.target.closest('#likeBtn')) like(); });
+
+  // ออนไลน์: ทุกแท็บส่ง heartbeat ทุก 25 วิ, ใครมี heartbeat ภายใน 75 วิ = ออนไลน์
+  const pid = sessionStorage.getItem('pid') || (() => {
+    const v = Math.random().toString(36).slice(2, 10);
+    sessionStorage.setItem('pid', v);
+    return v;
+  })();
+  async function refresh() {
+    if (!hasFB) return;
+    const [v, l, pr] = await Promise.all([
+      num('stats/views'), num('stats/likes'),
+      db('presence').then(r => (r.ok ? r.json() : undefined)).catch(() => undefined)
+    ]);
+    if (v !== undefined) S.views = v;
+    if (l !== undefined) S.likes = l;
+    if (pr !== undefined) {
+      const now = Date.now();
+      let n = 0;
+      const stale = [];
+      Object.entries(pr || {}).forEach(([k, t]) => {
+        if (typeof t !== 'number') return;
+        if (now - t < 75000) n++;
+        else if (now - t > 600000) stale.push(k);
+      });
+      S.online = Math.max(1, n);
+      stale.slice(0, 5).forEach(k => db('presence/' + k, { method: 'DELETE' }).catch(() => {}));
+    }
+    drawStats();
+  }
+  if (hasFB) {
+    const beat = () => { if (!document.hidden) db('presence/' + pid, { method: 'PUT', body: Date.now() }).catch(() => {}); };
+    beat();
+    setInterval(beat, 25000);
+    setTimeout(refresh, 600);
+    setInterval(refresh, 20000);
+    document.addEventListener('visibilitychange', () => { if (!document.hidden) { beat(); refresh(); } });
+    addEventListener('pagehide', () => { db('presence/' + pid, { method: 'DELETE', keepalive: true }).catch(() => {}); });
+  }
+
+  /* ---------- นับสถิติแบบไม่ระบุตัวตน (1 ครั้งต่อการเปิดแท็บ, ไม่นับตอนล็อกอินเจ้าของ) ---------- */
+  if (hasFB && !owner && !sessionStorage.getItem('counted')) {
+    sessionStorage.setItem('counted', '1');
+    const ua = navigator.userAgent;
+    const device = /iPad|Tablet/i.test(ua) ? 'tablet' : /Mobi|Android|iPhone/i.test(ua) ? 'mobile' : 'desktop';
+    const os = /Windows/.test(ua) ? 'Windows' : /Android/.test(ua) ? 'Android' : /iPhone|iPad|iPod/.test(ua) ? 'iOS'
+             : /Mac OS/.test(ua) ? 'macOS' : /Linux/.test(ua) ? 'Linux' : 'other';
+    const browser = /Edg\//.test(ua) ? 'Edge' : /OPR\/|Opera/.test(ua) ? 'Opera' : /SamsungBrowser/.test(ua) ? 'Samsung'
+                  : /Chrome\//.test(ua) ? 'Chrome' : /Firefox\//.test(ua) ? 'Firefox' : /Safari\//.test(ua) ? 'Safari' : 'other';
+    let ref = 'direct';
+    try {
+      const h = new URL(document.referrer).hostname;
+      if (h && h !== location.hostname) ref = h;
+    } catch (_) {}
+    bump('stats/views');
+    bump('stats/daily/' + new Date().toLocaleDateString('sv-SE'));
+    bump('stats/device/' + device);
+    bump('stats/os/' + os);
+    bump('stats/browser/' + browser);
+    bump('stats/ref/' + safeKey(ref));
+  }
+
+  // นับการกด: คัดลอกไอดี / ลิงก์ / เปิดรูป / โซเชียล
+  document.addEventListener('click', e => {
+    if (!hasFB || owner) return;
+    let k = null, el;
+    if ((el = e.target.closest('.copy-btn'))) {
+      k = 'copy_' + ($('.id-name', el.closest('.id-card') || document)?.textContent || '');
+    } else if ((el = e.target.closest('.link-item'))) {
+      k = 'link_' + ($('.link-title', el)?.textContent || '') + '_' + ($('.link-sub', el)?.textContent || '');
+    } else if ((el = e.target.closest('.g-item'))) {
+      k = 'img_' + (CONFIG.gallery[+el.dataset.i]?.caption || el.dataset.i);
+    } else if ((el = e.target.closest('.social'))) {
+      k = 'social_' + (el.title || '');
+    }
+    if (k) bump('stats/clicks/' + safeKey(k));
+  }, true);
+
+  /* ---------- เจ้าของ: ล็อกอิน / เขียนสถานะ ---------- */
+  let tok = { t: null, exp: 0 };
   async function getToken() {
+    if (tok.t && Date.now() < tok.exp) return tok.t;
     const rt = localStorage.getItem('fbRefresh');
     if (!rt) return null;
     const r = await fetch('https://securetoken.googleapis.com/v1/token?key=' + FB.apiKey, {
@@ -1180,7 +1360,8 @@ function initStatus() {
     const j = await r.json();
     if (!j.id_token) return null;
     if (j.refresh_token) localStorage.setItem('fbRefresh', j.refresh_token);
-    return j.id_token;
+    tok = { t: j.id_token, exp: Date.now() + Math.max(60, (parseInt(j.expires_in, 10) || 3600) - 120) * 1000 };
+    return tok.t;
   }
   async function login() {
     const email = prompt('อีเมลเจ้าของเว็บ:');
@@ -1196,63 +1377,149 @@ function initStatus() {
       const j = await r.json();
       if (!j.refreshToken) throw new Error('login');
       localStorage.setItem('fbRefresh', j.refreshToken);
+      tok = { t: null, exp: 0 };
       return true;
     } catch (_) {
       showToast('ล็อกอินไม่สำเร็จ', 'star');
       return false;
     }
   }
-  async function publish(key) {
-    localStorage.setItem('status', key);
+  async function publish(v) {
+    try { localStorage.setItem('status', JSON.stringify(v)); } catch (_) {}
     if (!hasFB) return true;
     try {
       const t = await getToken();
       if (!t) throw new Error('token');
-      const r = await fetch(dbBase + '/status.json?auth=' + t, { method: 'PUT', body: JSON.stringify(key) });
+      const r = await db('status', { method: 'PUT', body: v, token: t });
       if (!r.ok) throw new Error('write');
       return true;
     } catch (_) {
-      showToast('บันทึกสถานะไม่สำเร็จ ลองกดค้างเพื่อล็อกอินใหม่', 'star');
+      showToast('บันทึกสถานะไม่สำเร็จ ลองกดค้างที่ป้ายเพื่อล็อกอินใหม่', 'star');
       return false;
     }
   }
 
-  // กดค้าง = เข้า/ออกโหมดเจ้าของ, กดสั้น = สลับสถานะ (เฉพาะโหมดเจ้าของ)
+  /* ---------- แผงเจ้าของ ---------- */
+  const dispKey = k => k.replace(/^copy_/, 'คัดลอก ').replace(/^link_/, 'ลิงก์ ')
+    .replace(/^img_/, 'รูป ').replace(/^social_/, 'โซเชียล ').replace(/_/g, ' ');
+  function rowsHTML(obj, map, limit) {
+    const arr = Object.entries(obj || {}).filter(([, v]) => typeof v === 'number')
+      .sort((a, b) => b[1] - a[1]).slice(0, limit || 10);
+    if (!arr.length) return '<div class="op-row" style="color:var(--ink-soft)">ยังไม่มีข้อมูล</div>';
+    const max = arr[0][1] || 1;
+    return arr.map(([k, v]) => `<div class="op-row"><span class="lb">${esc(map ? map(k) : k)}</span><span class="bw"><span class="bar" style="width:${Math.max(4, Math.round(v / max * 100))}%"></span></span><span class="n">${v}</span></div>`).join('');
+  }
+  async function loadStats() {
+    const box = $('#opStats');
+    if (!box) return;
+    if (!hasFB) { box.textContent = 'ยังไม่ได้ตั้งค่า Firebase จึงยังไม่มีสถิติ'; return; }
+    box.textContent = 'กำลังโหลดสถิติ…';
+    try {
+      const t = await getToken();
+      const r = await db('stats', { token: t });
+      if (!r.ok) throw new Error('read');
+      const st = (await r.json()) || {};
+      const days = [...Array(7)].map((_, i) => new Date(Date.now() - i * 864e5).toLocaleDateString('sv-SE'));
+      const dmax = Math.max(1, ...days.map(d => (st.daily && st.daily[d]) || 0));
+      const dailyHTML = days.map(d => {
+        const v = (st.daily && st.daily[d]) || 0;
+        return `<div class="op-row"><span class="lb">${d.slice(5)}</span><span class="bw"><span class="bar" style="width:${v ? Math.max(4, Math.round(v / dmax * 100)) : 0}%"></span></span><span class="n">${v}</span></div>`;
+      }).join('');
+      box.innerHTML = `
+        <div class="op-nums">
+          <div class="op-num"><b>${fmt(st.views || 0)}</b><span>เข้าชมรวม</span></div>
+          <div class="op-num"><b>${fmt(st.likes || 0)}</b><span>หัวใจ</span></div>
+          <div class="op-num"><b>${S.online ?? '-'}</b><span>ออนไลน์</span></div>
+        </div>
+        <div class="op-h">7 วันล่าสุด</div>${dailyHTML}
+        <div class="op-h">สิ่งที่ถูกกด</div>${rowsHTML(st.clicks, dispKey, 12)}
+        <div class="op-h">อุปกรณ์</div>${rowsHTML(st.device)}
+        <div class="op-h">ระบบปฏิบัติการ</div>${rowsHTML(st.os)}
+        <div class="op-h">เบราว์เซอร์</div>${rowsHTML(st.browser)}
+        <div class="op-h">มาจาก</div>${rowsHTML(st.ref)}`;
+    } catch (_) {
+      box.textContent = 'โหลดสถิติไม่ได้ (เช็ก Rules หรือกดค้างที่ป้ายเพื่อล็อกอินใหม่)';
+    }
+  }
+  function closePanel() { const el = $('#ownerPanel'); if (el) el.remove(); }
+  function openPanel() {
+    closePanel();
+    let sel = cur.key;
+    const el = document.createElement('div');
+    el.id = 'ownerPanel';
+    el.className = 'op-backdrop';
+    el.innerHTML = `
+      <div class="op-card" role="dialog" aria-label="แผงเจ้าของ">
+        <div class="op-head"><span>แผงเจ้าของ</span><button data-act="close" aria-label="ปิด">✕</button></div>
+        <div class="op-sec">
+          <div class="op-label">สถานะ</div>
+          <div class="op-chips">${presets.map(p => `<button class="op-chip${p.key === sel ? ' on' : ''}" data-key="${esc(p.key)}" style="--c:${p.color}"><i></i>${esc(p.text)}</button>`).join('')}</div>
+          <input class="op-input" id="opText" maxlength="40" placeholder="พิมพ์ข้อความสถานะ เช่น กำลังเล่น ROV" value="${esc(cur.text)}">
+          <button class="op-save" data-act="save">บันทึกสถานะ</button>
+        </div>
+        <div class="op-sec"><div class="op-label">สถิติ (เห็นเฉพาะคุณ)</div><div id="opStats"></div></div>
+        <div class="op-foot"><button data-act="refresh">รีเฟรชสถิติ</button><button data-act="logout">ออกจากระบบ</button></div>
+      </div>`;
+    document.body.appendChild(el);
+    const input = $('#opText', el);
+    el.addEventListener('click', async e => {
+      if (e.target === el) { closePanel(); return; }
+      const chip = e.target.closest('.op-chip');
+      if (chip) {
+        const isDefault = !input.value.trim() || presets.some(p => p.text === input.value.trim());
+        sel = chip.dataset.key;
+        $$('.op-chip', el).forEach(c => c.classList.toggle('on', c === chip));
+        if (isDefault) input.value = find(sel).text;
+        return;
+      }
+      const act = e.target.closest('[data-act]')?.dataset.act;
+      if (act === 'close') closePanel();
+      else if (act === 'refresh') loadStats();
+      else if (act === 'save') {
+        const val = { key: sel, text: input.value.trim().slice(0, 40) || find(sel).text };
+        const prev = { ...cur };
+        apply(val);
+        if (await publish(val)) showToast('บันทึกสถานะแล้ว', 'check');
+        else apply(prev);
+      } else if (act === 'logout') {
+        if (!confirm('ออกจากโหมดเจ้าของ?')) return;
+        owner = false;
+        localStorage.removeItem('fbRefresh');
+        localStorage.removeItem('statusOwnerLocal');
+        tok = { t: null, exp: 0 };
+        closePanel();
+        showToast('ออกจากโหมดเจ้าของแล้ว', 'check');
+      }
+    });
+    loadStats();
+  }
+
+  // กดค้างที่ป้ายสถานะ = ล็อกอินเจ้าของ, เจ้าของกดสั้น = เปิดแผง
   let timer = null, longFired = false;
   badge.addEventListener('pointerdown', () => {
     longFired = false;
     timer = setTimeout(async () => {
       longFired = true;
-      if (owner) {
-        if (confirm('ออกจากโหมดเจ้าของ?')) {
-          owner = false;
-          localStorage.removeItem('fbRefresh');
-          localStorage.removeItem('statusOwnerLocal');
-          showToast('ออกจากโหมดเจ้าของแล้ว', 'check');
+      if (!owner) {
+        if (hasFB) {
+          if (!(await login())) return;
+        } else {
+          localStorage.setItem('statusOwnerLocal', '1');
+          showToast('ยังไม่ได้ตั้งค่า Firebase — เปลี่ยนได้เฉพาะเครื่องนี้', 'star');
         }
-      } else if (hasFB) {
-        if (await login()) { owner = true; showToast('โหมดเจ้าของ: กดที่ป้ายเพื่อสลับสถานะ', 'check'); }
-      } else {
         owner = true;
-        localStorage.setItem('statusOwnerLocal', '1');
-        showToast('ยังไม่ได้ตั้งค่า Firebase — เปลี่ยนได้เฉพาะเครื่องนี้', 'star');
       }
+      openPanel();
     }, 700);
   });
-  ['pointerup', 'pointerleave', 'pointercancel'].forEach(ev =>
-    badge.addEventListener(ev, () => clearTimeout(timer)));
+  ['pointerup', 'pointerleave', 'pointercancel'].forEach(ev => badge.addEventListener(ev, () => clearTimeout(timer)));
   badge.addEventListener('contextmenu', e => e.preventDefault());
-  badge.addEventListener('click', async () => {
+  badge.addEventListener('click', () => {
     if (longFired) { longFired = false; return; }
-    if (!owner) return;
-    const prev = current;
-    const next = presets[(presets.findIndex(p => p.key === current) + 1) % presets.length].key;
-    apply(next);
-    if (!(await publish(next))) apply(prev);
-    else showToast('สถานะ: ' + find(next).text, 'check');
+    if (owner) openPanel();
   });
 }
-initStatus();
+initLive();
 
 /* Scroll → update active nav */
 const scrollSections = [
