@@ -4,11 +4,21 @@ const ASSETS = [
   './',
   './index.html',
   './manifest.json',
-  './icon.svg'
+  './icon.svg',
+  './champagne-supernova.mp3',
+  './gta-sa.jpg',
+  './rov.jpg',
+  './minecraft.jpg',
+  './rdr.jpg',
+  './onepiece.jpg'
 ];
 
 self.addEventListener('install', e => {
-  e.waitUntil(caches.open(CACHE).then(c => c.addAll(ASSETS)).then(() => self.skipWaiting()));
+  e.waitUntil(
+    caches.open(CACHE).then(c =>
+      Promise.all(ASSETS.map(url => c.add(url).catch(() => {})))
+    ).then(() => self.skipWaiting())
+  );
 });
 
 self.addEventListener('activate', e => {
