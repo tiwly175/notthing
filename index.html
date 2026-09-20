@@ -550,30 +550,31 @@ const CONFIG = {
   name: "Tiwly ✿",
   tagline: "อยากทำไรก็ทำ",
   status: "ออนไลน์ • (มั้ง)",
-  avatar: "🍑", // ใส่ URL รูปก็ได้ เช่น "https://.../me.jpg"
+  avatar: "⚖", // ใส่ URL รูปก็ได้ เช่น "https://.../me.jpg"
   accent: "#ff7a59", // สีหลัก
   bgVideo: "./bg-video.mp4", // วิดีโอพื้นหลัง (ต้องเป็น H.264/mp4) — ใส่ "" ถ้าไม่ใช้
 
   games: [
-    { name: "VALORANT",        id: "Pang#1234",       icon: "target", color: "#ff4655" },
-    { name: "ROV",             id: "ปังปัง✿#9999",    icon: "sword",  color: "#3b82f6" },
-    { name: "GENSHIN IMPACT",  id: "MangoPang",        icon: "leaf",   color: "#10b981" },
-    { name: "MINECRAFT",       id: "MangoCraftTH",     icon: "cube",   color: "#84cc16" },
+    // ใส่ logo: "./ไฟล์โลโก้.png" เพื่อใช้โลโก้เกมจริงแทนไอคอนที่วาดเอง (ถ้าไม่ใส่ logo จะใช้ icon เดิม)
+    { name: "VALORANT",        id: "ไม่ค่อยเล่นแล้ว",       icon: "target", color: "#ff4655" },
+    { name: "ROV",             id: "บลูเล็ต♛",    icon: "sword",  color: "#3b82f6" },
+    { name: "GENSHIN IMPACT",  id: "ไม่ค่อยเล่นแล้ว",        icon: "leaf",   color: "#10b981" },
+    { name: "MINECRAFT",       id: "Skibididob8069",     icon: "cube",   color: "#84cc16" },
   ],
 
   links: [
-    { title: "Portfolio งานวาด", sub: "รวมผลงานที่ผ่านมา", url: "https://example.com/portfolio", icon: "palette", color: "#c77dff" },
-    { title: "Commission เปิดรับอยู่", sub: "รายละเอียด + ราคา", url: "https://example.com/commission", icon: "cart", color: "#ff7a59" },
-    { title: "ติดต่องาน", sub: "อีเมล / ไลน์", url: "ัyouvipy@gmail.com", icon: "mail", color: "#6ec9b8" },
+   // { title: "Portfolio งานวาด", sub: "รวมผลงานที่ผ่านมา", url: "https://example.com/portfolio", icon: "palette", color: "#c77dff" },
+    //{ title: "Commission เปิดรับอยู่", sub: "รายละเอียด + ราคา", url: "https://example.com/commission", icon: "cart", color: "#ff7a59" },
+    { title: "ติดต่อ", sub: "อีเมล", url: "mailto:youvipy@gmail.com", icon: "mail", color: "#6ec9b8" },
+    { title: "ติดต่อ", sub: "ไลน์", url: "https://line.me/ti/p/E4algXlTex", icon: "line", color: "#6ec9b8" }
   ],
 
   gallery: [
-    { src: "https://picsum.photos/seed/art1/600", caption: "งานวาด #01" },
-    { src: "https://picsum.photos/seed/art2/600", caption: "งานวาด #02" },
-    { src: "https://picsum.photos/seed/art3/600", caption: "งานวาด #03" },
-    { src: "https://picsum.photos/seed/art4/600", caption: "สเก็ตช์" },
-    { src: "https://picsum.photos/seed/art5/600", caption: "Fanart" },
-    { src: "https://picsum.photos/seed/art6/600", caption: "งาน Commission" },
+    { src: "./gta-sa.jpg", caption: "GTA San Andreas" },
+    { src: "./rov.jpg", caption: "RoV" },
+    { src: "./minecraft.jpg", caption: "Minecraft" },
+    { src: "./rdr.jpg", caption: "Red Dead Redemption" },
+    { src: "./onepiece.jpg", caption: "One Piece" },
   ],
 
   socials: [
@@ -705,14 +706,14 @@ function render() {
 
     <div class="section-title">
       ${ICONS.link}
-      <span>ที่อื่นๆ ของเรา</span>
+      <span>อื่นๆ</span>
       <span class="line"></span>
     </div>
     <div class="link-list">${linksHTML}</div>
 
     <div class="section-title" id="secGallery">
       ${ICONS.image}
-      <span>แกลเลอรี่</span>
+      <span>example</span>
       <span class="line"></span>
     </div>
     <div class="gallery">${galleryHTML}</div>
