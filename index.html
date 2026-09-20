@@ -4,6 +4,9 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 <title>link space ✿</title>
+
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+ 
 <meta name="theme-color" content="#fef6ee" />
 <link rel="manifest" href="manifest.json" />
 <link rel="icon" href="icon.svg" type="image/svg+xml" />
@@ -481,6 +484,8 @@ h1{
 }
 
 /* ===== Stats row + Owner panel ===== */
+.status-text{color:color-mix(in srgb,var(--st,#22c55e) 72%,var(--ink));font-weight:500;transition:color .3s}
+.contact-icons{display:flex;justify-content:center;align-items:center;gap:18px;margin-top:18px;font-size:18px}
 .stats-row{display:flex;justify-content:center;flex-wrap:wrap;gap:8px;margin-top:10px}
 .stats-row:empty{display:none}
 .pill{
@@ -617,18 +622,18 @@ button.pill:active{transform:scale(.88)}
    ⚙️ CONFIG — แก้ตรงนี้ที่เดียวจบ
    ===================================================================== */
 const CONFIG = {
-  name: "Tiwly ✿",
-  tagline: "อยากทำไรก็ทำ",
-  status: "ออนไลน์ • (มั้ง)",
+  name: "✿ @TIW.exe ✿",
+  tagline:" เราไม่สามารถเปลี่ยนคนรอบตัวได้<br>แต่เราสามารถเปลี่ยนคนรอบตัวได้",
+  status: "ออนไลน์",
   // สถานะที่กดสลับได้ (กดที่ป้ายสถานะ ตอนอยู่ในโหมดเจ้าของ — กดค้างที่ป้ายเพื่อเข้า/ออกโหมดนี้)
   statusPresets: [
-    { key: "online",  text: "ออนไลน์ • (มั้ง)", color: "#22c55e" },
+    { key: "online",  text: "ออนไลน์", color: "#22c55e" },
     { key: "busy",    text: "ไม่ว่าง",           color: "#ef4444" },
     { key: "offline", text: "ออฟไลน์",           color: "#9ca3af" },
   ],
   // แสดงสถานะให้ทุกคนเห็นแบบเรียลไทม์ต้องใส่ค่า Firebase (ดูวิธีตั้งค่าที่คุยกันในแชท) ถ้าเว้นว่าง = เห็นเฉพาะเครื่องนี้
   firebase: { dbUrl: "https://notthing-112-default-rtdb.asia-southeast1.firebasedatabase.app", apiKey: "AIzaSyDDTaS9WoBPAVG4_Hjw9c4N9PNUkw6L49M" },
-  avatar: "⚖", // ใส่ URL รูปก็ได้ เช่น "https://.../me.jpg"
+  avatar: "✿", // ใส่ URL รูปก็ได้ เช่น "https://.../me.jpg"
   accent: "#ff7a59", // สีหลัก
   bgVideo: "./bg-video.mp4", // วิดีโอพื้นหลัง (ต้องเป็น H.264/mp4) — ใส่ "" ถ้าไม่ใช้
 
@@ -643,9 +648,12 @@ const CONFIG = {
   links: [
    // { title: "Portfolio งานวาด", sub: "รวมผลงานที่ผ่านมา", url: "https://example.com/portfolio", icon: "palette", color: "#c77dff" },
     //{ title: "Commission เปิดรับอยู่", sub: "รายละเอียด + ราคา", url: "https://example.com/commission", icon: "cart", color: "#ff7a59" },
-    { title: "ติดต่อ", sub: "อีเมล", url: "mailto:youvipy@gmail.com", icon: "mail", color: "#6ec9b8" },
-    { title: "ติดต่อ", sub: "ไลน์", url: "https://line.me/ti/p/E4algXlTex", icon: "line", color: "#6ec9b8" }
-  ],
+  { title: "Contact", sub: "Gmail", url: "mailto:youvipy@gmail.com", icon: "fa-solid fa-envelope", color: "#EA4335" },
+  { title: "Contact", sub: "LINE", url: "https://line.me/ti/p/E4algXlTex", icon: "fa-brands fa-line", color: "#00B900" },
+  { title: "Contact", sub: "Instagram", url: "https://www.instagram.com/patchara.phon_?utm_source=ig_web_button_share_sheet&stkn=ZDNlZDc0MzIxNw==", icon: "fa-brands fa-instagram", color: "#E4405F" },
+  { title: "Contact", sub: "Facebook", url: "https://www.facebook.com/share/19RSxzEhti/", icon: "fa-brands fa-facebook", color: "#1877F2" },
+  { title: "Contact", sub: "GitHub", url: "https://github.com/tiwly175", icon: "fa-brands fa-github", color: "#24292e" },  
+],
 
   gallery: [
     { src: "./gta-sa.jpg", caption: "GTA San Andreas" },
@@ -734,7 +742,9 @@ function render() {
   // Links
   const linksHTML = CONFIG.links.map(l => `
     <a class="link-item" href="${l.url}" ${l.url.startsWith('http') ? 'target="_blank" rel="noopener"' : ''}>
-      <div class="link-icon" style="background:${l.color}">${ICONS[l.icon] || ICONS.link}</div>
+    
+      <div class="link-icon" style="background:${l.color}">${ICONS[l.icon] || `<i class="${l.icon}"></i>`}</div>
+      
       <div class="link-text">
         <div class="link-title">${l.title}</div>
         <div class="link-sub">${l.sub}</div>
@@ -769,9 +779,16 @@ function render() {
       <div style="text-align:center">
         <div class="status-badge">
           <span class="status-dot"></span>
-          <span>${CONFIG.status}</span>
+          <span class="status-text">${CONFIG.status}</span>
         </div>
         <div class="stats-row" id="statsRow"></div>
+        <div class="contact-icons">
+          <i class="fa-solid fa-envelope" style="color:#ea4335"></i>
+          <i class="fa-brands fa-line" style="color:#06c755"></i>
+          <i class="fa-brands fa-instagram" style="color:#e4405f"></i>
+          <i class="fa-brands fa-facebook" style="color:#1877f2"></i>
+          <i class="fa-brands fa-github" style="color:var(--ink)"></i>
+        </div>
       </div>
     </header>
 
@@ -1193,7 +1210,7 @@ function initLive() {
   const badge = $('.status-badge');
   if (!badge) return;
   const dot = $('.status-dot', badge);
-  const label = dot.nextElementSibling;
+  const label = $('.status-text', badge);
   const row = $('#statsRow');
   const presets = CONFIG.statusPresets;
   const FB = CONFIG.firebase || {};
