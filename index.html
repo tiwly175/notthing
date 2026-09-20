@@ -732,7 +732,9 @@ function render() {
   // Links
   const linksHTML = CONFIG.links.map(l => `
     <a class="link-item" href="${l.url}" ${l.url.startsWith('http') ? 'target="_blank" rel="noopener"' : ''}>
-      <div class="link-icon" style="background:${l.color}">${ICONS[l.icon] || ICONS.link}</div>
+    
+      <div class="link-icon" style="background:${l.color}">${ICONS[l.icon] || `<i class="${l.icon}"></i>`}</div>
+      
       <div class="link-text">
         <div class="link-title">${l.title}</div>
         <div class="link-sub">${l.sub}</div>
