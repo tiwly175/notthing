@@ -748,9 +748,9 @@ const CONFIG = {
 
   games: [
     // ใส่ logo: "./ไฟล์โลโก้.png" เพื่อใช้โลโก้เกมจริงแทนไอคอนที่วาดเอง (ถ้าไม่ใส่ logo จะใช้ icon เดิม)
-    { name: "VALORANT",        id: "ไม่ค่อยเล่นแล้ว",       icon: "target", color: "#ff4655" },
+    //{ name: "VALORANT",        id: "ไม่ค่อยเล่นแล้ว",       icon: "target", color: "#ff4655" },
     { name: "ROV",             id: "บลูเล็ต♛",    icon: "sword",  color: "#3b82f6" },
-    { name: "GENSHIN IMPACT",  id: "ไม่ค่อยเล่นแล้ว",        icon: "leaf",   color: "#10b981" },
+    //{ name: "GENSHIN IMPACT",  id: "ไม่ค่อยเล่นแล้ว",        icon: "leaf",   color: "#10b981" },
     { name: "MINECRAFT",       id: "Skibididob8069",     icon: "cube",   color: "#84cc16" },
   ],
 
@@ -872,17 +872,17 @@ function render() {
   const guestHTML = hasGB ? `
     <div class="section-title" id="secGuest">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-      <span>สมุดเยี่ยมชม</span>
+      <span>Shoutbox</span>
       <span class="line"></span>
     </div>
     <div class="gb">
       <div class="gb-list" id="gbList"></div>
       <div class="gb-form">
-        <input id="gbName" maxlength="24" placeholder="ชื่อ (ไม่ใส่ก็ได้)" autocomplete="off">
+        <input id="gbName" maxlength="24" placeholder="Name (ไม่ใส่ก็ได้)" autocomplete="off">
         <input id="gbWeb" class="gb-hp" tabindex="-1" autocomplete="off" aria-hidden="true">
-        <textarea id="gbText" maxlength="200" rows="2" placeholder="ฝากข้อความถึงเจ้าของเว็บ…"></textarea>
-        <div class="gb-row"><span class="gb-count" id="gbCount">0/200</span><button id="gbSend" type="button">ส่งข้อความ</button></div>
-        <div class="gb-note" id="gbNote">ข้อความจะขึ้นในหน้านี้หลังเจ้าของอนุมัติ</div>
+        <textarea id="gbText" maxlength="200" rows="2" placeholder="ฝากข้อความถึงเจ้าของ…"></textarea>
+        <div class="gb-row"><span class="gb-count" id="gbCount">0/200</span><button id="gbSend" type="button">Send message</button></div>
+        <div class="gb-note" id="gbNote">ข้อความจะขึ้นในหน้านี้หลัง Adminอนุมัติ</div>
       </div>
     </div>` : '';
   const galleryHTML = CONFIG.gallery.map((g, i) => `
@@ -948,7 +948,7 @@ function render() {
     <div class="gallery">${galleryHTML}</div>
 ${guestHTML}
     <div class="socials">${socialsHTML}</div>
-    <p class="footer">made with <span class="heart">❤</span> by ${CONFIG.name.split(' ')[0]}</p>
+    <p class="footer">Built by patchara.phon_ © 2026 <span class="heart"></span>  ${CONFIG.name.split(' ')[0]}</p>
     <details class="privacy">
       <summary>สถิติแบบไม่ระบุตัวตน</summary>
       <p>เว็บนี้นับสถิติเป็นตัวเลขรวม เช่น จำนวนผู้เข้าชม ประเภทอุปกรณ์/เบราว์เซอร์ ขนาดหน้าจอ ภาษา เขตเวลา ช่วงเวลาที่เข้า ส่วนที่ดู และสิ่งที่กด โดยไม่บันทึก IP ชื่อ หรือข้อมูลที่ระบุตัวบุคคล และไม่เก็บเป็นประวัติรายคน</p>
