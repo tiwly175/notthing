@@ -570,6 +570,50 @@ button.pill:active{transform:scale(.88)}
 .privacy summary::-webkit-details-marker{display:none}
 .privacy p{margin:6px 0 0;line-height:1.7}
 .op-card button.op-danger{width:100%;margin-top:8px;padding:9px;border-radius:12px;background:transparent;border:1px solid color-mix(in srgb,#ef4444 55%,transparent);color:#ef4444;font-size:12.5px}
+/* ===== Clock widget ===== */
+#clockHost{position:fixed;z-index:60;pointer-events:none;transition:opacity .35s ease}
+#clockHost:empty{display:none}
+#clockHost.hide{opacity:0}
+#clockHost[data-pos="top-left"]{top:calc(14px + var(--safe-t));left:14px}
+#clockHost[data-pos="top-center"]{top:calc(14px + var(--safe-t));left:50%;transform:translateX(-50%)}
+#clockHost[data-pos="inline"]{position:static;display:flex;justify-content:center;margin:0 0 12px}
+.clk{--ck-color:var(--ink);--ck-accent:var(--accent);font-size:calc(14px * var(--ck-scale,1));color:var(--ck-color);font-family:var(--ck-font,inherit);line-height:1.15;white-space:nowrap}
+.clk-box{background:var(--ck-bgc,transparent);border:1px solid var(--card-brd);border-radius:16px;padding:.5em .85em}
+.clk.glass .clk-box{backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+.clk-time{font-weight:600;font-variant-numeric:tabular-nums;letter-spacing:.5px}
+.clk-time i{font-style:normal}
+.clk-digital .clk-box{text-align:center}
+.clk-time .colon.blink{animation:ckBlink 1s steps(1) infinite}
+@keyframes ckBlink{50%{opacity:.25}}
+.clk-s{color:var(--ck-accent)}
+.clk-ap{font-size:.6em;margin-left:.3em;opacity:.8}
+.clk-date{font-size:.72em;opacity:.8;margin-top:.15em}
+.clk-label{font-size:.66em;opacity:.7;letter-spacing:.6px;margin-top:.1em}
+.clk-digital .clk-time{font-size:2.1em}
+.clk-minimal .clk-box{background:transparent;border:0;padding:.1em 0}
+.clk-minimal .clk-time{font-size:1.2em;display:inline}
+.clk-minimal .clk-date,.clk-minimal .clk-label{display:inline;margin-left:.6em}
+.clk-pill .clk-box{border-radius:999px;display:flex;align-items:center;gap:.6em;padding:.45em 1em}
+.clk-pill .clk-time{font-size:1.15em}
+.clk-pill .clk-date,.clk-pill .clk-label{margin:0}
+.clk-neon{--ck-color:#f3ece6}
+.clk-neon .clk-box{background:var(--ck-bgc,rgba(0,0,0,.62));border-color:color-mix(in srgb,var(--ck-accent) 50%,transparent)}
+.clk-neon .clk-time{font-size:1.9em;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;color:var(--ck-accent);text-shadow:0 0 6px var(--ck-accent),0 0 18px color-mix(in srgb,var(--ck-accent) 60%,transparent)}
+.clk-analog .clk-box{border-radius:22px;text-align:center;padding:.6em .8em}
+.clk-analog svg{width:6em;height:6em;display:block;margin:0 auto .2em}
+.ck-prev{display:flex;justify-content:center;align-items:center;min-height:84px;padding:14px 8px;margin-bottom:10px;border-radius:14px;border:1px dashed var(--card-brd);background:repeating-conic-gradient(color-mix(in srgb,var(--ink) 6%,transparent) 0 25%,transparent 0 50%) 0 0/16px 16px}
+.ck-l{font-size:11.5px;color:var(--ink-soft);margin:12px 0 6px}
+.ck-chips{display:flex;flex-wrap:wrap;gap:6px}
+.op-card .ck-chip{padding:5px 11px;border-radius:999px;font-size:12px;border:1px solid var(--card-brd);background:transparent}
+.op-card .ck-chip.on{background:var(--ink);color:var(--bg);border-color:transparent}
+.ck-colors{display:grid;grid-template-columns:1fr 1fr;gap:8px 12px}
+.ck-inline{display:flex;align-items:center;gap:8px;font-size:12.5px}
+.ck-inline span{min-width:58px}
+.ck-inline small{color:var(--ink-soft);font-size:10.5px}
+.ck-inline input[type=range]{flex:1;min-width:0}
+.ck-inline input[type=color]{width:34px;height:28px;padding:0;border:1px solid var(--card-brd);border-radius:8px;background:none}
+.ck-inline b{min-width:42px;text-align:right;font-size:12px}
+.op-adjbtns button[data-act="ck-save"]{background:var(--ink);color:var(--bg);border-color:transparent}
 /* guestbook */
 .gb-list{display:flex;flex-direction:column;gap:8px}
 .gb-msg{background:var(--card);border:1px solid var(--card-brd);border-radius:16px;padding:10px 14px;margin:6px 0}
@@ -695,6 +739,8 @@ const CONFIG = {
     { key: "offline", text: "ออฟไลน์",           color: "#9ca3af" },
   ],
   // แสดงสถานะให้ทุกคนเห็นแบบเรียลไทม์ต้องใส่ค่า Firebase (ดูวิธีตั้งค่าที่คุยกันในแชท) ถ้าเว้นว่าง = เห็นเฉพาะเครื่องนี้
+  // นาฬิกา: ค่าเริ่มต้น (ปรับได้จากแผงเจ้าของ ไม่ต้องแก้ตรงนี้)
+  clock: {},
   firebase: { dbUrl: "https://notthing-112-default-rtdb.asia-southeast1.firebasedatabase.app", apiKey: "AIzaSyDDTaS9WoBPAVG4_Hjw9c4N9PNUkw6L49M" },
   avatar: "✿", // ใส่ URL รูปก็ได้ เช่น "https://.../me.jpg"
   accent: "#ff7a59", // สีหลัก
@@ -854,6 +900,7 @@ function render() {
   `).join('');
 
   app.innerHTML = `
+    <div id="clockHost" data-pos="inline"></div>
     <header>
       <div class="avatar-wrap">
         <div class="avatar-ring"></div>
@@ -1293,6 +1340,145 @@ if ('serviceWorker' in navigator) {
 render();
 
 /* =====================================================================
+   🕒 Clock widget (ปรับแต่งได้อิสระ — ตั้งค่าจากแผงเจ้าของ, เก็บที่ Firebase settings/clock)
+   ===================================================================== */
+const CLOCK_STYLES = [['digital', 'ดิจิทัล'], ['minimal', 'มินิมอล'], ['pill', 'แคปซูล'], ['neon', 'นีออน'], ['analog', 'อนาล็อก']];
+const CLOCK_POS = [['top-left', 'ซ้ายบน'], ['top-center', 'กลางบน'], ['inline', 'ในหน้า (เหนือโปรไฟล์)']];
+const CLOCK_FONTS = [['inherit', 'ตามเว็บ'], ['mali', 'Mali'], ['mono', 'โมโน'], ['serif', 'เซอริฟ']];
+const CLOCK_TZ = [['Asia/Bangkok', 'ไทย (UTC+7)'], ['local', 'ตามเครื่องผู้ชม'], ['Asia/Tokyo', 'ญี่ปุ่น'], ['Asia/Seoul', 'เกาหลี'], ['UTC', 'UTC'], ['Europe/London', 'ลอนดอน'], ['America/New_York', 'นิวยอร์ก'], ['America/Los_Angeles', 'ลอสแอนเจลิส']];
+const CLOCK_FONT_CSS = { inherit: 'inherit', mali: "'Mali',cursive", mono: "ui-monospace,SFMono-Regular,Menlo,Consolas,monospace", serif: "Georgia,'Times New Roman',serif" };
+const CLOCK_DEFAULTS = { on: true, style: 'pill', pos: 'top-left', h24: true, sec: false, blink: true, glass: true, fade: false,
+  date: 'short', tz: 'Asia/Bangkok', label: '', color: '', accent: '', bg: '', bgAlpha: 55, size: 100, font: 'inherit' };
+let clockSaved = null, clockApplied = null;
+const clockRegistry = new Map();
+
+function cleanClock(o) {
+  o = (o && typeof o === 'object') ? o : {};
+  const D = CLOCK_DEFAULTS;
+  const b = (k) => (typeof o[k] === 'boolean' ? o[k] : D[k]);
+  const pick = (k, list) => (list.some(x => x[0] === o[k]) ? o[k] : D[k]);
+  const hex = (k) => (typeof o[k] === 'string' && /^#[0-9a-fA-F]{6}$/.test(o[k]) ? o[k] : '');
+  const num = (k, lo, hi) => (Number.isFinite(+o[k]) && o[k] !== '' && o[k] !== null ? Math.min(hi, Math.max(lo, Math.round(+o[k]))) : D[k]);
+  return {
+    on: b('on'), style: pick('style', CLOCK_STYLES), pos: pick('pos', CLOCK_POS), h24: b('h24'), sec: b('sec'),
+    blink: b('blink'), glass: b('glass'), fade: b('fade'),
+    date: ['none', 'short', 'long'].includes(o.date) ? o.date : D.date,
+    tz: pick('tz', CLOCK_TZ), label: typeof o.label === 'string' ? o.label.slice(0, 16) : '',
+    color: hex('color'), accent: hex('accent'), bg: hex('bg'),
+    bgAlpha: num('bgAlpha', 0, 100), size: num('size', 60, 180), font: pick('font', CLOCK_FONTS)
+  };
+}
+
+const clockFmt = {};
+function clockParts(cfg, d) {
+  const tz = cfg.tz && cfg.tz !== 'local' ? cfg.tz : undefined;
+  const key = String(tz);
+  const f = clockFmt[key] || (clockFmt[key] = {
+    t: new Intl.DateTimeFormat('th-TH-u-nu-latn', { timeZone: tz, hourCycle: 'h23', hour: 'numeric', minute: 'numeric', second: 'numeric' }),
+    s: new Intl.DateTimeFormat('th-TH-u-nu-latn', { timeZone: tz, weekday: 'short', day: 'numeric', month: 'short' }),
+    l: new Intl.DateTimeFormat('th-TH-u-nu-latn', { timeZone: tz, weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })
+  });
+  const grab = fm => { const o = {}; fm.formatToParts(d).forEach(p => { o[p.type] = p.value; }); return o; };
+  const t = grab(f.t);
+  const out = { H: (+t.hour) % 24, M: +t.minute, S: +t.second };
+  if (cfg.date === 'short') { const o = grab(f.s); out.date = `${o.weekday} ${o.day} ${o.month}`; }
+  else if (cfg.date === 'long') { const o = grab(f.l); out.date = `${o.weekday}ที่ ${o.day} ${o.month} ${o.year}`; }
+  return out;
+}
+
+function clockVars(el, cfg) {
+  const set = (k, v) => (v ? el.style.setProperty(k, v) : el.style.removeProperty(k));
+  set('--ck-scale', String(cfg.size / 100));
+  set('--ck-font', CLOCK_FONT_CSS[cfg.font]);
+  set('--ck-color', cfg.color);
+  set('--ck-accent', cfg.accent);
+  if (cfg.bg) {
+    const h = cfg.bg.slice(1);
+    const rgb = [0, 2, 4].map(i => parseInt(h.slice(i, i + 2), 16)).join(',');
+    el.style.setProperty('--ck-bgc', `rgba(${rgb},${cfg.bgAlpha / 100})`);
+  } else if (cfg.style !== 'neon') {
+    el.style.setProperty('--ck-bgc', `color-mix(in srgb, var(--card-solid) ${cfg.bgAlpha}%, transparent)`);
+  } else el.style.removeProperty('--ck-bgc');
+}
+
+function makeClock(host, cfg) {
+  host.innerHTML = '';
+  const two = n => String(n).padStart(2, '0');
+  const wrap = document.createElement('div');
+  wrap.className = `clk clk-${cfg.style}${cfg.glass ? ' glass' : ''}`;
+  clockVars(wrap, cfg);
+  const box = document.createElement('div');
+  box.className = 'clk-box';
+  const meta = (cfg.date !== 'none' ? '<div class="clk-date" data-k="date"></div>' : '') + (cfg.label ? `<div class="clk-label">${escapeAttr(cfg.label)}</div>` : '');
+  if (cfg.style === 'analog') {
+    const ticks = [...Array(12)].map((_, i) => `<line x1="50" y1="8" x2="50" y2="${i % 3 === 0 ? 15 : 12}" stroke="currentColor" stroke-width="${i % 3 === 0 ? 2.4 : 1.4}" stroke-linecap="round" stroke-opacity="${i % 3 === 0 ? 0.9 : 0.5}" transform="rotate(${i * 30} 50 50)"/>`).join('');
+    box.innerHTML = `<svg viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="50" r="46" fill="none" stroke="currentColor" stroke-opacity=".3" stroke-width="2"/>${ticks}
+      <line data-k="hh" x1="50" y1="50" x2="50" y2="28" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>
+      <line data-k="mm" x1="50" y1="50" x2="50" y2="16" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+      ${cfg.sec ? '<line data-k="ss" x1="50" y1="56" x2="50" y2="12" stroke="var(--ck-accent)" stroke-width="1.6" stroke-linecap="round"/>' : ''}
+      <circle cx="50" cy="50" r="3.2" fill="var(--ck-accent)"/></svg>${meta}`;
+  } else {
+    box.innerHTML = `<div class="clk-time"><span data-k="h"></span><i class="colon${cfg.blink ? ' blink' : ''}">:</i><span data-k="m"></span>${cfg.sec ? '<i class="colon">:</i><span class="clk-s" data-k="s"></span>' : ''}${cfg.h24 ? '' : '<span class="clk-ap" data-k="ap"></span>'}</div>${meta}`;
+  }
+  wrap.appendChild(box);
+  host.appendChild(wrap);
+  const q = {};
+  box.querySelectorAll('[data-k]').forEach(n => { q[n.dataset.k] = n; });
+  const update = () => {
+    const p = clockParts(cfg, new Date());
+    if (q.h) q.h.textContent = cfg.h24 ? two(p.H) : String(((p.H + 11) % 12) + 1);
+    if (q.m) q.m.textContent = two(p.M);
+    if (q.s) q.s.textContent = two(p.S);
+    if (q.ap) q.ap.textContent = p.H < 12 ? 'AM' : 'PM';
+    if (q.date) q.date.textContent = p.date || '';
+    if (q.hh) q.hh.setAttribute('transform', `rotate(${(p.H % 12) * 30 + p.M * 0.5} 50 50)`);
+    if (q.mm) q.mm.setAttribute('transform', `rotate(${p.M * 6 + p.S * 0.1} 50 50)`);
+    if (q.ss) q.ss.setAttribute('transform', `rotate(${p.S * 6} 50 50)`);
+  };
+  clockRegistry.set(host, update);
+  update();
+}
+
+function applyClock(cfg) {
+  const host = $('#clockHost');
+  if (!host) return;
+  clockApplied = cfg;
+  if (!cfg.on) { host.innerHTML = ''; clockRegistry.delete(host); return; }
+  host.dataset.pos = cfg.pos;
+  makeClock(host, cfg);
+  onClockScroll();
+}
+function onClockScroll() {
+  const host = $('#clockHost');
+  if (!host || !clockApplied) return;
+  host.classList.toggle('hide', !!(clockApplied.fade && clockApplied.pos !== 'inline' && window.scrollY > 80));
+}
+function initClock() {
+  const FB = CONFIG.firebase || {};
+  let cfg = cleanClock(CONFIG.clock);
+  try { const c = JSON.parse(localStorage.getItem('clk')); if (c) cfg = cleanClock(c); } catch (_) {}
+  clockSaved = cfg;
+  applyClock(cfg);
+  window.addEventListener('scroll', onClockScroll, { passive: true });
+  setInterval(() => {
+    if (document.hidden) return;
+    clockRegistry.forEach((fn, host) => { if (host.isConnected) fn(); else clockRegistry.delete(host); });
+  }, 1000);
+  if (FB.dbUrl && FB.apiKey) {
+    const url = FB.dbUrl.replace(/\/$/, '') + '/settings/clock.json';
+    const pull = () => fetch(url, { cache: 'no-store' }).then(r => (r.ok ? r.json() : undefined)).then(v => {
+      if (!v || typeof v !== 'object' || $('#ownerPanel')) return;
+      const c = cleanClock(v);
+      clockSaved = c;
+      applyClock(c);
+      try { localStorage.setItem('clk', JSON.stringify(c)); } catch (_) {}
+    }).catch(() => {});
+    pull();
+    setInterval(pull, 60000);
+  }
+}
+
+/* =====================================================================
    🟢 Live: สถานะ + ออนไลน์/ยอดชม/หัวใจ + นับการกด + แผงเจ้าของ
    (Firebase Realtime Database ผ่าน REST + SSE ไม่ใช้ SDK, เก็บแบบไม่ระบุตัวตน ไม่เก็บ IP)
    ===================================================================== */
@@ -1376,6 +1562,7 @@ function initLive() {
   };
   const S = { views: undefined, likes: undefined, online: undefined, off: { views: 0, likes: 0, online: 0 } };
   let dailyRange = 7, lastSt = null, ownerGb = { pl: [], al: [] };
+  let ckDraft = null;
   let real = { views: 0, likes: 0, online: undefined }; // ค่าจริงล่าสุดที่แผงเจ้าของอ่านได้
   // ค่าที่แสดง = ค่าจริง + ตัวปรับ (ค่าจริงไม่ถูกแตะ ตัวปรับเก็บแยกที่ stats/offset)
   const shown = k => (S[k] === undefined ? undefined : Math.max(k === 'online' ? 1 : 0, S[k] + (S.off[k] || 0)));
@@ -1722,6 +1909,58 @@ function initLive() {
       return false;
     }
   }
+  function clockPanelHTML(d) {
+    const chip = (k, v, label, on) => `<button type="button" class="ck-chip${on ? ' on' : ''}" data-ck="${k}" data-v="${v}">${label}</button>`;
+    const tog = (k, label) => chip(k, 'toggle', label, d[k]);
+    const opt = (k, list) => list.map(([v, l]) => chip(k, v, l, d[k] === v)).join('');
+    const color = (k, label) => `<div class="ck-inline"><span>${label}</span><input type="color" data-ckin="${k}" value="${d[k] || '#888888'}">${d[k] ? `<button type="button" class="ck-chip" data-ck="clear" data-v="${k}">ล้าง</button>` : '<small>ค่าธีม</small>'}</div>`;
+    return `
+      <div class="op-label">นาฬิกา (ปรับแต่งได้อิสระ)</div>
+      <div class="ck-prev" id="ckPrev"></div>
+      <div class="ck-chips">${tog('on', 'แสดงนาฬิกา')}${tog('h24', '24 ชม.')}${tog('sec', 'แสดงวินาที')}${tog('blink', 'จุดกะพริบ')}${tog('glass', 'พื้นหลังเบลอ')}${tog('fade', 'ซ่อนเมื่อเลื่อนลง')}</div>
+      <div class="ck-l">รูปแบบ</div><div class="ck-chips">${opt('style', CLOCK_STYLES)}</div>
+      <div class="ck-l">ตำแหน่ง</div><div class="ck-chips">${opt('pos', CLOCK_POS)}</div>
+      <div class="ck-l">วันที่</div><div class="ck-chips">${opt('date', [['none', 'ไม่แสดง'], ['short', 'แบบสั้น'], ['long', 'แบบเต็ม']])}</div>
+      <div class="ck-l">ฟอนต์</div><div class="ck-chips">${opt('font', CLOCK_FONTS)}</div>
+      <div class="ck-l">เขตเวลา</div>
+      <select class="op-input" data-ckin="tz">${CLOCK_TZ.map(([v, l]) => `<option value="${v}"${d.tz === v ? ' selected' : ''}>${l}</option>`).join('')}</select>
+      <div class="ck-l">ข้อความกำกับ (เช่น เวลาไทย)</div>
+      <input class="op-input" data-ckin="label" maxlength="16" value="${esc(d.label)}" placeholder="ไม่ใส่ก็ได้">
+      <div class="ck-l">สี</div>
+      <div class="ck-colors">${color('color', 'ตัวอักษร')}${color('accent', 'เน้น/วินาที')}${color('bg', 'พื้นหลัง')}</div>
+      <div class="ck-l">ขนาดและความโปร่งใส</div>
+      <div class="ck-inline"><span>ขนาด</span><input type="range" min="60" max="180" data-ckin="size" value="${d.size}"><b id="ckv-size">${d.size}%</b></div>
+      <div class="ck-inline" style="margin-top:6px"><span>พื้นหลัง</span><input type="range" min="0" max="100" data-ckin="bgAlpha" value="${d.bgAlpha}"><b id="ckv-bgAlpha">${d.bgAlpha}%</b></div>
+      <div class="op-adjbtns"><button data-act="ck-reset">ค่าเริ่มต้น</button><button data-act="ck-save">บันทึกนาฬิกา</button></div>`;
+  }
+  function renderClockPanel(el) {
+    const box = $('#opClock', el);
+    if (!box) return;
+    box.innerHTML = clockPanelHTML(ckDraft);
+    const prev = $('#ckPrev', box);
+    if (prev) makeClock(prev, ckDraft);
+  }
+  function ckRefresh(el) {
+    const prev = $('#ckPrev', el);
+    if (prev) makeClock(prev, ckDraft);
+    applyClock(ckDraft);
+    ['size', 'bgAlpha'].forEach(k => { const v = $('#ckv-' + k, el); if (v) v.textContent = ckDraft[k] + '%'; });
+  }
+  async function putClock(cfg) {
+    lastErr = '';
+    try {
+      const t = await getToken();
+      if (!t) { lastErr = 'token'; return false; }
+      const r = await db('settings/clock', { method: 'PUT', body: cfg, token: t });
+      if (!r.ok) { lastErr = String(r.status); return false; }
+      clockSaved = cfg;
+      try { localStorage.setItem('clk', JSON.stringify(cfg)); } catch (_) {}
+      return true;
+    } catch (_) {
+      lastErr = 'network';
+      return false;
+    }
+  }
   async function resetStats() {
     lastErr = '';
     try {
@@ -1862,7 +2101,7 @@ function initLive() {
       box.textContent = 'โหลดสถิติไม่ได้ (เช็ก Rules หรือกดค้างที่ป้ายเพื่อล็อกอินใหม่)';
     }
   }
-  function closePanel() { const el = $('#ownerPanel'); if (el) el.remove(); }
+  function closePanel() { const el = $('#ownerPanel'); if (el) el.remove(); if (clockSaved) applyClock(clockSaved); }
   function openPanel() {
     closePanel();
     let sel = cur.key;
@@ -1879,6 +2118,7 @@ function initLive() {
           <input class="op-input" id="opText" maxlength="40" placeholder="พิมพ์ข้อความสถานะ เช่น กำลังเล่น ROV" value="${esc(cur.text)}">
           <button class="op-save" data-act="save">บันทึกสถานะ</button>
         </div>
+        <div class="op-sec" id="opClock"></div>
         <div class="op-sec"><div class="op-label">สมุดเยี่ยมชม <span id="opGbCount"></span></div><div id="opGuest">กำลังโหลด…</div></div>
         <div class="op-sec"><div class="op-label">สถิติ (เห็นเฉพาะคุณ)</div><div id="opStats"></div></div>
         <div class="op-foot"><button data-act="refresh">รีเฟรชสถิติ</button><button data-act="logout">ออกจากระบบ</button></div>
@@ -1887,8 +2127,21 @@ function initLive() {
       </div>`;
     document.body.appendChild(el);
     const input = $('#opText', el);
+    ckDraft = { ...(clockSaved || cleanClock({})) };
+    renderClockPanel(el);
     el.addEventListener('click', async e => {
       if (e.target === el) { closePanel(); return; }
+      const ck = e.target.closest('[data-ck]');
+      if (ck) {
+        const k = ck.dataset.ck, v = ck.dataset.v;
+        if (k === 'clear') ckDraft[v] = '';
+        else if (v === 'toggle') ckDraft[k] = !ckDraft[k];
+        else ckDraft[k] = v;
+        ckDraft = cleanClock(ckDraft);
+        renderClockPanel(el);
+        applyClock(ckDraft);
+        return;
+      }
       const chip = e.target.closest('.op-chip');
       if (chip) {
         const isDefault = !input.value.trim() || presets.some(p => p.text === input.value.trim());
@@ -1901,6 +2154,18 @@ function initLive() {
       const act = btn?.dataset.act;
       if (act === 'close') closePanel();
       else if (act === 'refresh') await busy(btn, 'กำลังโหลด…', async () => { await loadStats(); await loadOwnerGuest(); return true; });
+      else if (act === 'ck-reset') {
+        ckDraft = cleanClock({});
+        renderClockPanel(el);
+        applyClock(ckDraft);
+        panelMsg('โหลดค่าเริ่มต้นแล้ว กด "บันทึกนาฬิกา" เพื่อใช้จริง', 'ok');
+      }
+      else if (act === 'ck-save') {
+        const cfg = cleanClock(ckDraft);
+        const ok = await busy(btn, 'กำลังบันทึก…', () => putClock(cfg), '✓ บันทึกแล้ว');
+        if (ok) panelMsg('บันทึกนาฬิกาแล้ว ทุกคนเห็นเมื่อเปิดหน้าใหม่/ภายใน 1 นาที', 'ok');
+        else panelMsg(errText(), 'err');
+      }
       else if (act === 'range') {
         dailyRange = +btn.dataset.n || 7;
         $$('.op-seg button', el).forEach(b => b.classList.toggle('on', b === btn));
@@ -1959,6 +2224,14 @@ function initLive() {
       }
     });
     el.addEventListener('input', e => {
+      const c = e.target.closest('[data-ckin]');
+      if (c) {
+        const k = c.dataset.ckin;
+        ckDraft[k] = c.type === 'range' ? +c.value : c.value;
+        ckDraft = cleanClock(ckDraft);
+        ckRefresh(el);
+        return;
+      }
       const i = e.target.closest('[data-off]');
       if (!i) return;
       const k = i.dataset.off;
@@ -2008,6 +2281,7 @@ function initLive() {
     })();
   }
 }
+initClock();
 initLive();
 
 /* Scroll → update active nav */
