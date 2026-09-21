@@ -1,5 +1,5 @@
 /* Service Worker — cache-first สำหรับไฟล์นิ่ง, network-first สำหรับหน้าเว็บ, รองรับ Range (วิดีโอ/เพลง) */
-const CACHE = 'link-space-v2';
+const CACHE = 'link-space-v3';
 const ASSETS = [
   './',
   './index.html',
