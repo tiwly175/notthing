@@ -570,6 +570,108 @@ button.pill:active{transform:scale(.88)}
 .privacy summary::-webkit-details-marker{display:none}
 .privacy p{margin:6px 0 0;line-height:1.7}
 .op-card button.op-danger{width:100%;margin-top:8px;padding:9px;border-radius:12px;background:transparent;border:1px solid color-mix(in srgb,#ef4444 55%,transparent);color:#ef4444;font-size:12.5px}
+/* ===== Dynamic content / theme fx / popup ===== */
+.game-icon img,.link-icon img{width:100%;height:100%;object-fit:cover;border-radius:inherit;display:block}
+h1.fx-glow{text-shadow:0 0 8px var(--accent),0 0 22px color-mix(in srgb,var(--accent) 60%,transparent)}
+h1.fx-rainbow{background:linear-gradient(90deg,#ff7a59,#ffc857,#7bd88f,#5ab0ff,#c084fc,#ff7a59);background-size:200% auto;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;animation:fxSlide 6s linear infinite}
+@keyframes fxSlide{to{background-position:200% center}}
+h1.fx-shimmer{background:linear-gradient(100deg,var(--ink) 40%,color-mix(in srgb,var(--accent) 80%,#fff) 50%,var(--ink) 60%);background-size:250% auto;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;animation:fxShim 3s linear infinite}
+@keyframes fxShim{to{background-position:-250% center}}
+h1.fx-bounce span{display:inline-block;animation:fxBounce 1.6s ease-in-out infinite;animation-delay:calc(var(--i) * .08s)}
+@keyframes fxBounce{0%,60%,100%{transform:translateY(0)}30%{transform:translateY(-6px)}}
+.wp-backdrop{position:fixed;inset:0;z-index:9500;background:rgba(0,0,0,.55);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);display:flex;align-items:center;justify-content:center;padding:20px;animation:wpFade .3s ease}
+.wp-card{width:100%;max-width:360px;max-height:88dvh;overflow:auto;background:var(--card-solid);color:var(--ink);border-radius:26px;padding:0 0 18px;text-align:center;box-shadow:var(--shadow-lg);animation:wpPop .45s var(--ease-bounce)}
+.wp-card .wp-img{width:100%;max-height:260px;object-fit:cover;display:block;border-radius:26px 26px 0 0}
+.wp-card h3{margin:16px 18px 0;font-family:'Mali',cursive;font-size:20px}
+.wp-card p{margin:8px 20px 0;font-size:14px;line-height:1.65;color:var(--ink-soft);word-break:break-word}
+.wp-btn{margin-top:16px;padding:11px 28px;border-radius:999px;background:var(--ink);color:var(--bg);font-weight:500;font-size:14px}
+@keyframes wpFade{from{opacity:0}}
+@keyframes wpPop{from{opacity:0;transform:translateY(20px) scale(.9)}}
+/* ===== Embeds ===== */
+.embeds{display:flex;flex-direction:column;gap:14px;margin-top:6px}
+.embed-item{border-radius:18px;overflow:hidden;background:var(--card);border:1px solid var(--card-brd)}
+.embed-frame{position:relative;width:100%;aspect-ratio:16/9;background:#000}
+.embed-frame iframe,.embed-frame video{position:absolute;inset:0;width:100%;height:100%;border:0}
+.embed-cap{padding:9px 12px;font-size:12.5px;color:var(--ink-soft)}
+.embed-link{display:flex;align-items:center;gap:12px;padding:12px 14px;color:inherit}
+.embed-link .el-ic{width:38px;height:38px;border-radius:10px;background:var(--accent);color:#fff;display:grid;place-items:center;flex-shrink:0}
+.embed-link .el-tx{flex:1;min-width:0}
+.embed-link .el-tx b{display:block;font-size:13.5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.embed-link .el-tx small{color:var(--ink-soft);font-size:11.5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;display:block}
+#embedsSection{display:none}
+
+/* ===== Live chat ===== */
+.chat-fab{
+  position:fixed;right:16px;bottom:calc(150px + var(--safe-b));z-index:460;
+  width:52px;height:52px;border-radius:50%;
+  background:linear-gradient(135deg,var(--accent),var(--accent-4));color:#fff;
+  display:grid;place-items:center;box-shadow:var(--shadow-lg);
+  transition:transform .25s var(--ease-bounce);
+}
+.chat-fab:active{transform:scale(.9)}
+.chat-fab svg{width:24px;height:24px}
+.chat-fab .dot{position:absolute;top:4px;right:4px;width:11px;height:11px;border-radius:50%;background:#ef4444;border:2px solid var(--bg);display:none}
+.chat-fab.unread .dot{display:block}
+.chat-backdrop{position:fixed;inset:0;z-index:9400;background:rgba(0,0,0,.45);display:flex;align-items:flex-end;justify-content:center}
+.chat-card{width:100%;max-width:420px;height:min(78dvh,640px);background:var(--card-solid);color:var(--ink);border-radius:22px 22px 0 0;display:flex;flex-direction:column;box-shadow:var(--shadow-lg)}
+@media(min-width:600px){.chat-backdrop{align-items:center}.chat-card{border-radius:22px;height:min(70dvh,600px)}}
+.chat-head{display:flex;align-items:center;gap:8px;padding:14px 16px;border-bottom:1px solid var(--card-brd);font-family:'Mali',cursive;font-weight:600}
+.chat-head span{flex:1}
+.chat-head button{width:30px;height:30px;border-radius:50%;background:var(--card);border:1px solid var(--card-brd)}
+.chat-body{flex:1;overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:8px}
+.chat-empty{text-align:center;color:var(--ink-soft);font-size:12.5px;margin:auto}
+.cb{max-width:78%;padding:9px 13px;border-radius:16px;font-size:13.5px;line-height:1.5;word-break:break-word;white-space:pre-wrap}
+.cb.me{align-self:flex-end;background:var(--ink);color:var(--bg);border-bottom-right-radius:5px}
+.cb.them{align-self:flex-start;background:var(--card);border:1px solid var(--card-brd);border-bottom-left-radius:5px}
+.cb time{display:block;font-size:9.5px;opacity:.6;margin-top:3px}
+.chat-inp{display:flex;gap:8px;padding:10px 12px calc(10px + var(--safe-b));border-top:1px solid var(--card-brd)}
+.chat-inp input{flex:1;padding:10px 14px;border-radius:999px;border:1px solid var(--card-brd);background:var(--card);color:var(--ink);font:inherit;font-size:14px}
+.chat-inp button{width:40px;height:40px;border-radius:50%;background:var(--ink);color:var(--bg);display:grid;place-items:center;flex-shrink:0}
+.chat-inp button:disabled{opacity:.5}
+/* รายชื่อแชทฝั่งเจ้าของ */
+.cl-item{display:flex;align-items:center;gap:10px;padding:10px;border-radius:14px;border:1px solid var(--card-brd);background:var(--card);margin:6px 0;cursor:pointer}
+.cl-item .cl-dot{width:9px;height:9px;border-radius:50%;background:#ef4444;flex-shrink:0;opacity:0}
+.cl-item.unread .cl-dot{opacity:1}
+.cl-item .cl-tx{flex:1;min-width:0}
+.cl-item .cl-tx b{display:block;font-size:12.5px}
+.cl-item .cl-tx small{color:var(--ink-soft);font-size:11px;display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:210px}
+.chat-thread{display:flex;flex-direction:column;gap:6px;max-height:320px;overflow-y:auto;padding:8px;border:1px solid var(--card-brd);border-radius:14px;background:var(--card)}
+.chat-thread .cb{max-width:85%;font-size:12.5px}
+.chat-reply{display:flex;gap:6px;margin-top:8px}
+.chat-reply input{flex:1;padding:9px 12px;border-radius:12px;border:1px solid var(--card-brd);background:var(--card);color:var(--ink);font:inherit;font-size:13px}
+.chat-reply button{padding:9px 14px;border-radius:12px;background:var(--ink);color:var(--bg);font-size:12.5px}
+/* ===== Owner panel: tabs + editors ===== */
+.op-tabs{display:flex;gap:6px;margin:4px 0 8px;overflow-x:auto;padding-bottom:2px}
+.op-card .op-tab{flex:1;padding:8px 10px;border-radius:12px;font-size:13px;border:1px solid var(--card-brd);background:transparent;white-space:nowrap}
+.op-card .op-tab.on{background:var(--ink);color:var(--bg);border-color:transparent}
+.op-pane{display:none}
+.op-pane.on{display:block}
+textarea.op-input{resize:vertical;min-height:64px}
+.ed-item{border:1px solid var(--card-brd);border-radius:14px;margin:8px 0;background:var(--card)}
+.ed-head{display:flex;align-items:center;gap:10px;padding:8px 10px;cursor:pointer}
+.ed-ico{width:34px;height:34px;border-radius:10px;display:grid;place-items:center;overflow:hidden;color:#fff;flex-shrink:0;font-size:15px}
+.ed-ico svg{width:18px;height:18px}
+.ed-ico img{width:100%;height:100%;object-fit:cover}
+.ed-tx{flex:1;min-width:0;display:flex;flex-direction:column}
+.ed-tx b,.ed-tx small{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ed-tx small{color:var(--ink-soft);font-size:11px}
+.ed-btns{display:flex;gap:4px}
+.op-card .ed-btns button{width:28px;height:28px;border-radius:8px;border:1px solid var(--card-brd);background:transparent;font-size:12px;padding:0}
+.op-card .ed-btns button:disabled{opacity:.3}
+.ed-body{padding:2px 12px 12px}
+.ed-f{display:block;margin:8px 0 0}
+.ed-f>span{display:block;font-size:11.5px;color:var(--ink-soft);margin-bottom:4px}
+.ed-f input[type=color]{width:100%;height:34px;padding:0;border:1px solid var(--card-brd);border-radius:10px;background:none}
+.ed-f .op-input{margin-bottom:0}
+.ed-imgrow{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:6px}
+.ed-prev{width:44px;height:44px;border-radius:12px;object-fit:cover;background:var(--card);border:1px solid var(--card-brd);display:grid;place-items:center;font-size:20px;overflow:hidden}
+.ed-upl,.op-card .ed-mini{padding:6px 12px;border-radius:10px;border:1px solid var(--card-brd);background:transparent;font-size:12px;cursor:pointer;color:var(--ink)}
+.ed-actions{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
+.op-card .ed-actions button{flex:1;padding:9px;border-radius:12px;font-size:12.5px;border:1px solid var(--card-brd);background:var(--card)}
+.op-card .ed-actions button.pri{background:var(--ink);color:var(--bg);border-color:transparent}
+.ed-hint{font-size:11px;color:var(--ink-soft);margin-top:6px;line-height:1.5}
+.gb-secret{display:flex;align-items:center;gap:8px;font-size:12.5px;color:var(--ink-soft)}
+.gb-secret input{width:auto}
 /* ===== Clock widget ===== */
 #clockHost{position:fixed;z-index:60;pointer-events:none;transition:opacity .35s ease}
 #clockHost:empty{display:none}
@@ -670,6 +772,12 @@ button.pill:active{transform:scale(.88)}
 <!-- Main -->
 <main class="wrap" id="app"></main>
 
+<!-- Live chat -->
+<button class="chat-fab" id="chatFab" aria-label="แชท" hidden>
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+  <span class="dot"></span>
+</button>
+
 <!-- Music mini-player -->
 <div class="mini-player hidden" id="miniPlayer">
   <button class="mp-btn" id="mpPlayPause" aria-label="play">
@@ -734,9 +842,9 @@ const CONFIG = {
   status: "ออนไลน์",
   // สถานะที่กดสลับได้ (กดที่ป้ายสถานะ ตอนอยู่ในโหมดเจ้าของ — กดค้างที่ป้ายเพื่อเข้า/ออกโหมดนี้)
   statusPresets: [
-    { key: "online",  text: "Online", color: "#22c55e" },
+    { key: "online",  text: "ออนไลน์", color: "#22c55e" },
     { key: "busy",    text: "ไม่ว่าง",           color: "#ef4444" },
-    { key: "offline", text: "Offline",           color: "#9ca3af" },
+    { key: "offline", text: "ออฟไลน์",           color: "#9ca3af" },
   ],
   // แสดงสถานะให้ทุกคนเห็นแบบเรียลไทม์ต้องใส่ค่า Firebase (ดูวิธีตั้งค่าที่คุยกันในแชท) ถ้าเว้นว่าง = เห็นเฉพาะเครื่องนี้
   // นาฬิกา: ค่าเริ่มต้น (ปรับได้จากแผงเจ้าของ ไม่ต้องแก้ตรงนี้)
@@ -748,9 +856,9 @@ const CONFIG = {
 
   games: [
     // ใส่ logo: "./ไฟล์โลโก้.png" เพื่อใช้โลโก้เกมจริงแทนไอคอนที่วาดเอง (ถ้าไม่ใส่ logo จะใช้ icon เดิม)
-    //{ name: "VALORANT",        id: "ไม่ค่อยเล่นแล้ว",       icon: "target", color: "#ff4655" },
+    { name: "VALORANT",        id: "ไม่ค่อยเล่นแล้ว",       icon: "target", color: "#ff4655" },
     { name: "ROV",             id: "บลูเล็ต♛",    icon: "sword",  color: "#3b82f6" },
-    //{ name: "GENSHIN IMPACT",  id: "ไม่ค่อยเล่นแล้ว",        icon: "leaf",   color: "#10b981" },
+    { name: "GENSHIN IMPACT",  id: "ไม่ค่อยเล่นแล้ว",        icon: "leaf",   color: "#10b981" },
     { name: "MINECRAFT",       id: "Skibididob8069",     icon: "cube",   color: "#84cc16" },
   ],
 
@@ -776,6 +884,8 @@ const CONFIG = {
     { src: "./rdr.jpg", caption: "Red Dead Redemption" },
     { src: "./onepiece.jpg", caption: "One Piece" },
   ],
+
+  embeds: [], // โพสต์ Instagram หรือวิดีโอ YouTube ที่จะฝังในหน้า — จัดการได้จากแผงเจ้าของ
 
   socials: [
     { icon: "instagram", url: "https://instagram.com/", label: "Instagram" },
@@ -839,58 +949,31 @@ function render() {
     : `<div class="avatar">${CONFIG.avatar}</div>`;
 
   // Games
-  const gamesHTML = CONFIG.games.map(g => `
-    <div class="id-card" data-copy="${escapeAttr(g.id)}">
-      <div class="game-icon" style="background:${g.color}">${ICONS[g.icon] || ICONS.star}</div>
-      <div class="id-info">
-        <div class="id-name">${g.name}</div>
-        <div class="id-value">${g.id}</div>
-      </div>
-      <button class="copy-btn" aria-label="คัดลอก">
-        <span class="ic-copy">${ICONS.copy}</span>
-        <span class="ic-check">${ICONS.check}</span>
-      </button>
-    </div>
-  `).join('');
+  const gamesHTML = CONFIG.games.map(gameCardHTML).join('');
 
   // Links
-  const linksHTML = CONFIG.links.map(l => `
-    <a class="link-item" href="${l.url}" ${l.url.startsWith('http') ? 'target="_blank" rel="noopener"' : ''}>
-    
-      <div class="link-icon" style="background:${l.color}">${ICONS[l.icon] || `<i class="${l.icon}"></i>`}</div>
-      
-      <div class="link-text">
-        <div class="link-title">${l.title}</div>
-        <div class="link-sub">${l.sub}</div>
-      </div>
-      <span class="link-arrow">${ICONS.arrow}</span>
-    </a>
-  `).join('');
+  const linksHTML = CONFIG.links.map(linkItemHTML).join('');
 
   // Gallery
   const hasGB = !!(CONFIG.firebase && CONFIG.firebase.dbUrl && CONFIG.firebase.apiKey);
   const guestHTML = hasGB ? `
     <div class="section-title" id="secGuest">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-      <span>Shoutbox</span>
+      <span>สมุดเยี่ยมชม</span>
       <span class="line"></span>
     </div>
     <div class="gb">
       <div class="gb-list" id="gbList"></div>
       <div class="gb-form">
-        <input id="gbName" maxlength="24" placeholder="Name (ไม่ใส่ก็ได้)" autocomplete="off">
+        <label class="gb-secret"><input type="checkbox" id="gbSecret"> ส่งแบบลับ (เห็นเฉพาะเจ้าของ ไม่ขึ้นหน้าเว็บ ไม่ระบุตัวตน)</label>
+        <input id="gbName" maxlength="24" placeholder="ชื่อ (ไม่ใส่ก็ได้)" autocomplete="off">
         <input id="gbWeb" class="gb-hp" tabindex="-1" autocomplete="off" aria-hidden="true">
-        <textarea id="gbText" maxlength="200" rows="2" placeholder="ฝากข้อความถึงเจ้าของ…"></textarea>
-        <div class="gb-row"><span class="gb-count" id="gbCount">0/200</span><button id="gbSend" type="button">Send message</button></div>
-        <div class="gb-note" id="gbNote">ข้อความจะขึ้นในหน้านี้หลัง Adminอนุมัติ</div>
+        <textarea id="gbText" maxlength="200" rows="2" placeholder="ฝากข้อความถึงเจ้าของเว็บ…"></textarea>
+        <div class="gb-row"><span class="gb-count" id="gbCount">0/200</span><button id="gbSend" type="button">ส่งข้อความ</button></div>
+        <div class="gb-note" id="gbNote">ข้อความจะขึ้นในหน้านี้หลังเจ้าของอนุมัติ</div>
       </div>
     </div>` : '';
-  const galleryHTML = CONFIG.gallery.map((g, i) => `
-    <div class="g-item" data-i="${i}">
-      <img src="${g.src}" alt="${g.caption}" loading="lazy" />
-      <div class="g-cap">${g.caption}</div>
-    </div>
-  `).join('');
+  const galleryHTML = CONFIG.gallery.map(galleryItemHTML).join('');
 
   // Socials
   const socialsHTML = CONFIG.socials.map(s => `
@@ -946,9 +1029,18 @@ function render() {
       <span class="line"></span>
     </div>
     <div class="gallery">${galleryHTML}</div>
+
+    <div id="embedsSection">
+      <div class="section-title" id="secEmbeds">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="m10 8 6 4-6 4z"/></svg>
+        <span>โพสต์ที่แชร์</span>
+        <span class="line"></span>
+      </div>
+      <div class="embeds" id="embedsList"></div>
+    </div>
 ${guestHTML}
     <div class="socials">${socialsHTML}</div>
-    <p class="footer">Built by patchara.phon_ © 2026 <span class="heart"></span>  ${CONFIG.name.split(' ')[0]}</p>
+    <p class="footer">made with <span class="heart">❤</span> by ${CONFIG.name.split(' ')[0]}</p>
     <details class="privacy">
       <summary>สถิติแบบไม่ระบุตัวตน</summary>
       <p>เว็บนี้นับสถิติเป็นตัวเลขรวม เช่น จำนวนผู้เข้าชม ประเภทอุปกรณ์/เบราว์เซอร์ ขนาดหน้าจอ ภาษา เขตเวลา ช่วงเวลาที่เข้า ส่วนที่ดู และสิ่งที่กด โดยไม่บันทึก IP ชื่อ หรือข้อมูลที่ระบุตัวบุคคล และไม่เก็บเป็นประวัติรายคน</p>
@@ -1124,8 +1216,8 @@ function renderTracks() {
         <div class="track ${i === currentIdx ? 'active' : ''}" data-i="${i}">
           <span class="t-num">${i === currentIdx && isPlaying ? '♪' : (i+1)}</span>
           <div class="t-info">
-            <div class="t-name">${t.title}</div>
-            <div class="t-artist">${t.artist}</div>
+            <div class="t-name">${escapeAttr(t.title)}</div>
+            <div class="t-artist">${escapeAttr(t.artist || "")}</div>
           </div>
           <button class="t-del" data-del="${i}" aria-label="ลบ">${ICONS.trash}</button>
         </div>
@@ -1231,7 +1323,7 @@ $('#musicFile').addEventListener('change', (e) => {
   files.forEach(f => {
     const url = URL.createObjectURL(f);
     const name = f.name.replace(/\.[^.]+$/, '');
-    playlist.push({ title: name, artist: 'จากเครื่อง', src: url });
+    playlist.push({ title: name, artist: 'จากเครื่อง', src: url, _local: true });
   });
   if (files.length) {
     showToast(`เพิ่ม ${files.length} เพลงแล้ว`, 'check');
@@ -1248,7 +1340,7 @@ $('#musicUrlBtn').addEventListener('click', () => {
   if (!url) return;
   const title = prompt('ชื่อเพลง:', 'เพลงใหม่') || 'เพลงใหม่';
   const artist = prompt('ศิลปิน:', 'ไม่ทราบ') || 'ไม่ทราบ';
-  playlist.push({ title, artist, src: url });
+  playlist.push({ title, artist, src: url, _local: true });
   showToast('เพิ่มเพลงแล้ว', 'check');
   loadTrack(playlist.length - 1, true);
 });
@@ -1338,6 +1430,279 @@ if ('serviceWorker' in navigator) {
    🚀 Init
    ===================================================================== */
 render();
+
+/* =====================================================================
+   📦 Dynamic content — ลิงก์/ไอดีเกม/เพลย์ลิสต์/โปรไฟล์/ธีม/Pop-up จัดการจากแผงเจ้าของ
+   (เก็บที่ Firebase: content/* และ settings/*, ถ้าไม่มีข้อมูลจะใช้ค่าในโค้ดตามเดิม)
+   ===================================================================== */
+const BASE = { name: CONFIG.name, tagline: CONFIG.tagline, avatar: CONFIG.avatar, accent: CONFIG.accent };
+const ORIG = { games: [...CONFIG.games], links: [...CONFIG.links], gallery: [...CONFIG.gallery], embeds: [...CONFIG.embeds] };
+const SITE = { games: null, links: null, playlist: null, profile: null, theme: null, popup: null, gallery: null, embeds: null };
+const ICON_KEYS = ['target', 'sword', 'leaf', 'cube', 'gamepad', 'star', 'link', 'mail', 'image', 'palette', 'cart', 'discord', 'instagram', 'tiktok', 'twitter'];
+const FX_FONTS = [['', 'ตามเว็บ'], ['Mali', 'Mali'], ['Kanit', 'Kanit'], ['Prompt', 'Prompt'], ['Itim', 'Itim'], ['Pridi', 'Pridi (เซอริฟ)'], ['Sriracha', 'Sriracha (ลายมือ)'], ['Charm', 'Charm']];
+const FX_LIST = [['none', 'ไม่มี'], ['glow', 'เรืองแสง'], ['rainbow', 'รุ้งเคลื่อนไหว'], ['shimmer', 'ประกายวิ่ง'], ['bounce', 'ตัวอักษรเด้ง']];
+const POPUP_FREQ = [['session', 'ครั้งเดียวต่อการเปิดเว็บ'], ['always', 'ทุกครั้งที่เข้า'], ['daily', 'วันละครั้ง'], ['once', 'ครั้งเดียวต่อคน (จนกว่าจะแก้ป๊อปอัป)']];
+
+// (ใช้ function เพราะ render() ถูกเรียกก่อนบรรทัดนี้ ต้องให้ hoist)
+function okUrl(u) {
+  if (typeof u !== 'string') return '';
+  u = u.trim();
+  if (u.startsWith('data:')) return (/^data:image\/(png|jpe?g|webp|gif);base64,[A-Za-z0-9+/=]+$/.test(u) && u.length < 260000) ? u : '';
+  return /^(https?:\/\/|\.\/|\/[^/])/i.test(u) ? u.slice(0, 400) : '';
+}
+function okColor(c, d) { return (typeof c === 'string' && /^#[0-9a-fA-F]{3,8}$/.test(c) ? c : (d || '')); }
+function okIcon(i) { return (typeof i === 'string' && /^[a-zA-Z0-9 _-]{1,40}$/.test(i) ? i : ''); }
+function strOf(v, n) { return (typeof v === 'string' ? v : '').slice(0, n); }
+function cleanGame(g) {
+  g = g || {};
+  return { name: strOf(g.name, 40), id: strOf(g.id, 60), site: okUrl(g.site), color: okColor(g.color, '#ff7a59'),
+    icon: ICON_KEYS.includes(g.icon) ? g.icon : 'star', img: okUrl(g.img || g.logo) };
+}
+function cleanLink(l) {
+  l = l || {};
+  return { title: strOf(l.title, 40), sub: strOf(l.sub, 60), url: okUrl(l.url) || '#', color: okColor(l.color, '#ff7a59'),
+    icon: okIcon(l.icon) || 'link', img: okUrl(l.img || l.logo) };
+}
+function cleanTrack(t) {
+  t = t || {};
+  return { title: strOf(t.title, 60) || 'ไม่มีชื่อ', artist: strOf(t.artist, 60), src: okUrl(t.src) };
+}
+function cleanGalleryItem(g) {
+  g = g || {};
+  return { caption: strOf(g.caption, 60), src: okUrl(g.src) };
+}
+function cleanEmbed(e) {
+  e = e || {};
+  return { url: okUrl(e.url), caption: strOf(e.caption, 80) };
+}
+function galleryItemHTML(g, i) {
+  return `<div class="g-item" data-i="${i}"><img src="${escapeAttr(g.src)}" alt="${escapeAttr(g.caption)}" loading="lazy" /><div class="g-cap">${escapeAttr(g.caption)}</div></div>`;
+}
+function embedKind(url) {
+  try {
+    const h = new URL(url).hostname.replace(/^www\./, '');
+    if (h === 'youtube.com' || h === 'm.youtube.com' || h === 'youtu.be') return 'youtube';
+    if (h === 'instagram.com') return 'instagram';
+    if (/\.(mp4|webm)$/i.test(new URL(url).pathname)) return 'video';
+  } catch (_) {}
+  return 'link';
+}
+function ytId(url) {
+  try {
+    const u = new URL(url);
+    if (u.hostname.includes('youtu.be')) return u.pathname.slice(1);
+    if (u.pathname.startsWith('/shorts/')) return u.pathname.split('/')[2];
+    return u.searchParams.get('v') || '';
+  } catch (_) { return ''; }
+}
+let igLoaded = false;
+function loadInstagramEmbed() {
+  if (igLoaded) { if (window.instgrm) window.instgrm.Embeds.process(); return; }
+  igLoaded = true;
+  const sc = document.createElement('script');
+  sc.async = true;
+  sc.src = 'https://www.instagram.com/embed.js';
+  sc.onload = () => { if (window.instgrm) window.instgrm.Embeds.process(); };
+  document.body.appendChild(sc);
+}
+function embedHTML(e) {
+  const kind = embedKind(e.url);
+  const cap = e.caption ? `<div class="embed-cap">${escapeAttr(e.caption)}</div>` : '';
+  if (kind === 'youtube') {
+    const id = ytId(e.url);
+    if (id) return `<div class="embed-item"><div class="embed-frame"><iframe src="https://www.youtube.com/embed/${escapeAttr(id)}" title="${escapeAttr(e.caption || 'YouTube video')}" loading="lazy" allow="accelerometer;autoplay;clipboard-write;encrypted-media;gyroscope;picture-in-picture" allowfullscreen></iframe></div>${cap}</div>`;
+  }
+  if (kind === 'instagram') return `<div class="embed-item"><blockquote class="instagram-media" data-instgrm-permalink="${escapeAttr(e.url)}" data-instgrm-version="14" style="margin:0;width:100%;min-width:auto"></blockquote>${cap}</div>`;
+  if (kind === 'video') return `<div class="embed-item"><div class="embed-frame"><video src="${escapeAttr(e.url)}" controls preload="metadata" playsinline></video></div>${cap}</div>`;
+  return `<a class="embed-item embed-link" href="${escapeAttr(e.url)}" target="_blank" rel="noopener"><span class="el-ic">${ICONS.link}</span><span class="el-tx"><b>${escapeAttr(e.caption || 'เปิดลิงก์')}</b><small>${escapeAttr(e.url)}</small></span></a>`;
+}
+function renderGallery() {
+  const el = $('.gallery');
+  if (el) el.innerHTML = CONFIG.gallery.map(galleryItemHTML).join('');
+}
+function renderEmbeds() {
+  const box = $('#embedsList'), sec = $('#embedsSection');
+  if (!box || !sec) return;
+  const list = CONFIG.embeds || [];
+  sec.style.display = list.length ? 'block' : 'none';
+  box.innerHTML = list.map(embedHTML).join('');
+  if (list.some(e => embedKind(e.url) === 'instagram')) loadInstagramEmbed();
+}
+function cleanProfile(p) {
+  p = p || {};
+  const av = strOf(p.avatar, 260000);
+  return { name: strOf(p.name, 40), tagline: strOf(p.tagline, 120), avatar: /^(https?:|\.\/|\/|data:)/i.test(av) ? okUrl(av) : av.slice(0, 8) };
+}
+function cleanTheme(t) {
+  t = t || {};
+  return { accent: okColor(t.accent, ''), nameColor: okColor(t.nameColor, ''), tagColor: okColor(t.tagColor, ''),
+    font: FX_FONTS.some(f => f[0] === t.font) ? t.font : '', fx: FX_LIST.some(f => f[0] === t.fx) ? t.fx : 'none' };
+}
+function cleanPopup(p) {
+  p = p || {};
+  return { on: !!p.on, title: strOf(p.title, 60), text: strOf(p.text, 600), btn: strOf(p.btn, 24), img: okUrl(p.img),
+    freq: POPUP_FREQ.some(f => f[0] === p.freq) ? p.freq : 'session', v: Number(p.v) || 0 };
+}
+// Firebase เก็บรายการเป็น {n, items:[...]}; อ่านกลับเป็น array (null = ยังไม่เคยตั้งค่า -> ใช้ค่าในโค้ด)
+function toList(v) {
+  if (!v || typeof v !== 'object') return null;
+  if (typeof v.n !== 'number' && !Array.isArray(v)) return null;
+  const items = Array.isArray(v) ? v : v.items;
+  const arr = Array.isArray(items) ? items : (items && typeof items === 'object' ? Object.keys(items).sort((a, b) => a - b).map(k => items[k]) : []);
+  return arr.filter(Boolean);
+}
+function imgTag(u) { return `<img src="${escapeAttr(u)}" alt="" loading="lazy">`; }
+function gameCardHTML(g) {
+  const img = okUrl(g.img || g.logo);
+  return `
+    <div class="id-card" data-copy="${escapeAttr(g.id)}">
+      <div class="game-icon" style="background:${okColor(g.color, '#ff7a59')}">${img ? imgTag(img) : (ICONS[g.icon] || ICONS.star)}</div>
+      <div class="id-info">
+        <div class="id-name">${escapeAttr(g.name)}</div>
+        <div class="id-value">${escapeAttr(g.id)}</div>
+      </div>
+      <button class="copy-btn" aria-label="คัดลอก">
+        <span class="ic-copy">${ICONS.copy}</span>
+        <span class="ic-check">${ICONS.check}</span>
+      </button>
+    </div>`;
+}
+function linkItemHTML(l) {
+  const url = l.url || '#';
+  const img = okUrl(l.img || l.logo);
+  const ico = img ? imgTag(img) : (ICONS[l.icon] || `<i class="${escapeAttr(l.icon || 'fa-solid fa-link')}"></i>`);
+  return `
+    <a class="link-item" href="${escapeAttr(url)}" ${/^https?:/i.test(url) ? 'target="_blank" rel="noopener"' : ''}>
+      <div class="link-icon" style="background:${okColor(l.color, '#ff7a59')}">${ico}</div>
+      <div class="link-text">
+        <div class="link-title">${escapeAttr(l.title)}</div>
+        <div class="link-sub">${escapeAttr(l.sub)}</div>
+      </div>
+      <span class="link-arrow">${ICONS.arrow}</span>
+    </a>`;
+}
+function renderLists() {
+  const gr = $('.id-grid'), ll = $('.link-list');
+  if (gr) gr.innerHTML = CONFIG.games.map(gameCardHTML).join('');
+  if (ll) ll.innerHTML = CONFIG.links.map(linkItemHTML).join('');
+}
+
+let profNow = { name: BASE.name, tagline: '', avatar: BASE.avatar, taglineHTML: BASE.tagline }, themeNow = {};
+function loadFont(f) {
+  if (!f) return;
+  let l = $('#fxFont');
+  if (!l) { l = document.createElement('link'); l.id = 'fxFont'; l.rel = 'stylesheet'; document.head.appendChild(l); }
+  l.href = 'https://fonts.googleapis.com/css2?family=' + encodeURIComponent(f) + '&display=swap';
+}
+function paintHeader() {
+  const h1 = $('header h1');
+  if (h1) {
+    const fx = themeNow.fx || 'none';
+    h1.className = fx !== 'none' ? 'fx-' + fx : '';
+    h1.style.color = themeNow.nameColor || '';
+    h1.style.fontFamily = themeNow.font ? `'${themeNow.font}',cursive` : '';
+    if (fx === 'bounce') h1.innerHTML = [...profNow.name].map((c, i) => `<span style="--i:${i}">${c === ' ' ? '&nbsp;' : escapeAttr(c)}</span>`).join('');
+    else h1.textContent = profNow.name;
+  }
+  const tg = $('.tagline');
+  if (tg) { tg.innerHTML = profNow.taglineHTML; tg.style.color = themeNow.tagColor || ''; }
+  const ft = $('.footer');
+  if (ft) ft.innerHTML = `made with <span class="heart">❤</span> by ${escapeAttr(profNow.name.split(' ')[0])}`;
+}
+function applyProfile(p) {
+  p = p || {};
+  const name = p.name || BASE.name;
+  const av = p.avatar || BASE.avatar;
+  profNow = { name, tagline: p.tagline || '', avatar: av,
+    taglineHTML: p.tagline ? escapeAttr(p.tagline).replace(/\n/g, '<br>') : BASE.tagline };
+  CONFIG.name = name;
+  const el = $('.avatar-wrap .avatar');
+  if (el) {
+    const img = okUrl(av);
+    el.outerHTML = img ? `<img class="avatar" src="${escapeAttr(img)}" alt="" />` : `<div class="avatar">${escapeAttr(av)}</div>`;
+  }
+  paintHeader();
+}
+function applyTheme(t) {
+  themeNow = t || {};
+  document.documentElement.style.setProperty('--accent', themeNow.accent || BASE.accent);
+  loadFont(themeNow.font);
+  paintHeader();
+}
+function applyPlaylist(list) {
+  const cur = playlist[currentIdx] && playlist[currentIdx].src;
+  const locals = playlist.filter(t => t._local);
+  playlist = [...list, ...locals];
+  const idx = playlist.findIndex(t => t.src === cur);
+  if (idx >= 0) currentIdx = idx;
+  else if (currentIdx >= playlist.length) currentIdx = 0;
+  renderTracks();
+  updateMini();
+  if (idx < 0 && !isPlaying && playlist.length) loadTrack(currentIdx);
+}
+
+let popupDone = false;
+function showPopup(cfg, force) {
+  if (!cfg) return;
+  if (!force) {
+    if (!cfg.on || popupDone || localStorage.getItem('fbRefresh')) return;
+    const today = new Date().toLocaleDateString('sv-SE');
+    if (cfg.freq === 'session' && sessionStorage.getItem('wp' + cfg.v)) return;
+    if (cfg.freq === 'daily' && localStorage.getItem('wpd' + cfg.v) === today) return;
+    if (cfg.freq === 'once' && localStorage.getItem('wpo' + cfg.v)) return;
+    popupDone = true;
+    try { sessionStorage.setItem('wp' + cfg.v, '1'); localStorage.setItem('wpd' + cfg.v, today); localStorage.setItem('wpo' + cfg.v, '1'); } catch (_) {}
+  }
+  const old = $('#wpPopup');
+  if (old) old.remove();
+  const el = document.createElement('div');
+  el.id = 'wpPopup';
+  el.className = 'wp-backdrop';
+  el.setAttribute('role', 'dialog');
+  el.setAttribute('aria-modal', 'true');
+  const txt = cfg.text ? `<p>${escapeAttr(cfg.text).replace(/\n/g, '<br>')}</p>` : '';
+  el.innerHTML = `<div class="wp-card">${cfg.img ? `<img class="wp-img" src="${escapeAttr(cfg.img)}" alt="">` : ''}${cfg.title ? `<h3>${escapeAttr(cfg.title)}</h3>` : ''}${txt}<button class="wp-btn" type="button" data-wp="close">${escapeAttr(cfg.btn || 'เข้าสู่หน้าเว็บ')}</button></div>`;
+  const close = () => { el.remove(); document.removeEventListener('keydown', onKey); };
+  const onKey = e => { if (e.key === 'Escape') close(); };
+  el.addEventListener('click', e => { if (e.target === el || e.target.closest('[data-wp="close"]')) close(); });
+  document.addEventListener('keydown', onKey);
+  document.body.appendChild(el);
+}
+
+let siteSig = '';
+function applySite(data) {
+  const sig = JSON.stringify(data);
+  if (sig === siteSig) return;
+  siteSig = sig;
+  const c = (data && data.content) || {}, st = (data && data.settings) || {};
+  const g = toList(c.games), l = toList(c.links), pl = toList(c.playlist), gal = toList(c.gallery), em = toList(c.embeds);
+  if (g) { SITE.games = g.map(cleanGame); CONFIG.games = SITE.games; }
+  if (l) { SITE.links = l.map(cleanLink); CONFIG.links = SITE.links; }
+  if (g || l) renderLists();
+  if (gal) { SITE.gallery = gal.map(cleanGalleryItem).filter(x => x.src); CONFIG.gallery = SITE.gallery; renderGallery(); }
+  if (em) { SITE.embeds = em.map(cleanEmbed).filter(x => x.url); CONFIG.embeds = SITE.embeds; renderEmbeds(); }
+  if (pl) { SITE.playlist = pl.map(cleanTrack).filter(t => t.src); applyPlaylist(SITE.playlist); }
+  if (st.profile) { SITE.profile = cleanProfile(st.profile); applyProfile(SITE.profile); }
+  if (st.theme) { SITE.theme = cleanTheme(st.theme); applyTheme(SITE.theme); }
+  if (st.popup) { SITE.popup = cleanPopup(st.popup); showPopup(SITE.popup); }
+}
+function initSite() {
+  const FB = CONFIG.firebase || {};
+  try { const c = JSON.parse(localStorage.getItem('site_v1')); if (c) applySite(c); } catch (_) {}
+  if (!(FB.dbUrl && FB.apiKey)) return;
+  const base = FB.dbUrl.replace(/\/$/, '');
+  const get = p => fetch(`${base}/${p}.json`, { cache: 'no-store' }).then(r => (r.ok ? r.json() : undefined)).catch(() => undefined);
+  const pull = async () => {
+    if ($('#ownerPanel')) return;
+    const [content, settings] = await Promise.all([get('content'), get('settings')]);
+    if (content === undefined && settings === undefined) return;
+    const data = { content: content || {}, settings: settings || {} };
+    applySite(data);
+    try { localStorage.setItem('site_v1', JSON.stringify(data)); } catch (_) {}
+  };
+  pull();
+  setInterval(pull, 120000);
+}
 
 /* =====================================================================
    🕒 Clock widget (ปรับแต่งได้อิสระ — ตั้งค่าจากแผงเจ้าของ, เก็บที่ Firebase settings/clock)
@@ -1479,6 +1844,113 @@ function initClock() {
 }
 
 /* =====================================================================
+   💬 Live chat (ฝั่งผู้เข้าชม) — แชทกับเจ้าของเว็บแบบไม่ระบุตัวตน
+   เก็บที่ Firebase: chat/{sessionId}/messages, chat/{sessionId}/meta
+   sessionId เป็นรหัสสุ่มที่จำไว้ในเครื่องผู้เข้าชมเท่านั้น เจ้าของเห็นได้เฉพาะตอนล็อกอิน
+   ===================================================================== */
+function initChat() {
+  const FB = CONFIG.firebase || {};
+  const hasFB = !!(FB.dbUrl && FB.apiKey);
+  const fab = $('#chatFab');
+  if (!hasFB || !fab || localStorage.getItem('fbRefresh')) return; // เจ้าของไม่เห็นปุ่มแชทของตัวเอง
+  fab.hidden = false;
+  const base = FB.dbUrl.replace(/\/$/, '');
+  const dbc = (path, o = {}) => fetch(base + '/' + path + '.json' + (o.q ? '?' + o.q : ''), { method: o.method || 'GET', body: o.body === undefined ? undefined : JSON.stringify(o.body), cache: 'no-store' });
+  const uidKey = 'chatUid';
+  let uid = localStorage.getItem(uidKey) || '';
+  let panel = null, es = null, seen = new Set(), opened = false;
+
+  function bubble(m) {
+    const t = new Date(m.ts || Date.now()).toLocaleTimeString('th-TH', { hour: '2-digit', minute: '2-digit' });
+    return `<div class="cb ${m.from === 'owner' ? 'them' : 'me'}">${escapeAttr(m.text)}<time>${t}</time></div>`;
+  }
+  function addMsg(id, m) {
+    if (seen.has(id)) return;
+    seen.add(id);
+    const body = $('.chat-body', panel);
+    if (!body) return;
+    const empty = $('.chat-empty', body);
+    if (empty) empty.remove();
+    body.insertAdjacentHTML('beforeend', bubble(m));
+    body.scrollTop = body.scrollHeight;
+    if (m.from === 'owner' && document.hidden === false && !panel.classList.contains('__init')) {
+      // ไม่ทำอะไรเพิ่ม แค่เลื่อนดูล่าสุด (ไว้ขยายเป็นแจ้งเตือนได้ภายหลัง)
+    }
+  }
+  function listen() {
+    if (es) es.close();
+    try {
+      es = new EventSource(base + '/chat/' + uid + '/messages.json');
+      es.addEventListener('put', e => {
+        try {
+          const d = JSON.parse(e.data);
+          if (!d) return;
+          if (d.path === '/' && d.data && typeof d.data === 'object') {
+            Object.entries(d.data).forEach(([id, m]) => addMsg(id, m));
+          } else if (d.path !== '/' && d.data) {
+            addMsg(d.path.replace('/', ''), d.data);
+          }
+        } catch (_) {}
+      });
+    } catch (_) {}
+  }
+  async function ensureSession() {
+    if (uid) return uid;
+    uid = 'v' + Math.random().toString(36).slice(2, 10) + Date.now().toString(36).slice(-4);
+    localStorage.setItem(uidKey, uid);
+    return uid;
+  }
+  function openPanel() {
+    if (panel) { panel.remove(); }
+    fab.classList.remove('unread');
+    localStorage.setItem('chatFabSeen', '1');
+    panel = document.createElement('div');
+    panel.className = 'chat-backdrop';
+    panel.innerHTML = `<div class="chat-card">
+      <div class="chat-head"><span>แชทกับเจ้าของเว็บ</span><button type="button" data-cc="close" aria-label="ปิด">✕</button></div>
+      <div class="chat-body"><div class="chat-empty">พิมพ์ทักทายได้เลย ไม่ต้องใส่ชื่อก็ได้ ✿</div></div>
+      <div class="chat-inp"><input id="ccIn" maxlength="300" placeholder="พิมพ์ข้อความ…" autocomplete="off"><button type="button" id="ccSend" aria-label="ส่ง">${ICONS.arrow}</button></div>
+    </div>`;
+    document.body.appendChild(panel);
+    panel.addEventListener('click', e => { if (e.target === panel || e.target.closest('[data-cc="close"]')) panel.remove(); });
+    const inp = $('#ccIn', panel), send = $('#ccSend', panel);
+    async function doSend() {
+      const text = inp.value.trim().slice(0, 300);
+      if (!text) return;
+      send.disabled = true;
+      await ensureSession();
+      try {
+        await dbc('chat/' + uid + '/meta', { method: 'PUT', body: { last: Date.now(), preview: text.slice(0, 60) } });
+        await dbc('chat/' + uid + '/messages', { method: 'POST', body: { from: 'visitor', text, ts: Date.now() } });
+      } catch (_) {}
+      inp.value = '';
+      send.disabled = false;
+      inp.focus();
+    }
+    send.addEventListener('click', doSend);
+    inp.addEventListener('keydown', e => { if (e.key === 'Enter') doSend(); });
+    if (uid) {
+      dbc('chat/' + uid + '/messages').then(r => (r.ok ? r.json() : null)).then(o => {
+        if (o && typeof o === 'object') {
+          const body = $('.chat-body', panel);
+          const empty = $('.chat-empty', body);
+          if (empty) empty.remove();
+          Object.entries(o).sort((a, b) => (a[1].ts || 0) - (b[1].ts || 0)).forEach(([id, m]) => { seen.add(id); body.insertAdjacentHTML('beforeend', bubble(m)); });
+          body.scrollTop = body.scrollHeight;
+        }
+        listen();
+      }).catch(() => listen());
+    }
+    setTimeout(() => inp.focus(), 200);
+  }
+  fab.addEventListener('click', openPanel);
+  if (uid) {
+    listen();
+    if (!localStorage.getItem('chatFabSeen')) fab.classList.add('unread');
+  }
+}
+
+/* =====================================================================
    🟢 Live: สถานะ + ออนไลน์/ยอดชม/หัวใจ + นับการกด + แผงเจ้าของ
    (Firebase Realtime Database ผ่าน REST + SSE ไม่ใช้ SDK, เก็บแบบไม่ระบุตัวตน ไม่เก็บ IP)
    ===================================================================== */
@@ -1562,7 +2034,7 @@ function initLive() {
   };
   const S = { views: undefined, likes: undefined, online: undefined, off: { views: 0, likes: 0, online: 0 } };
   let dailyRange = 7, lastSt = null, ownerGb = { pl: [], al: [] };
-  let ckDraft = null;
+  let ckDraft = null, opTab = 'status', ED = null, ocOpen = null, ocData = {};
   let real = { views: 0, likes: 0, online: undefined }; // ค่าจริงล่าสุดที่แผงเจ้าของอ่านได้
   // ค่าที่แสดง = ค่าจริง + ตัวปรับ (ค่าจริงไม่ถูกแตะ ตัวปรับเก็บแยกที่ stats/offset)
   const shown = k => (S[k] === undefined ? undefined : Math.max(k === 'online' ? 1 : 0, S[k] + (S.off[k] || 0)));
@@ -1659,6 +2131,11 @@ function initLive() {
     const gbText = $('#gbText'), gbName = $('#gbName'), gbSend = $('#gbSend'), gbNote = $('#gbNote'), gbWeb = $('#gbWeb');
     const note = (t, c) => { gbNote.textContent = t; gbNote.className = 'gb-note ' + (c || ''); };
     gbText.addEventListener('input', () => { $('#gbCount').textContent = gbText.value.length + '/200'; });
+    const gbSecret = $('#gbSecret');
+    if (gbSecret) gbSecret.addEventListener('change', () => {
+      gbName.style.display = gbSecret.checked ? 'none' : '';
+      note(gbSecret.checked ? 'ข้อความลับจะไม่ขึ้นหน้าเว็บ ส่งถึงเจ้าของโดยตรง (ไม่ระบุตัวตน)' : 'ข้อความจะขึ้นในหน้านี้หลังเจ้าของอนุมัติ');
+    });
     gbSend.addEventListener('click', async () => {
       if (gbWeb.value) return; // ช่องดักบอท
       const text = gbText.value.trim().slice(0, 200);
@@ -1668,14 +2145,15 @@ function initLive() {
       gbSend.disabled = true;
       gbSend.textContent = 'กำลังส่ง…';
       let ok = false;
-      try { ok = (await db('guestbook/pending', { method: 'POST', body: { name, text, ts: Date.now() } })).ok; } catch (_) {}
+      const secret = !!$('#gbSecret')?.checked;
+      try { ok = (await (secret ? db('inbox', { method: 'POST', body: { text, ts: Date.now() } }) : db('guestbook/pending', { method: 'POST', body: { name, text, ts: Date.now() } }))).ok; } catch (_) {}
       gbSend.disabled = false;
       gbSend.textContent = 'ส่งข้อความ';
       if (ok) {
         localStorage.setItem('gbLast', String(Date.now()));
         gbText.value = '';
         $('#gbCount').textContent = '0/200';
-        note('ส่งแล้ว ✓ ข้อความจะขึ้นหลังเจ้าของอนุมัติ', 'ok');
+        note(secret ? 'ส่งข้อความลับแล้ว ✓ เจ้าของเห็นคนเดียว' : 'ส่งแล้ว ✓ ข้อความจะขึ้นหลังเจ้าของอนุมัติ', 'ok');
       } else note('ส่งไม่สำเร็จ ลองใหม่อีกครั้ง', 'err');
     });
     loadGuest();
@@ -1961,6 +2439,340 @@ function initLive() {
       return false;
     }
   }
+  /* ---------- ตัวแก้ไขเนื้อหา (ลิงก์/ไอดีเกม/เพลย์ลิสต์/โปรไฟล์/ธีม/Pop-up) ---------- */
+  async function putPath(path, body) {
+    lastErr = '';
+    try {
+      const t = await getToken();
+      if (!t) { lastErr = 'token'; return false; }
+      const r = await db(path, { method: body === null ? 'DELETE' : 'PUT', body, token: t });
+      if (!r.ok) { lastErr = String(r.status); return false; }
+      return true;
+    } catch (_) {
+      lastErr = 'network';
+      return false;
+    }
+  }
+  function cacheSet(group, key, value) {
+    try {
+      const c = JSON.parse(localStorage.getItem('site_v1')) || { content: {}, settings: {} };
+      c[group] = c[group] || {};
+      if (value === null) delete c[group][key]; else c[group][key] = value;
+      localStorage.setItem('site_v1', JSON.stringify(c));
+      siteSig = JSON.stringify(c);
+    } catch (_) {}
+  }
+  function resizeImage(file, max, mime, q) {
+    return new Promise((res, rej) => {
+      if (!file || !/^image\//.test(file.type) || file.size > 10e6) return rej(new Error('bad'));
+      const fr = new FileReader();
+      fr.onerror = () => rej(new Error('read'));
+      fr.onload = () => {
+        const im = new Image();
+        im.onerror = () => rej(new Error('img'));
+        im.onload = () => {
+          const k = Math.min(1, max / Math.max(im.width, im.height));
+          const w = Math.max(1, Math.round(im.width * k)), h = Math.max(1, Math.round(im.height * k));
+          const c = document.createElement('canvas');
+          c.width = w; c.height = h;
+          const x = c.getContext('2d');
+          if (mime === 'image/jpeg') { x.fillStyle = '#fff'; x.fillRect(0, 0, w, h); }
+          x.drawImage(im, 0, 0, w, h);
+          let out = c.toDataURL(mime, q);
+          if (out.length > 240000) out = c.toDataURL('image/jpeg', 0.6);
+          res(out);
+        };
+        im.src = fr.result;
+      };
+      fr.readAsDataURL(file);
+    });
+  }
+  function faviconFor(u) {
+    try {
+      const h = new URL(/^https?:/i.test(u) ? u : 'https://' + u).hostname;
+      return h.includes('.') ? 'https://www.google.com/s2/favicons?domain=' + encodeURIComponent(h) + '&sz=128' : '';
+    } catch (_) { return ''; }
+  }
+  const icoOf = it => (it.img ? imgTag(it.img) : (ICONS[it.icon] || (it.icon && it.icon.includes('fa-') ? `<i class="${esc(it.icon)}"></i>` : ICONS.star)));
+  const LIST_DEFS = {
+    games: { title: 'ไอดีเกม', path: 'content/games', site: 'site', clean: cleanGame, keep: g => g.name || g.id,
+      blank: () => ({ name: '', id: '', site: '', color: '#ff7a59', icon: 'gamepad', img: '' }),
+      name: g => g.name || '(ยังไม่ตั้งชื่อ)', sub: g => g.id, ico: g => icoOf(g), bg: g => g.color,
+      fields: [['name', 'ชื่อเกม', 'text'], ['id', 'ไอดี (ค่าที่ถูกคัดลอกเมื่อกด)', 'text'], ['site', 'เว็บของเกม (ใช้ดึงโลโก้อัตโนมัติ)', 'url'], ['color', 'สีพื้นไอคอน', 'color'], ['icon', 'ไอคอนสำรอง (ถ้าไม่มีโลโก้)', 'icon'], ['img', 'โลโก้', 'img']] },
+    links: { title: 'ลิงก์และแอป', path: 'content/links', site: 'url', clean: cleanLink, keep: l => l.title || l.sub,
+      blank: () => ({ title: '', sub: '', url: '', color: '#ff7a59', icon: 'link', img: '' }),
+      name: l => l.title || '(ยังไม่ตั้งชื่อ)', sub: l => l.sub, ico: l => icoOf(l), bg: l => l.color,
+      fields: [['title', 'หัวข้อ', 'text'], ['sub', 'คำอธิบาย', 'text'], ['url', 'ลิงก์ (https://…)', 'url'], ['color', 'สีพื้นไอคอน', 'color'], ['icon', 'ไอคอน (ชื่อในระบบ หรือคลาส Font Awesome เช่น fa-brands fa-line)', 'text'], ['img', 'โลโก้', 'img']] },
+    playlist: { title: 'เพลย์ลิสต์', path: 'content/playlist', clean: cleanTrack, keep: t => t.src,
+      blank: () => ({ title: '', artist: '', src: '' }),
+      name: t => t.title || '(ยังไม่ตั้งชื่อ)', sub: t => t.artist, ico: () => '♪', bg: () => 'var(--accent)',
+      fields: [['title', 'ชื่อเพลง', 'text'], ['artist', 'ศิลปิน', 'text'], ['src', 'ลิงก์ไฟล์เพลง (.mp3) หรือชื่อไฟล์ใน repo เช่น ./song.mp3', 'url']] },
+    gallery: { title: 'คลังรูป (แกลเลอรี่)', path: 'content/gallery', clean: cleanGalleryItem, keep: g => g.src,
+      blank: () => ({ caption: '', src: '' }),
+      name: g => g.caption || '(ไม่มีคำอธิบาย)', sub: g => g.src, ico: g => (g.src ? imgTag(g.src) : ICONS.image), bg: () => 'var(--card)',
+      fields: [['caption', 'คำอธิบายรูป', 'text'], ['src', 'รูป', 'img']] },
+    embeds: { title: 'โพสต์ที่แชร์ (Instagram / YouTube)', path: 'content/embeds', clean: cleanEmbed, keep: e => e.url,
+      blank: () => ({ url: '', caption: '' }),
+      name: e => e.caption || (e.url ? embedKind(e.url) : '(ยังไม่ใส่ลิงก์)'), sub: e => e.url,
+      ico: e => (embedKind(e.url) === 'youtube' && ytId(e.url) ? imgTag(`https://img.youtube.com/vi/${ytId(e.url)}/default.jpg`) : (embedKind(e.url) === 'instagram' ? '📷' : ICONS.link)),
+      bg: () => 'var(--accent)',
+      fields: [['url', 'ลิงก์โพสต์ Instagram หรือวิดีโอ YouTube', 'url'], ['caption', 'คำอธิบาย (ไม่ใส่ก็ได้)', 'text']] }
+  };
+  function edInput(sc, i, f, label, type, val, it) {
+    const at = `data-ed="${sc}"${i >= 0 ? ` data-i="${i}"` : ''} data-f="${f}"`;
+    if (type === 'color') return `<label class="ed-f"><span>${label}</span><input type="color" ${at} value="${esc(val || '#ff7a59')}"></label>`;
+    if (type === 'icon') return `<label class="ed-f"><span>${label}</span><select class="op-input" ${at}>${ICON_KEYS.map(k => `<option value="${k}"${val === k ? ' selected' : ''}>${k}</option>`).join('')}</select></label>`;
+    if (type === 'img') {
+      const kind = sc === 'profile' ? 'avatar' : sc === 'popup' ? 'popup' : sc === 'gallery' ? 'gallery' : 'icon';
+      const D = LIST_DEFS[sc];
+      const canFetch = D && D.site;
+      return `<div class="ed-f"><span>${label}</span>
+        <div class="ed-imgrow"><span class="ed-prev">${val ? (okUrl(val) ? imgTag(val) : esc(val)) : ''}</span>
+          <label class="ed-upl">อัปโหลดรูป<input type="file" accept="image/*" hidden data-edfile="${sc}"${i >= 0 ? ` data-i="${i}"` : ''} data-f="${f}" data-kind="${kind}"></label>
+          ${canFetch ? `<button type="button" class="ed-mini" data-act="ed-fetch">ดึงโลโก้จากเว็บ</button>` : ''}
+          <button type="button" class="ed-mini" data-act="ed-clearimg" data-ed="${sc}"${i >= 0 ? ` data-i="${i}"` : ''} data-f="${f}">ล้าง</button></div>
+        <input class="op-input" ${at} value="${val && !val.startsWith('data:') ? esc(val) : ''}" placeholder="หรือวางลิงก์รูป${val && val.startsWith('data:') ? ' (ตอนนี้ใช้รูปที่อัปโหลด)' : ''}"></div>`;
+    }
+    if (type === 'area') return `<label class="ed-f"><span>${label}</span><textarea class="op-input" rows="3" ${at}>${esc(val)}</textarea></label>`;
+    return `<label class="ed-f"><span>${label}</span><input class="op-input" ${at} value="${esc(val)}"></label>`;
+  }
+  function edRow(sc, it, i, n) {
+    const D = LIST_DEFS[sc];
+    const open = ED.open[sc + ':' + i];
+    return `<div class="ed-item" data-list="${sc}" data-i="${i}">
+      <div class="ed-head" data-act="ed-open"><span class="ed-ico" style="background:${esc(D.bg(it))}">${D.ico(it)}</span>
+        <span class="ed-tx"><b class="ed-name">${esc(D.name(it))}</b><small class="ed-sub">${esc(D.sub(it) || '')}</small></span>
+        <span class="ed-btns"><button data-act="ed-up"${i === 0 ? ' disabled' : ''}>↑</button><button data-act="ed-down"${i === n - 1 ? ' disabled' : ''}>↓</button><button data-act="ed-del">🗑</button></span></div>
+      <div class="ed-body"${open ? '' : ' hidden'}>${D.fields.map(([f, l, t]) => edInput(sc, i, f, l, t, it[f], it)).join('')}</div>
+    </div>`;
+  }
+  function renderList(el, sc) {
+    const box = $('#edl-' + sc, el);
+    if (box) box.innerHTML = ED[sc].map((it, i) => edRow(sc, it, i, ED[sc].length)).join('') || '<div class="ed-hint">ยังไม่มีรายการ</div>';
+    const sm = $(`[data-grp="${sc}"] summary`, el);
+    if (sm) sm.textContent = `${LIST_DEFS[sc].title} (${ED[sc].length})`;
+  }
+  function renderContentPane(el) {
+    const box = $('#opContent', el);
+    if (!box) return;
+    const P = ED.profile, T = ED.theme, U = ED.popup;
+    const clr = (sc, f, l) => `<div class="ck-inline" style="margin-top:6px"><span style="min-width:90px">${l}</span><input type="color" data-ed="${sc}" data-f="${f}" value="${esc(ED[sc][f] || '#888888')}">${ED[sc][f] ? `<button type="button" class="ed-mini" data-act="ed-clear" data-ed="${sc}" data-f="${f}">ล้าง</button>` : '<small>ค่าเริ่มต้น</small>'}</div>`;
+    const sel = (sc, f, list, l) => `<label class="ed-f"><span>${l}</span><select class="op-input" data-ed="${sc}" data-f="${f}">${list.map(([v, t]) => `<option value="${esc(v)}"${ED[sc][f] === v ? ' selected' : ''}>${esc(t)}</option>`).join('')}</select></label>`;
+    const list = sc => `<details class="op-det" data-grp="${sc}"><summary>${LIST_DEFS[sc].title} (${ED[sc].length})</summary>
+      <div id="edl-${sc}"></div>
+      <div class="ed-actions"><button data-act="ed-add" data-list="${sc}">＋ เพิ่ม</button><button data-act="ed-reset" data-list="${sc}">ใช้ค่าในโค้ด</button><button class="pri" data-act="ed-save" data-list="${sc}">บันทึก</button></div>
+      ${sc === 'playlist' ? '<div class="ed-hint">ใส่ลิงก์ไฟล์เพลง (.mp3/.ogg/.m4a) หรือชื่อไฟล์ที่อัปโหลดไว้ใน repo เช่น ./song.mp3 (Spotify/SoundCloud ยังไม่รองรับในเวอร์ชันนี้) เพลงที่ผู้เข้าชมเพิ่มจากเครื่องตัวเองจะไม่หาย</div>' : ''}
+      ${sc === 'games' ? '<div class="ed-hint">ใส่ "เว็บของเกม" แล้วกด "ดึงโลโก้จากเว็บ" ระบบจะดึงไอคอนเว็บมาให้อัตโนมัติ หรืออัปโหลดรูปเอง (ระบบย่อรูปให้ก่อนบันทึก)</div>' : ''}</details>`;
+    box.innerHTML = `
+      <details class="op-det" open data-grp="profile"><summary>โปรไฟล์และธีม</summary>
+        ${edInput('profile', -1, 'name', 'ชื่อ', 'text', P.name)}
+        ${edInput('profile', -1, 'tagline', 'คำคม/คำอธิบายใต้ชื่อ (ขึ้นบรรทัดใหม่ได้)', 'area', P.tagline)}
+        ${edInput('profile', -1, 'avatar', 'รูปโปรไฟล์ (พิมพ์ Emoji ได้ หรืออัปโหลด/วางลิงก์รูป)', 'img', P.avatar, null)}
+        <div class="ck-inline" style="margin-top:6px"><span style="min-width:90px">สีหลัก</span><input type="color" data-ed="theme" data-f="accent" value="${esc(T.accent || BASE.accent)}"></div>
+        ${clr('theme', 'nameColor', 'สีชื่อ')}${clr('theme', 'tagColor', 'สีคำคม')}
+        ${sel('theme', 'font', FX_FONTS, 'ฟอนต์ชื่อ')}${sel('theme', 'fx', FX_LIST, 'เอฟเฟกต์ตัวอักษรชื่อ')}
+        <div class="ed-actions"><button data-act="ed-reset-prof">ค่าเริ่มต้น</button><button class="pri" data-act="ed-save-prof">บันทึกโปรไฟล์และธีม</button></div>
+      </details>
+      <details class="op-det" data-grp="popup"><summary>Pop-up ต้อนรับ</summary>
+        <label class="ck-inline" style="margin-top:6px"><input type="checkbox" data-ed="popup" data-f="on"${U.on ? ' checked' : ''}> <span style="min-width:0">เปิดใช้งาน Pop-up</span></label>
+        ${edInput('popup', -1, 'title', 'หัวข้อ', 'text', U.title)}
+        ${edInput('popup', -1, 'text', 'ข้อความ', 'area', U.text)}
+        ${edInput('popup', -1, 'btn', 'ข้อความบนปุ่มปิด (ค่าเริ่มต้น: เข้าสู่หน้าเว็บ)', 'text', U.btn)}
+        ${edInput('popup', -1, 'img', 'รูปภาพ', 'img', U.img, null)}
+        ${sel('popup', 'freq', POPUP_FREQ, 'แสดงบ่อยแค่ไหน')}
+        <div class="ed-actions"><button data-act="pp-preview">ดูตัวอย่าง</button><button class="pri" data-act="pp-save">บันทึก Pop-up</button></div>
+      </details>
+      ${list('games')}${list('links')}${list('gallery')}${list('embeds')}${list('playlist')}`;
+    ['games', 'links', 'gallery', 'embeds', 'playlist'].forEach(sc => renderList(el, sc));
+  }
+  function edInit() {
+    const clone = a => a.map(x => ({ ...x }));
+    ED = {
+      open: {},
+      games: clone(CONFIG.games.map(cleanGame)),
+      links: clone(CONFIG.links.map(cleanLink)),
+      playlist: clone((SITE.playlist || CONFIG.playlist.map(cleanTrack))),
+      gallery: clone(CONFIG.gallery.map(cleanGalleryItem)),
+      embeds: clone(CONFIG.embeds.map(cleanEmbed)),
+      profile: { name: profNow.name, tagline: profNow.tagline || BASE.tagline.replace(/<br\s*\/?>/gi, '\n'), avatar: profNow.avatar },
+      theme: { ...cleanTheme({}), ...(SITE.theme || {}) },
+      popup: { ...cleanPopup({}), ...(SITE.popup || {}) }
+    };
+  }
+  function edUpdateHead(el, sc, i) {
+    const row = $(`.ed-item[data-list="${sc}"][data-i="${i}"]`, el);
+    const D = LIST_DEFS[sc];
+    if (!row) return;
+    const it = ED[sc][i];
+    $('.ed-name', row).textContent = D.name(it);
+    $('.ed-sub', row).textContent = D.sub(it) || '';
+    const ic = $('.ed-ico', row);
+    ic.style.background = D.bg(it);
+    ic.innerHTML = D.ico(it);
+  }
+  async function editorAct(el, act, btn) {
+    const item = btn.closest('.ed-item');
+    const sc = (item && item.dataset.list) || btn.dataset.list;
+    const i = item ? +item.dataset.i : -1;
+    const D = LIST_DEFS[sc];
+    if (act === 'ed-open') {
+      const k = sc + ':' + i;
+      ED.open[k] = !ED.open[k];
+      $('.ed-body', item).hidden = !ED.open[k];
+    } else if (act === 'ed-up' || act === 'ed-down') {
+      const j = act === 'ed-up' ? i - 1 : i + 1;
+      if (j < 0 || j >= ED[sc].length) return;
+      [ED[sc][i], ED[sc][j]] = [ED[sc][j], ED[sc][i]];
+      ED.open = {};
+      renderList(el, sc);
+    } else if (act === 'ed-del') {
+      if (!confirm('ลบรายการนี้? (ต้องกดบันทึกด้วยถึงจะมีผลกับหน้าเว็บ)')) return;
+      ED[sc].splice(i, 1);
+      ED.open = {};
+      renderList(el, sc);
+    } else if (act === 'ed-add') {
+      ED[sc].push(D.blank());
+      ED.open = { [sc + ':' + (ED[sc].length - 1)]: true };
+      renderList(el, sc);
+      const last = $(`.ed-item[data-list="${sc}"][data-i="${ED[sc].length - 1}"]`, el);
+      if (last) last.scrollIntoView({ block: 'nearest' });
+    } else if (act === 'ed-fetch') {
+      const url = faviconFor(ED[sc][i][D.site] || '');
+      if (!url) { panelMsg('ใส่ลิงก์เว็บก่อน (เช่น https://example.com)', 'err'); return; }
+      ED[sc][i].img = url;
+      ED.open[sc + ':' + i] = true;
+      renderList(el, sc);
+      panelMsg('ดึงโลโก้แล้ว ตรวจดูแล้วกดบันทึก', 'ok');
+    } else if (act === 'ed-clearimg') {
+      const scope = btn.dataset.ed;
+      if (scope === 'profile') { ED.profile.avatar = ''; applyProfile(cleanProfile(ED.profile)); const pv = $('.ed-prev', btn.closest('.ed-f')); if (pv) pv.innerHTML = ''; }
+      else if (scope === 'popup') { ED.popup.img = ''; const pv = $('.ed-prev', btn.closest('.ed-f')); if (pv) pv.innerHTML = ''; }
+      else { ED[scope][+btn.dataset.i][btn.dataset.f] = ''; ED.open[scope + ':' + btn.dataset.i] = true; renderList(el, scope); }
+    } else if (act === 'ed-clear') {
+      ED[btn.dataset.ed][btn.dataset.f] = '';
+      renderContentPane(el);
+      if (btn.dataset.ed === 'theme') applyTheme(cleanTheme(ED.theme));
+    } else if (act === 'ed-save') {
+      const items = ED[sc].map(D.clean).filter(D.keep);
+      const ok = await busy(btn, 'กำลังบันทึก…', () => putPath(D.path, { n: items.length, items }), '✓ บันทึกแล้ว');
+      if (!ok) { panelMsg(errText(), 'err'); return; }
+      cacheSet('content', sc, { n: items.length, items });
+      if (sc === 'playlist') { SITE.playlist = items; applyPlaylist(items); }
+      else if (sc === 'gallery') { SITE.gallery = items; CONFIG.gallery = items; renderGallery(); }
+      else if (sc === 'embeds') { SITE.embeds = items; CONFIG.embeds = items; renderEmbeds(); }
+      else { SITE[sc] = items; CONFIG[sc] = items; renderLists(); }
+      panelMsg(`บันทึก${D.title}แล้ว หน้าเว็บอัปเดตทันที`, 'ok');
+    } else if (act === 'ed-reset') {
+      if (!confirm(`ใช้ค่า${D.title}ที่เขียนไว้ในโค้ดแทน? (รายการที่แก้ไว้ในหลังบ้านจะถูกลบ)`)) return;
+      const ok = await putPath(D.path, null);
+      if (!ok) { panelMsg(errText(), 'err'); return; }
+      cacheSet('content', sc, null);
+      SITE[sc] = null;
+      if (sc === 'playlist') applyPlaylist(CONFIG.playlist.map(cleanTrack).filter(t => t.src));
+      else if (sc === 'gallery') { CONFIG.gallery = ORIG.gallery; renderGallery(); }
+      else if (sc === 'embeds') { CONFIG.embeds = ORIG.embeds; renderEmbeds(); }
+      else { CONFIG[sc] = ORIG[sc]; renderLists(); }
+      edInit();
+      renderContentPane(el);
+      panelMsg(`กลับไปใช้ค่า${D.title}ในโค้ดแล้ว`, 'ok');
+    }
+  }
+  async function saveProfile(btn) {
+    const p = cleanProfile(ED.profile), t = cleanTheme(ED.theme);
+    const ok = await busy(btn, 'กำลังบันทึก…', async () => (await putPath('settings/profile', p)) && (await putPath('settings/theme', t)), '✓ บันทึกแล้ว');
+    if (!ok) { panelMsg(errText(), 'err'); return; }
+    SITE.profile = p; SITE.theme = t;
+    cacheSet('settings', 'profile', p);
+    cacheSet('settings', 'theme', t);
+    panelMsg('บันทึกโปรไฟล์และธีมแล้ว', 'ok');
+  }
+  async function savePopup(btn) {
+    const p = cleanPopup({ ...ED.popup, v: Date.now() });
+    const ok = await busy(btn, 'กำลังบันทึก…', () => putPath('settings/popup', p), '✓ บันทึกแล้ว');
+    if (!ok) { panelMsg(errText(), 'err'); return; }
+    SITE.popup = p; ED.popup = { ...p };
+    cacheSet('settings', 'popup', p);
+    panelMsg(p.on ? 'บันทึก Pop-up แล้ว ผู้เข้าชมจะเห็นตามความถี่ที่ตั้ง' : 'บันทึกแล้ว (ปิด Pop-up อยู่)', 'ok');
+  }
+
+  /* ---------- กล่องข้อความลับ ---------- */
+  async function loadInbox() {
+    const box = $('#opInbox');
+    if (!box) return;
+    try {
+      const t = await getToken();
+      const r = await db('inbox', { token: t });
+      if (!r.ok) throw new Error(String(r.status));
+      const o = (await r.json()) || {};
+      const arr = Object.entries(o).map(([id, m]) => ({ id, ...m })).filter(m => m && typeof m.text === 'string').sort((a, b) => (b.ts || 0) - (a.ts || 0));
+      const cnt = $('#opIbCount');
+      if (cnt) cnt.textContent = arr.length ? `(${arr.length})` : '';
+      box.innerHTML = arr.map(m => `<div class="gb-msg" data-id="${esc(m.id)}"><time style="margin:0">${new Date(m.ts).toLocaleString('th-TH', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })}</time><p>${esc(m.text)}</p><div class="gb-act"><button class="danger" data-act="ib-del">ลบ</button></div></div>`).join('')
+        || '<div class="op-row" style="color:var(--ink-soft)">ยังไม่มีข้อความลับ</div>';
+    } catch (_) {
+      box.textContent = 'โหลดข้อความลับไม่ได้ (ยังไม่ได้เพิ่ม Rules ของ inbox หรือให้กดค้างที่ป้ายเพื่อล็อกอินใหม่)';
+    }
+  }
+  /* ---------- แชทสด (ฝั่งเจ้าของ) ---------- */
+  function cTime(ts) {
+    if (!ts) return '';
+    const m = Math.max(0, Math.floor((Date.now() - ts) / 60000));
+    if (m < 1) return 'เมื่อสักครู่';
+    if (m < 60) return m + ' นาทีที่แล้ว';
+    if (m < 1440) return Math.floor(m / 60) + ' ชม.ที่แล้ว';
+    return Math.floor(m / 1440) + ' วันที่แล้ว';
+  }
+  function chatBubble(m) {
+    const t = new Date(m.ts || 0).toLocaleTimeString('th-TH', { hour: '2-digit', minute: '2-digit' });
+    return `<div class="cb ${m.from === 'owner' ? 'me' : 'them'}">${esc(m.text)}<time>${t}</time></div>`;
+  }
+  async function loadOwnerChat() {
+    const box = $('#opChat');
+    if (!box) return;
+    if (!hasFB) { box.textContent = 'ยังไม่ได้ตั้งค่า Firebase'; return; }
+    try {
+      const t = await getToken();
+      const r = await db('chat', { token: t });
+      if (!r.ok) throw new Error(String(r.status));
+      const o = (await r.json()) || {};
+      ocData = o;
+      const sessions = Object.entries(o).filter(([, v]) => v && (v.meta || v.messages)).map(([uid, v]) => {
+        const msgs = v.messages ? Object.entries(v.messages).map(([id, m]) => ({ id, ...m })).sort((a, b) => (a.ts || 0) - (b.ts || 0)) : [];
+        const last = (v.meta && v.meta.last) || (msgs.length ? msgs[msgs.length - 1].ts : 0);
+        const preview = (v.meta && v.meta.preview) || (msgs.length ? msgs[msgs.length - 1].text : '');
+        const seenAt = +localStorage.getItem('chatSeen:' + uid) || 0;
+        return { uid, msgs, last, preview, unread: last > seenAt };
+      }).sort((a, b) => b.last - a.last);
+      const cnt = $('#opChatCount');
+      const nUnread = sessions.filter(s => s.unread).length;
+      if (cnt) cnt.textContent = nUnread ? `(ใหม่ ${nUnread})` : '';
+      if (!sessions.length) { box.innerHTML = '<div class="op-row" style="color:var(--ink-soft)">ยังไม่มีคนทักแชท</div>'; return; }
+      if (ocOpen && !sessions.some(s => s.uid === ocOpen)) ocOpen = null;
+      box.innerHTML = sessions.map(s => `
+        <div class="cl-item${s.unread ? ' unread' : ''}" data-chat-uid="${esc(s.uid)}"><span class="cl-dot"></span>
+          <span class="cl-tx"><b>ผู้เยี่ยมชม ${esc(s.uid.slice(1, 6))}</b><small>${esc(s.preview || '')}</small></span>
+          <span style="font-size:10.5px;color:var(--ink-soft)">${cTime(s.last)}</span></div>
+        ${ocOpen === s.uid ? `<div class="chat-thread">${s.msgs.map(chatBubble).join('') || '<div class="op-row" style="color:var(--ink-soft)">ไม่มีข้อความ</div>'}</div>
+          <div class="chat-reply"><input type="text" maxlength="300" placeholder="พิมพ์ตอบกลับ…" data-chat-reply="${esc(s.uid)}"><button type="button" data-act="chat-send" data-uid="${esc(s.uid)}">ส่ง</button></div>` : ''}
+      `).join('');
+    } catch (_) {
+      box.textContent = 'โหลดแชทไม่ได้ (ยังไม่ได้เพิ่ม Rules ของ chat หรือให้กดค้างที่ป้ายเพื่อล็อกอินใหม่)';
+    }
+  }
+  async function chatReply(uid, text) {
+    lastErr = '';
+    try {
+      const t = await getToken();
+      if (!t) { lastErr = 'token'; return false; }
+      const r1 = await db('chat/' + uid + '/messages', { method: 'POST', body: { from: 'owner', text, ts: Date.now() }, token: t });
+      if (!r1.ok) { lastErr = String(r1.status); return false; }
+      await db('chat/' + uid + '/meta', { method: 'PUT', body: { last: Date.now(), preview: text.slice(0, 60) }, token: t });
+      return true;
+    } catch (_) {
+      lastErr = 'network';
+      return false;
+    }
+  }
   async function resetStats() {
     lastErr = '';
     try {
@@ -2101,7 +2913,7 @@ function initLive() {
       box.textContent = 'โหลดสถิติไม่ได้ (เช็ก Rules หรือกดค้างที่ป้ายเพื่อล็อกอินใหม่)';
     }
   }
-  function closePanel() { const el = $('#ownerPanel'); if (el) el.remove(); if (clockSaved) applyClock(clockSaved); }
+  function closePanel() { const el = $('#ownerPanel'); if (el) el.remove(); if (clockSaved) applyClock(clockSaved); applyProfile(SITE.profile); applyTheme(SITE.theme); }
   function openPanel() {
     closePanel();
     let sel = cur.key;
@@ -2112,25 +2924,53 @@ function initLive() {
       <div class="op-card" role="dialog" aria-label="แผงเจ้าของ">
         <div class="op-msg" id="opMsg" role="status"></div>
         <div class="op-head"><span>แผงเจ้าของ</span><button data-act="close" aria-label="ปิด">✕</button></div>
-        <div class="op-sec">
-          <div class="op-label">สถานะ</div>
-          <div class="op-chips">${presets.map(p => `<button class="op-chip${p.key === sel ? ' on' : ''}" data-key="${esc(p.key)}" style="--c:${p.color}"><i></i>${esc(p.text)}</button>`).join('')}</div>
-          <input class="op-input" id="opText" maxlength="40" placeholder="พิมพ์ข้อความสถานะ เช่น กำลังเล่น ROV" value="${esc(cur.text)}">
-          <button class="op-save" data-act="save">บันทึกสถานะ</button>
+        <div class="op-tabs">${[['status', 'สถานะ'], ['content', 'เนื้อหา'], ['msgs', 'ข้อความ'], ['stats', 'สถิติ']].map(([k, l]) => `<button class="op-tab${k === opTab ? ' on' : ''}" data-tab="${k}">${l}</button>`).join('')}</div>
+        <div class="op-pane${opTab === 'status' ? ' on' : ''}" data-pane="status">
+          <div class="op-sec">
+            <div class="op-label">สถานะ</div>
+            <div class="op-chips">${presets.map(p => `<button class="op-chip${p.key === sel ? ' on' : ''}" data-key="${esc(p.key)}" style="--c:${p.color}"><i></i>${esc(p.text)}</button>`).join('')}</div>
+            <input class="op-input" id="opText" maxlength="40" placeholder="พิมพ์ข้อความสถานะ เช่น กำลังเล่น ROV" value="${esc(cur.text)}">
+            <button class="op-save" data-act="save">บันทึกสถานะ</button>
+          </div>
+          <div class="op-sec" id="opClock"></div>
         </div>
-        <div class="op-sec" id="opClock"></div>
-        <div class="op-sec"><div class="op-label">สมุดเยี่ยมชม <span id="opGbCount"></span></div><div id="opGuest">กำลังโหลด…</div></div>
-        <div class="op-sec"><div class="op-label">สถิติ (เห็นเฉพาะคุณ)</div><div id="opStats"></div></div>
-        <div class="op-foot"><button data-act="refresh">รีเฟรชสถิติ</button><button data-act="logout">ออกจากระบบ</button></div>
-        <button class="op-export" data-act="export">ดาวน์โหลดสำรองสถิติ (.json)</button>
-        <button class="op-danger" data-act="reset-stats">ล้างสถิติทั้งหมด (เริ่มนับใหม่)</button>
+        <div class="op-pane${opTab === 'content' ? ' on' : ''}" data-pane="content"><div id="opContent"></div></div>
+        <div class="op-pane${opTab === 'msgs' ? ' on' : ''}" data-pane="msgs">
+          <div class="op-sec"><div class="op-label">แชทสด <span id="opChatCount"></span></div><div id="opChat">กำลังโหลด…</div></div>
+          <div class="op-sec"><div class="op-label">ข้อความลับ (เห็นเฉพาะคุณ) <span id="opIbCount"></span></div><div id="opInbox">กำลังโหลด…</div></div>
+          <div class="op-sec"><div class="op-label">สมุดเยี่ยมชม <span id="opGbCount"></span></div><div id="opGuest">กำลังโหลด…</div></div>
+        </div>
+        <div class="op-pane${opTab === 'stats' ? ' on' : ''}" data-pane="stats">
+          <div class="op-sec"><div class="op-label">สถิติ (เห็นเฉพาะคุณ)</div><div id="opStats"></div></div>
+          <button class="op-export" data-act="export">ดาวน์โหลดสำรองสถิติ (.json)</button>
+          <button class="op-danger" data-act="reset-stats">ล้างสถิติทั้งหมด (เริ่มนับใหม่)</button>
+        </div>
+        <div class="op-foot"><button data-act="refresh">รีเฟรชข้อมูล</button><button data-act="logout">ออกจากระบบ</button></div>
       </div>`;
     document.body.appendChild(el);
     const input = $('#opText', el);
     ckDraft = { ...(clockSaved || cleanClock({})) };
     renderClockPanel(el);
+    edInit();
+    if (opTab === 'content') renderContentPane(el);
     el.addEventListener('click', async e => {
       if (e.target === el) { closePanel(); return; }
+      const clItem = e.target.closest('.cl-item');
+      if (clItem) {
+        const uid = clItem.dataset.chatUid;
+        ocOpen = ocOpen === uid ? null : uid;
+        if (ocOpen) localStorage.setItem('chatSeen:' + uid, String(Date.now()));
+        loadOwnerChat();
+        return;
+      }
+      const tabBtn = e.target.closest('[data-tab]');
+      if (tabBtn) {
+        opTab = tabBtn.dataset.tab;
+        $$('.op-tab', el).forEach(b => b.classList.toggle('on', b === tabBtn));
+        $$('.op-pane', el).forEach(p => p.classList.toggle('on', p.dataset.pane === opTab));
+        if (opTab === 'content' && !$('#opContent', el).children.length) renderContentPane(el);
+        return;
+      }
       const ck = e.target.closest('[data-ck]');
       if (ck) {
         const k = ck.dataset.ck, v = ck.dataset.v;
@@ -2153,7 +2993,32 @@ function initLive() {
       const btn = e.target.closest('[data-act]');
       const act = btn?.dataset.act;
       if (act === 'close') closePanel();
-      else if (act === 'refresh') await busy(btn, 'กำลังโหลด…', async () => { await loadStats(); await loadOwnerGuest(); return true; });
+      else if (act === 'refresh') await busy(btn, 'กำลังโหลด…', async () => { await loadStats(); await loadOwnerGuest(); await loadInbox(); await loadOwnerChat(); return true; });
+      else if (act && act.startsWith('ed-') && act !== 'ed-save-prof' && act !== 'ed-reset-prof') await editorAct(el, act, btn);
+      else if (act === 'ed-save-prof') await saveProfile(btn);
+      else if (act === 'ed-reset-prof') {
+        ED.profile = { name: BASE.name, tagline: BASE.tagline.replace(/<br\s*\/?>/gi, '\n'), avatar: BASE.avatar };
+        ED.theme = cleanTheme({});
+        renderContentPane(el);
+        applyProfile(cleanProfile(ED.profile));
+        applyTheme(cleanTheme(ED.theme));
+        panelMsg('โหลดค่าเริ่มต้นแล้ว กดบันทึกเพื่อใช้จริง', 'ok');
+      }
+      else if (act === 'pp-preview') showPopup(cleanPopup(ED.popup), true);
+      else if (act === 'pp-save') await savePopup(btn);
+      else if (act === 'chat-send') {
+        const uid = btn.dataset.uid;
+        const inp = $(`[data-chat-reply="${uid}"]`, el);
+        const text = (inp?.value || '').trim().slice(0, 300);
+        if (!text) return;
+        const ok = await busy(btn, '…', () => chatReply(uid, text));
+        if (ok) { if (inp) inp.value = ''; loadOwnerChat(); } else panelMsg(errText(), 'err');
+      }
+      else if (act === 'ib-del') {
+        const id = btn.closest('[data-id]')?.dataset.id;
+        const ok = await busy(btn, '…', () => putPath('inbox/' + id, null));
+        if (ok) { panelMsg('ลบแล้ว', 'ok'); loadInbox(); } else panelMsg(errText(), 'err');
+      }
       else if (act === 'ck-reset') {
         ckDraft = cleanClock({});
         renderClockPanel(el);
@@ -2223,7 +3088,50 @@ function initLive() {
         showToast('ออกจากโหมดเจ้าของแล้ว', 'check');
       }
     });
+    el.addEventListener('change', async e => {
+      const fi = e.target.closest('[data-edfile]');
+      if (!fi || !fi.files || !fi.files[0]) return;
+      const sc = fi.dataset.edfile, f = fi.dataset.f, kind = fi.dataset.kind;
+      const max = kind === 'popup' ? 640 : kind === 'gallery' ? 640 : kind === 'avatar' ? 192 : 96;
+      try {
+        const url = await resizeImage(fi.files[0], max, kind === 'icon' ? 'image/png' : 'image/jpeg', 0.8);
+        if (LIST_DEFS[sc]) {
+          const i = +fi.dataset.i;
+          ED[sc][i][f] = url;
+          ED.open[sc + ':' + i] = true;
+          renderList(el, sc);
+        } else {
+          ED[sc][f] = url;
+          const pv = $('.ed-prev', fi.closest('.ed-f'));
+          if (pv) pv.innerHTML = imgTag(url);
+          if (sc === 'profile') applyProfile(cleanProfile(ED.profile));
+        }
+        panelMsg('อัปโหลดรูปแล้ว (ย่อให้อัตโนมัติ) กดบันทึกเพื่อใช้จริง', 'ok');
+      } catch (_) { panelMsg('อัปโหลดไม่ได้ ลองรูปอื่น (ต้องเป็นไฟล์รูป ไม่เกิน 10MB)', 'err'); }
+      fi.value = '';
+    });
+    el.addEventListener('keydown', e => {
+      const cr = e.target.closest('[data-chat-reply]');
+      if (cr && e.key === 'Enter') { e.preventDefault(); $(`[data-act="chat-send"][data-uid="${cr.dataset.chatReply}"]`, el)?.click(); }
+    });
     el.addEventListener('input', e => {
+      const ed = e.target.closest('[data-ed]');
+      if (ed && ed.dataset.f && !ed.matches('button')) {
+        const sc = ed.dataset.ed, f = ed.dataset.f;
+        const val = ed.type === 'checkbox' ? ed.checked : ed.value;
+        if (LIST_DEFS[sc]) {
+          const i = +ed.dataset.i;
+          ED[sc][i][f] = val;
+          edUpdateHead(el, sc, i);
+        } else {
+          ED[sc][f] = val;
+          if (sc === 'profile') applyProfile(cleanProfile(ED.profile));
+          if (sc === 'theme') applyTheme(cleanTheme(ED.theme));
+        }
+        return;
+      }
+      const cr = e.target.closest('[data-chat-reply]');
+      // (ใช้ input event เพื่อความสม่ำเสมอ ปล่อยผ่านไป ไม่มีการกระทำ)
       const c = e.target.closest('[data-ckin]');
       if (c) {
         const k = c.dataset.ckin;
@@ -2240,6 +3148,8 @@ function initLive() {
     });
     loadStats();
     loadOwnerGuest();
+    loadInbox();
+    loadOwnerChat();
   }
 
   // กดค้างที่ป้ายสถานะ = ล็อกอินเจ้าของ, เจ้าของกดสั้น = เปิดแผง
@@ -2273,14 +3183,24 @@ function initLive() {
       try {
         const t = await getToken();
         if (!t) return;
-        const r = await db('guestbook/pending', { token: t, q: 'shallow=true' });
-        if (!r.ok) return;
-        const n = Object.keys((await r.json()) || {}).length;
-        if (n) setTimeout(() => showToast(`มีข้อความสมุดเยี่ยมชมรออนุมัติ ${n} ข้อความ (กดที่ป้ายสถานะ)`, 'star'), 1200);
+        const [r, r2, r3] = await Promise.all([db('guestbook/pending', { token: t, q: 'shallow=true' }), db('inbox', { token: t, q: 'shallow=true' }), db('chat', { token: t })]);
+        const n = r.ok ? Object.keys((await r.json()) || {}).length : 0;
+        const n2 = r2.ok ? Object.keys((await r2.json()) || {}).length : 0;
+        let n3 = 0;
+        if (r3.ok) {
+          const co = (await r3.json()) || {};
+          n3 = Object.entries(co).filter(([uid, v]) => {
+            const last = (v && v.meta && v.meta.last) || 0;
+            return last > (+localStorage.getItem('chatSeen:' + uid) || 0);
+          }).length;
+        }
+        if (n || n2 || n3) setTimeout(() => showToast(`มีข้อความใหม่: รออนุมัติ ${n} · ข้อความลับ ${n2} · แชท ${n3} (กดที่ป้ายสถานะ)`, 'star'), 1200);
       } catch (_) {}
     })();
   }
 }
+initSite();
+initChat();
 initClock();
 initLive();
 
