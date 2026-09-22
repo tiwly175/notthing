@@ -1040,7 +1040,7 @@ function render() {
     </div>
 ${guestHTML}
     <div class="socials">${socialsHTML}</div>
-    <p class="footer"><span class="heart">Built by patchara.phon_ © 2026</span> ${CONFIG.name.split(' ')[0]}</p>
+    <p class="footer">Built by patchara.phon_ © 2026<span class="heart"></span> ${CONFIG.name.split(' ')[0]}</p>
     <details class="privacy">
       <summary>สถิติแบบไม่ระบุตัวตน</summary>
       <p>เว็บนี้นับสถิติเป็นตัวเลขรวม เช่น จำนวนผู้เข้าชม ประเภทอุปกรณ์/เบราว์เซอร์ ขนาดหน้าจอ ภาษา เขตเวลา ช่วงเวลาที่เข้า ส่วนที่ดู และสิ่งที่กด โดยไม่บันทึก IP ชื่อ หรือข้อมูลที่ระบุตัวบุคคล และไม่เก็บเป็นประวัติรายคน</p>
@@ -1607,7 +1607,7 @@ function paintHeader() {
   const tg = $('.tagline');
   if (tg) { tg.innerHTML = profNow.taglineHTML; tg.style.color = themeNow.tagColor || ''; }
   const ft = $('.footer');
-  if (ft) ft.innerHTML = `made with <span class="heart">❤</span> by ${escapeAttr(profNow.name.split(' ')[0])}`;
+  if (ft) ft.innerHTML = `made with <span class="heart">Built by patchara.phon_ © 2026</span> by ${escapeAttr(profNow.name.split(' ')[0])}`;
 }
 function applyProfile(p) {
   p = p || {};
